@@ -12,6 +12,7 @@ Goal: Develop an application implementing a geometric drawing program starting w
 
 💻Technologies and tools <br>
 Programming Language -> Java <br>
+Framework -> JavaFX <br>
 IDE -> Netbeans <br>
 Gui Bilder -> Scene Builder <br>
 Testing -> JUnit (via Maven) <br>
