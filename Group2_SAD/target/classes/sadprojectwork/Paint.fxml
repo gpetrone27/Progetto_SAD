@@ -81,7 +81,7 @@
                                              </toggleGroup>
                                           </ToggleButton>
                                           <ToggleButton mnemonicParsing="false" onAction="#selectShapeRectangle" prefHeight="25.0" prefWidth="105.0" text="Rectangle" textAlignment="CENTER" toggleGroup="$shapes" />
-                                          <ToggleButton mnemonicParsing="false" onAction="#selectShapeLine" prefHeight="30.0" prefWidth="101.0" text="Line" GridPane.rowIndex="1" />
+                                          <ToggleButton mnemonicParsing="false" onAction="#selectShapeLine" prefHeight="30.0" prefWidth="101.0" text="Line" toggleGroup="$shapes" GridPane.rowIndex="1" />
                                        </children>
                                     </GridPane>
                                  </content>

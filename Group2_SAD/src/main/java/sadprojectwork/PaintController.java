@@ -141,7 +141,7 @@ public class PaintController implements Initializable {
     }
 
     @FXML
-    private void resizeShape(ActionEvent event) {
+    private void showResizeWindow(ActionEvent event) {
     }
     
 }
