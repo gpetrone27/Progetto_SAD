@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.control.ContextMenu?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
@@ -25,6 +26,17 @@
                <content>
                   <Canvas fx:id="canvas" height="5000.0" width="5000.0" />
                </content>
+               <contextMenu>
+                  <ContextMenu fx:id="rightClickMenu">
+                    <items>
+                      <MenuItem mnemonicParsing="false" onAction="#deleteShape" text="Delete" />
+                        <MenuItem mnemonicParsing="false" onAction="#copyShape" text="Copy" />
+                        <MenuItem mnemonicParsing="false" onAction="#pasteShape" text="Paste" />
+                        <MenuItem mnemonicParsing="false" onAction="#cutShape" text="Cut" />
+                        <MenuItem mnemonicParsing="false" onAction="#showResizeWindow" text="Resize" />
+                    </items>
+                  </ContextMenu>
+               </contextMenu>
             </ScrollPane>
          </center>
          <top>
@@ -69,7 +81,7 @@
                                              </toggleGroup>
                                           </ToggleButton>
                                           <ToggleButton mnemonicParsing="false" onAction="#selectShapeRectangle" prefHeight="25.0" prefWidth="105.0" text="Rectangle" textAlignment="CENTER" toggleGroup="$shapes" />
-                                          <ToggleButton mnemonicParsing="false" onAction="#selectShapeLine" prefHeight="30.0" prefWidth="101.0" text="Segment Line" GridPane.rowIndex="1" />
+                                          <ToggleButton mnemonicParsing="false" onAction="#selectShapeLine" prefHeight="30.0" prefWidth="101.0" text="Line" GridPane.rowIndex="1" />
                                        </children>
                                     </GridPane>
                                  </content>

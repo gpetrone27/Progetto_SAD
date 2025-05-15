@@ -7,6 +7,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.ToggleGroup;
 
 public class PaintController implements Initializable {
@@ -19,6 +20,8 @@ public class PaintController implements Initializable {
     private ToggleGroup borderColor;
     @FXML
     private ToggleGroup fillColor;
+    @FXML
+    private ContextMenu rightClickMenu;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -119,6 +122,26 @@ public class PaintController implements Initializable {
 
     @FXML
     private void selectShapeLine(ActionEvent event) {
+    }
+
+    @FXML
+    private void deleteShape(ActionEvent event) {
+    }
+
+    @FXML
+    private void copyShape(ActionEvent event) {
+    }
+
+    @FXML
+    private void pasteShape(ActionEvent event) {
+    }
+
+    @FXML
+    private void cutShape(ActionEvent event) {
+    }
+
+    @FXML
+    private void resizeShape(ActionEvent event) {
     }
     
 }
