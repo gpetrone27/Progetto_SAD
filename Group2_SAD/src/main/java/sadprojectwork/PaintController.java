@@ -116,5 +116,9 @@ public class PaintController implements Initializable {
     @FXML
     private void selectFillPurple(ActionEvent event) {
     }
+
+    @FXML
+    private void selectShapeLine(ActionEvent event) {
+    }
     
 }

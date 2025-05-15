@@ -60,6 +60,7 @@
                                       </columnConstraints>
                                       <rowConstraints>
                                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                       </rowConstraints>
                                        <children>
                                           <ToggleButton mnemonicParsing="false" onAction="#selectShapeEllipsis" prefWidth="100.0" text="Ellipsis" textAlignment="CENTER" GridPane.columnIndex="1">
@@ -67,7 +68,8 @@
                                                 <ToggleGroup fx:id="shapes" />
                                              </toggleGroup>
                                           </ToggleButton>
-                                          <ToggleButton mnemonicParsing="false" onAction="#selectShapeRectangle" prefWidth="100.0" text="Rectangle" textAlignment="CENTER" toggleGroup="$shapes" />
+                                          <ToggleButton mnemonicParsing="false" onAction="#selectShapeRectangle" prefHeight="25.0" prefWidth="105.0" text="Rectangle" textAlignment="CENTER" toggleGroup="$shapes" />
+                                          <ToggleButton mnemonicParsing="false" onAction="#selectShapeLine" prefHeight="30.0" prefWidth="101.0" text="Segment Line" GridPane.rowIndex="1" />
                                        </children>
                                     </GridPane>
                                  </content>
