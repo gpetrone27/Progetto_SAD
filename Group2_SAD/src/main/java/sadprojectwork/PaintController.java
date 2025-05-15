@@ -1,4 +1,3 @@
-
 package sadprojectwork;
 
 import java.net.URL;
@@ -22,16 +21,24 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.scene.canvas.GraphicsContext;
+
 
 public class PaintController implements Initializable {
 
     // Model reference
     private Model model = new Model();
-    
+
     // Colors variables
     private Color borderHex = Color.BLACK;
     private Color fillHex = Color.BLACK;
-    
+
+    private boolean lineMode = false;
+    private boolean rectMode = false;
+    private boolean ellipseMode = false;
+    private Double startX = null;
+    private Double startY = null;
+
     @FXML
     private ToggleGroup shapes;
     @FXML
@@ -47,9 +54,49 @@ public class PaintController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         initBindings();
     }
-    
+
     private void initBindings() {
-        
+        canvas.setOnMouseClicked(event -> {
+            double clickX = event.getX();
+            double clickY = event.getY();
+
+            if (lineMode || rectMode || ellipseMode) {
+                if (startX == null && startY == null) {
+                    startX = clickX;
+                    startY = clickY;
+                } else {
+                    double endX = clickX;
+                    double endY = clickY;
+
+                    double x = Math.min(startX, endX);
+                    double y = Math.min(startY, endY);
+                    double width = Math.abs(endX - startX);
+                    double height = Math.abs(endY - startY);
+
+                    GraphicsContext gc = canvas.getGraphicsContext2D();
+                    gc.setStroke(borderHex);
+                    gc.setFill(fillHex);
+                    gc.setLineWidth(2);
+
+                    if (lineMode) {
+                        gc.strokeLine(startX, startY, endX, endY);
+                    } else if (rectMode) {
+                        gc.fillRect(x, y, width, height);
+                        gc.strokeRect(x, y, width, height);
+                    } else if (ellipseMode) {
+                        gc.fillOval(x, y, width, height);
+                        gc.strokeOval(x, y, width, height);
+                    }
+
+                    // Reset
+                    startX = null;
+                    startY = null;
+                    lineMode = false;
+                    rectMode = false;
+                    ellipseMode = false;
+                }
+            }
+        });
     }
 
     @FXML
@@ -93,17 +140,43 @@ public class PaintController implements Initializable {
         }
         System.out.println(fillHex);
     }
-    
+
     @FXML
     private void selectShapeEllipsis(ActionEvent event) {
+        // Attiva la modalità disegno di ellisse
+        ellipseMode = true;
+        
+        // Disattiva le altre modalità
+        rectMode = false;
+        lineMode = false;
+        
+        // Resetta il punto iniziale del disegno
+        startX = null;
+        startY = null;
     }
 
     @FXML
     private void selectShapeRectangle(ActionEvent event) {
+        // Attiva la modalità disegno di rettangolo
+        rectMode = true;
+        
+        // Disattiva le altre modalità
+        ellipseMode = false;
+        lineMode = false;
+        
+        // Resetta il punto iniziale del disegno
+        startX = null;
+        startY = null;
     }
 
     @FXML
     private void selectShapeLine(ActionEvent event) {
+        // Attiva la modalità disegno di linea
+        lineMode = true;
+        
+        // Resetta il punto iniziale del disegno
+        startX = null;
+        startY = null;
     }
 
     @FXML
@@ -124,17 +197,17 @@ public class PaintController implements Initializable {
 
     @FXML
     private void showResizeWindow(ActionEvent event) {
-        
+
         // Creation of the window
         Stage popupWindow = new Stage();
         popupWindow.setTitle("Resize");
         popupWindow.initModality(Modality.APPLICATION_MODAL); // Blocks inputs to other windows
-        
+
         // UI Elements
         TextField field1 = new TextField();
         TextField field2 = new TextField();
         Button submitButton = new Button("Submit");
-        
+
         field1.setPromptText("Width");
         field2.setPromptText("Height");
         submitButton.setOnAction(e -> {
@@ -143,9 +216,10 @@ public class PaintController implements Initializable {
                 int num2 = Integer.parseInt(field2.getText().trim());
                 resizeShape(num1, num2); // Add the shape as a parameter here as well
                 popupWindow.close();
-            } catch (NumberFormatException ex) {}
+            } catch (NumberFormatException ex) {
+            }
         });
-        
+
         VBox layout = new VBox(10,
                 new Label("Enter new dimensions"),
                 new HBox(5, field1, new Label("x"), field2),
@@ -153,14 +227,14 @@ public class PaintController implements Initializable {
         );
         layout.setPadding(new Insets(15));
         layout.setAlignment(Pos.CENTER);
-        
+
         popupWindow.setScene(new Scene(layout, 240, 160));
         popupWindow.showAndWait();
     }
-    
+
     // TO DO: Add the shape to be resized as a parameter of the method
     private void resizeShape(int width, int height) {
-        
+
     }
-    
+
 }
