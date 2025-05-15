@@ -14,9 +14,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -24,6 +27,10 @@ public class PaintController implements Initializable {
 
     // Model reference
     private Model model = new Model();
+    
+    // Colors variables
+    private Color borderHex = Color.BLACK;
+    private Color fillHex = Color.BLACK;
     
     @FXML
     private ToggleGroup shapes;
@@ -68,75 +75,31 @@ public class PaintController implements Initializable {
     }
 
     @FXML
+    private void selectBorderColor(ActionEvent event) {
+        ToggleButton colorButton = (ToggleButton) event.getSource();
+        Paint colorPaint = colorButton.getBackground().getFills().get(0).getFill();
+        if (colorPaint instanceof Color) {
+            borderHex = (Color) colorPaint;
+        }
+        System.out.println(borderHex);
+    }
+
+    @FXML
+    private void selectFillColor(ActionEvent event) {
+        ToggleButton colorButton = (ToggleButton) event.getSource();
+        Paint colorPaint = colorButton.getBackground().getFills().get(0).getFill();
+        if (colorPaint instanceof Color) {
+            fillHex = (Color) colorPaint;
+        }
+        System.out.println(fillHex);
+    }
+    
+    @FXML
     private void selectShapeEllipsis(ActionEvent event) {
     }
 
     @FXML
     private void selectShapeRectangle(ActionEvent event) {
-    }
-
-    @FXML
-    private void selectBorderBlack(ActionEvent event) {
-    }
-
-    @FXML
-    private void selectBorderWhite(ActionEvent event) {
-    }
-
-    @FXML
-    private void selectBorderRed(ActionEvent event) {
-    }
-
-    @FXML
-    private void selectBorderOrange(ActionEvent event) {
-    }
-
-    @FXML
-    private void selectBorderYellow(ActionEvent event) {
-    }
-
-    @FXML
-    private void selectBorderGreen(ActionEvent event) {
-    }
-
-    @FXML
-    private void selectBorderBlue(ActionEvent event) {
-    }
-
-    @FXML
-    private void selectBorderPurple(ActionEvent event) {
-    }
-
-    @FXML
-    private void selectFillBlack(ActionEvent event) {
-    }
-
-    @FXML
-    private void selectFillWhite(ActionEvent event) {
-    }
-
-    @FXML
-    private void selectFillRed(ActionEvent event) {
-    }
-
-    @FXML
-    private void selectFillOrange(ActionEvent event) {
-    }
-
-    @FXML
-    private void selectFillYellow(ActionEvent event) {
-    }
-
-    @FXML
-    private void selectFillGreen(ActionEvent event) {
-    }
-
-    @FXML
-    private void selectFillBlue(ActionEvent event) {
-    }
-
-    @FXML
-    private void selectFillPurple(ActionEvent event) {
     }
 
     @FXML

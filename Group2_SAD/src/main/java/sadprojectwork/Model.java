@@ -11,6 +11,7 @@ public class Model {
     
     public Model() {
         commandHistory = new ArrayDeque<>();
+        deletedCommands = new ArrayDeque<>();
     }
     
     public void execute(Command command) {
