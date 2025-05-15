@@ -21,7 +21,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.scene.canvas.GraphicsContext;
 
 
 public class PaintController implements Initializable {
@@ -56,47 +55,6 @@ public class PaintController implements Initializable {
     }
 
     private void initBindings() {
-        canvas.setOnMouseClicked(event -> {
-            double clickX = event.getX();
-            double clickY = event.getY();
-
-            if (lineMode || rectMode || ellipseMode) {
-                if (startX == null && startY == null) {
-                    startX = clickX;
-                    startY = clickY;
-                } else {
-                    double endX = clickX;
-                    double endY = clickY;
-
-                    double x = Math.min(startX, endX);
-                    double y = Math.min(startY, endY);
-                    double width = Math.abs(endX - startX);
-                    double height = Math.abs(endY - startY);
-
-                    GraphicsContext gc = canvas.getGraphicsContext2D();
-                    gc.setStroke(borderHex);
-                    gc.setFill(fillHex);
-                    gc.setLineWidth(2);
-
-                    if (lineMode) {
-                        gc.strokeLine(startX, startY, endX, endY);
-                    } else if (rectMode) {
-                        gc.fillRect(x, y, width, height);
-                        gc.strokeRect(x, y, width, height);
-                    } else if (ellipseMode) {
-                        gc.fillOval(x, y, width, height);
-                        gc.strokeOval(x, y, width, height);
-                    }
-
-                    // Reset
-                    startX = null;
-                    startY = null;
-                    lineMode = false;
-                    rectMode = false;
-                    ellipseMode = false;
-                }
-            }
-        });
     }
 
     @FXML
@@ -143,40 +101,14 @@ public class PaintController implements Initializable {
 
     @FXML
     private void selectShapeEllipsis(ActionEvent event) {
-        // Attiva la modalità disegno di ellisse
-        ellipseMode = true;
-        
-        // Disattiva le altre modalità
-        rectMode = false;
-        lineMode = false;
-        
-        // Resetta il punto iniziale del disegno
-        startX = null;
-        startY = null;
     }
 
     @FXML
     private void selectShapeRectangle(ActionEvent event) {
-        // Attiva la modalità disegno di rettangolo
-        rectMode = true;
-        
-        // Disattiva le altre modalità
-        ellipseMode = false;
-        lineMode = false;
-        
-        // Resetta il punto iniziale del disegno
-        startX = null;
-        startY = null;
     }
 
     @FXML
     private void selectShapeLine(ActionEvent event) {
-        // Attiva la modalità disegno di linea
-        lineMode = true;
-        
-        // Resetta il punto iniziale del disegno
-        startX = null;
-        startY = null;
     }
 
     @FXML
