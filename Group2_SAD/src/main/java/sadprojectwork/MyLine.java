@@ -1,19 +1,12 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package sadprojectwork;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Shape;
 
-/**
- *
- * @author gianl
- */
-public class MyLine extends MyShape{
+public class MyLine extends MyShape {
+    
     private Line line;
 
     public MyLine(double startX, double startY, double endX, double endY, Color borderColor) {

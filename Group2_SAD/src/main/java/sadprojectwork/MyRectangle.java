@@ -1,20 +1,13 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package sadprojectwork;
 
 import javafx.scene.shape.Shape;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.paint.Color;
 
-/**
- *
- * @author gianl
- */
 public class MyRectangle extends MyShape {
-        private Rectangle rect;
+    
+    private Rectangle rect;
 
     public MyRectangle(double x, double y, double width, double height, Color borderColor, Color fillColor) {
         super(x, y);

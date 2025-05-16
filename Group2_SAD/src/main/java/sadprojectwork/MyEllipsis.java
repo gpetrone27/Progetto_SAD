@@ -1,19 +1,12 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package sadprojectwork;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Ellipse;
 import javafx.scene.shape.Shape;
 
-/**
- *
- * @author gianl
- */
-public class MyEllipsis extends MyShape{
+public class MyEllipsis extends MyShape {
+    
     private Ellipse ellipse;
 
     public MyEllipsis(double centerX, double centerY, double radiusX, double radiusY, Color borderColor, Color fillColor) {
