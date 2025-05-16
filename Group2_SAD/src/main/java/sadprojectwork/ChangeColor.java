@@ -1,4 +1,3 @@
-
 package sadprojectwork;
 
 import javafx.scene.paint.Color;
@@ -9,21 +8,43 @@ public class ChangeColor implements Command {
     private final MyShape targetShape;
     private final Color newFillColor;
     private Color oldFillColor;
+    
+    private final Color newStrokeColor;
+    private Color oldStrokeColor;
 
-    public ChangeColor(MyShape targetShape, Color newFillColor) {
+    public ChangeColor(MyShape targetShape, Color newFillColor, Color newStrokeColor) {
         this.targetShape = targetShape;
         this.newFillColor = newFillColor;
+        this.newStrokeColor = newStrokeColor;
     }
 
     @Override
     public void execute() {
         Shape fxShape = targetShape.getFxShape();
-        oldFillColor = (Color) fxShape.getFill();  // Salva colore precedente
-        fxShape.setFill(newFillColor);             // Applica nuovo colore
+        
+        if (newFillColor != null) {
+            oldFillColor = (Color) fxShape.getFill(); //save the old color 
+            fxShape.setFill(newFillColor);
+        }
+
+        if (newStrokeColor != null) {
+            oldStrokeColor = (Color) fxShape.getStroke(); //save the old stroke color 
+            fxShape.setStroke(newStrokeColor);
+        }
     }
 
     @Override
     public void undo() {
-        targetShape.getFxShape().setFill(oldFillColor); // Ripristina colore precedente
+        Shape fxShape = targetShape.getFxShape();
+
+        if (newFillColor != null) {
+            oldFillColor = (Color) fxShape.getFill();
+            fxShape.setFill(newFillColor);
+        }
+
+        if (newStrokeColor != null) {
+            oldStrokeColor = (Color) fxShape.getStroke();
+            fxShape.setStroke(newStrokeColor);
+        }
     }
 }
