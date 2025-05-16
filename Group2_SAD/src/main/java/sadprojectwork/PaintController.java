@@ -154,9 +154,9 @@ public class PaintController implements Initializable {
     private void enableSelection(MyShape shape) {
         shape.getFxShape().setOnMouseClicked(event -> {
             selectedShape = shape;
-            highlightSelected(shape);  // facoltativo
+            highlightSelected(shape);  
             System.out.println("Selezionato: " + shape.getClass().getSimpleName());
-            event.consume();  // blocca il click dal propagarsi al canvas
+            event.consume();  
         });
     }
 
@@ -166,7 +166,7 @@ public class PaintController implements Initializable {
                 ((Shape) node).setStrokeWidth(1); // reset
             }
         }
-        shape.getFxShape().setStrokeWidth(3); // evidenzia selezionato
+        shape.getFxShape().setStrokeWidth(3); // mark selected shape
     }
 
     /**

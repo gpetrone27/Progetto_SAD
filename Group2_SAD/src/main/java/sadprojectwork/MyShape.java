@@ -22,7 +22,6 @@ public abstract class MyShape {
     public void setPosition(double x, double y) {
         this.startX = x;
         this.startY = y;
-        // Implementazione specifica nelle sottoclassi
     }
 
     public double getStartX() {
