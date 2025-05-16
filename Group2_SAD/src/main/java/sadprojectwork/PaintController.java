@@ -2,20 +2,23 @@ package sadprojectwork;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.Set;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -41,20 +44,27 @@ public class PaintController implements Initializable {
     @FXML
     private ToggleGroup shapes;
     @FXML
-    private Canvas canvas;
+    private Pane canvas;
     @FXML
     private ToggleGroup borderColor;
     @FXML
     private ToggleGroup fillColor;
     @FXML
     private ContextMenu rightClickMenu;
+    @FXML
+    private AnchorPane rootPane;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         initBindings();
+        initButtonActions();
     }
 
     private void initBindings() {
+        
+    }
+
+    private void initButtonActions() {
     }
 
     @FXML
