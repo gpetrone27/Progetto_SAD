@@ -230,7 +230,15 @@ public class PaintController implements Initializable {
 
         // Updates the variable borderHex to match the selected color
         if (colorPaint instanceof Color) {
+            Color selectedColor = (Color) colorPaint;
             borderHex = (Color) colorPaint;
+
+            if (selectedShape != null) {
+                Command changeColor = new ChangeColor(selectedShape, null, selectedColor);
+                model.execute(changeColor);
+            } else {
+                borderHex = selectedColor;
+            }
         }
     }
 
@@ -252,7 +260,7 @@ public class PaintController implements Initializable {
             Color selectedColor = (Color) colorPaint;
 
             if (selectedShape != null) {
-                Command changeColor = new ChangeColor(selectedShape, selectedColor);
+                Command changeColor = new ChangeColor(selectedShape, selectedColor, null);
                 model.execute(changeColor);
             } else {
                 fillHex = selectedColor;
