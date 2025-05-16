@@ -1,4 +1,3 @@
-
 package sadprojectwork;
 
 import java.net.URL;
@@ -25,22 +24,24 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class PaintController implements Initializable {
-    
+
     // Model reference
     private Model model = new Model();
-    
+
     // Colors variables
     private Color borderHex = Color.BLACK;
     private Color fillHex = Color.BLACK;
-    
+
     private boolean cursorMode = true;
     private boolean lineMode = false;
     private boolean rectMode = false;
     private boolean ellipseMode = false;
-    
+
     private Double startX = null;
     private Double startY = null;
-    
+
+    private MyShape currentShape = null;
+
     @FXML
     private ToggleGroup shapes;
     @FXML
@@ -53,25 +54,27 @@ public class PaintController implements Initializable {
     private ContextMenu rightClickMenu;
     @FXML
     private AnchorPane rootPane;
-    
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         initBindings();
         initButtonActions();
+        initCanvasEvents();
+
     }
-    
+
     /**
      * Initializes the bindings of the application
      */
     private void initBindings() {
-        
+
         // Prevents the user from unselecting a border color
         borderColor.selectedToggleProperty().addListener((obs, oldToggle, newToggle) -> {
             if (newToggle == null) {
                 borderColor.selectToggle(oldToggle);
             }
         });
-        
+
         // Prevents the user from unselecting a fill color
         fillColor.selectedToggleProperty().addListener((obs, oldToggle, newToggle) -> {
             if (newToggle == null) {
@@ -79,49 +82,96 @@ public class PaintController implements Initializable {
             }
         });
     }
-    
+
     /**
      * Initializes the actions of the buttons of the application
      */
     private void initButtonActions() {
     }
-    
+
+    private void initCanvasEvents() {
+        canvas.setOnMousePressed(e -> {
+            startX = e.getX();
+            startY = e.getY();
+
+            if (cursorMode) {
+                return;
+            }
+
+            if (rectMode) {
+                currentShape = new MyRectangle(startX, startY, 0, 0, borderHex, fillHex);
+                canvas.getChildren().add(currentShape.getFxShape());
+            } else if (lineMode) {
+                currentShape = new MyLine(startX, startY, startX, startY, borderHex);
+                canvas.getChildren().add(currentShape.getFxShape());
+            } else if (ellipseMode) {
+                currentShape = new MyEllipsis(startX, startY, 0, 0, borderHex, fillHex);
+                canvas.getChildren().add(currentShape.getFxShape());
+            }
+        });
+
+        canvas.setOnMouseDragged(e -> {
+            if (currentShape == null) {
+                return;
+            }
+
+            double endX = e.getX();
+            double endY = e.getY();
+
+            double width = Math.abs(endX - startX);
+            double height = Math.abs(endY - startY);
+
+            currentShape.resize(width, height);
+        });
+
+        canvas.setOnMouseReleased(e -> {
+            if (currentShape != null) {
+                currentShape = null;
+            }
+        });
+    }
+
     /**
      * Cleares the current drawing and opens a new "untitled" temporary file
-     * @param event 
+     *
+     * @param event
      */
     @FXML
     private void newDrawing(ActionEvent event) {
     }
-    
+
     /**
      * Saves the current drawing in a file
-     * @param event 
+     *
+     * @param event
      */
     @FXML
     private void saveDrawing(ActionEvent event) {
     }
-    
+
     /**
      * Loads a drawing from a file
-     * @param event 
+     *
+     * @param event
      */
     @FXML
     private void loadDrawing(ActionEvent event) {
     }
-    
+
     /**
      * Undoes the last operation
-     * @param event 
+     *
+     * @param event
      */
     @FXML
     private void undoOperation(ActionEvent event) {
         model.undoLast();
     }
-    
+
     /**
      * Redoes the last undone operation
-     * @param event 
+     *
+     * @param event
      */
     @FXML
     private void redoOperation(ActionEvent event) {
@@ -130,15 +180,16 @@ public class PaintController implements Initializable {
 
     /**
      * Updates the variable borderHex to match the user selection
-     * @param event 
+     *
+     * @param event
      */
     @FXML
     private void selectBorderColor(ActionEvent event) {
-        
+
         // Reads the background color of the button that generated the event
         ToggleButton colorButton = (ToggleButton) event.getSource();
         Paint colorPaint = colorButton.getBackground().getFills().get(0).getFill();
-        
+
         // Updates the variable borderHex to match the selected color
         if (colorPaint instanceof Color) {
             borderHex = (Color) colorPaint;
@@ -147,88 +198,116 @@ public class PaintController implements Initializable {
 
     /**
      * Updates the variable fillHex to match the user selection
-     * @param event 
+     *
+     * @param event
      */
     @FXML
     private void selectFillColor(ActionEvent event) {
-        
+
         // Reads the background color of the button that generated the event
         ToggleButton colorButton = (ToggleButton) event.getSource();
         Paint colorPaint = colorButton.getBackground().getFills().get(0).getFill();
-        
+
         // Updates the variable fillHex to match the selected color
         if (colorPaint instanceof Color) {
             fillHex = (Color) colorPaint;
         }
     }
-    
+
     /**
-     * Selects the cursor: this allows to pan inside the canvas and select shapes
-     * @param event 
+     * Selects the cursor: this allows to pan inside the canvas and select
+     * shapes
+     *
+     * @param event
      */
     @FXML
     private void selectCursor(ActionEvent event) {
+        cursorMode = true;
+        lineMode = false;
+        rectMode = false;
+        ellipseMode = false;
     }
-    
+
     /**
      * Selects the Line shape: this allows to draw lines
-     * @param event 
+     *
+     * @param event
      */
     @FXML
     private void selectShapeLine(ActionEvent event) {
+        cursorMode = false;
+        lineMode = true;
+        rectMode = false;
+        ellipseMode = false;
     }
-    
+
     /**
      * Selects the Rectangle shape: this allows to draw rectangles
-     * @param event 
+     *
+     * @param event
      */
     @FXML
     private void selectShapeRectangle(ActionEvent event) {
+        cursorMode = false;
+        lineMode = false;
+        rectMode = true;
+        ellipseMode = false;
     }
-    
+
     /**
      * Selects the Ellipsis shape: this allows to draw ellipsises
-     * @param event 
+     *
+     * @param event
      */
     @FXML
     private void selectShapeEllipsis(ActionEvent event) {
+        cursorMode = false;
+        lineMode = false;
+        rectMode = false;
+        ellipseMode = true;
     }
-    
+
     /**
      * Deletes the selected shape
-     * @param event 
+     *
+     * @param event
      */
     @FXML
     private void deleteShape(ActionEvent event) {
     }
-    
+
     /**
      * Copies the selected shape into the clipboard
-     * @param event 
+     *
+     * @param event
      */
     @FXML
     private void copyShape(ActionEvent event) {
     }
-    
+
     /**
      * Pastes a shape from the clipboard
-     * @param event 
+     *
+     * @param event
      */
     @FXML
     private void pasteShape(ActionEvent event) {
     }
-    
+
     /**
      * Copies the selected shape into the clipboard and deletes it
-     * @param event 
+     *
+     * @param event
      */
     @FXML
     private void cutShape(ActionEvent event) {
     }
-    
+
     /**
-     * Shows a popup window when the user clicks "Resize" in the right click menu
-     * @param event 
+     * Shows a popup window when the user clicks "Resize" in the right click
+     * menu
+     *
+     * @param event
      */
     @FXML
     private void showResizeWindow(ActionEvent event) {
@@ -242,10 +321,10 @@ public class PaintController implements Initializable {
         TextField widthField = new TextField();
         TextField heightField = new TextField();
         Button submitButton = new Button("Submit");
-        
+
         widthField.setPromptText("Width");
         heightField.setPromptText("Height");
-        
+
         // Functions that is run when the user clicks the Submit button
         submitButton.setOnAction(e -> {
             try {
@@ -271,14 +350,15 @@ public class PaintController implements Initializable {
         popupWindow.setScene(new Scene(layout, 240, 160));
         popupWindow.showAndWait();
     }
-    
+
     /**
      * Resizes the selected shape according to the new dimensions
+     *
      * @param shape
      * @param newWidth
-     * @param newHeight 
+     * @param newHeight
      */
-    private void resizeShape(int newWidth, int newHeight) { 
+    private void resizeShape(int newWidth, int newHeight) {
     }
-    
+
 }
