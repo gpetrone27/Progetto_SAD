@@ -9,14 +9,15 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -27,25 +28,35 @@ public class PaintController implements Initializable {
 
     // Model reference
     private Model model = new Model();
-    
+
     // Colors variables
     private Color borderHex = Color.BLACK;
     private Color fillHex = Color.BLACK;
+
+    private boolean lineMode = false;
+    private boolean rectMode = false;
+    private boolean ellipseMode = false;
     
+    private Double startX = null;
+    private Double startY = null;
+
     @FXML
     private ToggleGroup shapes;
     @FXML
-    private Canvas canvas;
+    private Pane canvas;
     @FXML
     private ToggleGroup borderColor;
     @FXML
     private ToggleGroup fillColor;
     @FXML
     private ContextMenu rightClickMenu;
+    @FXML
+    private AnchorPane rootPane;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         initBindings();
+        initButtonActions();
     }
     
     /**
@@ -55,7 +66,13 @@ public class PaintController implements Initializable {
     }
 
     /**
-     * Creates a new drawing
+     * Initializes the actions of the buttons of the application
+     */
+    private void initButtonActions() {
+    }
+    
+    /**
+     * Cleares the current drawing and opens a new "untitled" temporary file
      * @param event 
      */
     @FXML
@@ -97,33 +114,39 @@ public class PaintController implements Initializable {
     }
 
     /**
-     * Selects the border color from the corresponding button when clicked
+     * Updates the variable borderHex to match the user selection
      * @param event 
      */
     @FXML
     private void selectBorderColor(ActionEvent event) {
+        
+        // Reads the background color of the button that generated the event
         ToggleButton colorButton = (ToggleButton) event.getSource();
         Paint colorPaint = colorButton.getBackground().getFills().get(0).getFill();
+        
+        // Updates the variable borderHex to match the selected color
         if (colorPaint instanceof Color) {
             borderHex = (Color) colorPaint;
         }
-        System.out.println(borderHex);
     }
 
     /**
-     * Selects the fill color from the corresponding button when clicked
+     * Updates the variable fillHex to match the user selection
      * @param event 
      */
     @FXML
     private void selectFillColor(ActionEvent event) {
+        
+        // Reads the background color of the button that generated the event
         ToggleButton colorButton = (ToggleButton) event.getSource();
         Paint colorPaint = colorButton.getBackground().getFills().get(0).getFill();
+        
+        // Updates the variable fillHex to match the selected color
         if (colorPaint instanceof Color) {
             fillHex = (Color) colorPaint;
         }
-        System.out.println(fillHex);
     }
-    
+
     @FXML
     private void selectShapeEllipsis(ActionEvent event) {
     }
@@ -136,34 +159,50 @@ public class PaintController implements Initializable {
     private void selectShapeLine(ActionEvent event) {
     }
 
+    /**
+     * Deletes the selected shape
+     * @param event 
+     */
     @FXML
     private void deleteShape(ActionEvent event) {
     }
 
+    /**
+     * Copies the selected shape into the clipboard
+     * @param event 
+     */
     @FXML
     private void copyShape(ActionEvent event) {
     }
 
+    /**
+     * Pastes a shape from the clipboard
+     * @param event 
+     */
     @FXML
     private void pasteShape(ActionEvent event) {
     }
 
+    /**
+     * Copies the selected shape into the clipboard and deletes it
+     * @param event 
+     */
     @FXML
     private void cutShape(ActionEvent event) {
     }
 
     /**
-     * Shows a popup window to edit the selected shape's dimensions
+     * Shows a popup window when the user clicks "Resize" in the right click menu
      * @param event 
      */
     @FXML
     private void showResizeWindow(ActionEvent event) {
-        
+
         // Creation of the window
         Stage popupWindow = new Stage();
         popupWindow.setTitle("Resize");
         popupWindow.initModality(Modality.APPLICATION_MODAL); // Blocks inputs to other windows
-        
+
         // UI Elements
         TextField widthField = new TextField();
         TextField heightField = new TextField();
@@ -171,23 +210,29 @@ public class PaintController implements Initializable {
         
         widthField.setPromptText("Width");
         heightField.setPromptText("Height");
+        
+        // Functions that is run when the user clicks the Submit button
         submitButton.setOnAction(e -> {
             try {
                 int width = Integer.parseInt(widthField.getText().trim());
                 int height = Integer.parseInt(heightField.getText().trim());
                 resizeShape(width, height); // Add the shape as a parameter here as well
                 popupWindow.close();
-            } catch (NumberFormatException ex) {}
+            } catch (NumberFormatException ex) {
+            }
         });
-        
-        VBox layout = new VBox(10,
+
+        // Layout
+        VBox layout = new VBox(
+                10,
                 new Label("Enter new dimensions"),
                 new HBox(5, widthField, new Label("x"), heightField),
                 submitButton
         );
         layout.setPadding(new Insets(15));
         layout.setAlignment(Pos.CENTER);
-        
+
+        // Shows the window
         popupWindow.setScene(new Scene(layout, 240, 160));
         popupWindow.showAndWait();
     }
@@ -200,5 +245,5 @@ public class PaintController implements Initializable {
      */
     private void resizeShape(int newWidth, int newHeight) { 
     }
-    
+
 }
