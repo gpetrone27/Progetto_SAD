@@ -1,8 +1,12 @@
-sadprojectwork\Shape.class
+sadprojectwork\MyShape.class
+sadprojectwork\MyRectangle.class
 sadprojectwork\Paste.class
 sadprojectwork\Command.class
 sadprojectwork\Cut.class
-sadprojectwork\PaintController.class
 sadprojectwork\Model.class
 sadprojectwork\PaintApp.class
 sadprojectwork\Copy.class
+sadprojectwork\ChangeColor.class
+sadprojectwork\MyEllipsis.class
+sadprojectwork\MyLine.class
+sadprojectwork\PaintController.class
