@@ -1,0 +1,32 @@
+
+.color-button {
+    -fx-min-width: 20px;
+    -fx-max-width: 20px;
+    -fx-min-height: 20px;
+    -fx-min-height: 20px;
+    -fx-background-radius: 50%;
+    -fx-border-radius: 50%;
+    -fx-padding: 0;
+    -fx-border-color: rgba(0, 0, 0, 0.2);
+    -fx-border-width: 2;
+    -fx-cursor: hand;
+    -fx-scale-x: 1;
+    -fx-scale-y: 1;
+    -fx-font-size: 1;
+    -fx-transition: all 0.2s ease-in-out;
+}
+
+.color-button:hover {
+    -fx-border-color: transparent;
+    -fx-scale-x: 1.25;
+    -fx-scale-y: 1.25;
+}
+
+.color-button:selected {
+    -fx-scale-x: 1.5;
+    -fx-scale-y: 1.5;
+}
+
+#canvas {
+    -fx-background-color: #fefefe;
+}
