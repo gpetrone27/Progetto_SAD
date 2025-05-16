@@ -27,6 +27,7 @@ public class MyEllipsis extends MyShape {
         ellipse.setRadiusY(newRadiusY);
     }
 
+    //create a copy of the shape, usefull for the copy and paste command
     @Override
     public MyShape cloneShape() {
         return new MyEllipsis(startX, startY, ellipse.getRadiusX(), ellipse.getRadiusY(),

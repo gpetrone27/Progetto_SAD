@@ -26,6 +26,7 @@ public class MyLine extends MyShape {
         line.setEndY(startY + newHeight);
     }
 
+    //create a copy of the shape, usefull for the copy and paste command
     @Override
     public MyShape cloneShape() {
         return new MyLine(startX, startY, line.getEndX(), line.getEndY(), (Color) line.getStroke());

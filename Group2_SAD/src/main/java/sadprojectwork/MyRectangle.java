@@ -27,6 +27,7 @@ public class MyRectangle extends MyShape {
         rect.setHeight(newHeight);
     }
 
+    //create a copy of the shape, usefull for the copy and paste command
     @Override
     public MyShape cloneShape() {
         return new MyRectangle(startX, startY, rect.getWidth(), rect.getHeight(),
