@@ -3,6 +3,8 @@ package sadprojectwork;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -11,6 +13,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
@@ -33,7 +36,7 @@ public class PaintController implements Initializable {
     private Color borderHex = Color.BLACK;
     private Color fillHex = Color.BLACK;
     
-    private boolean cursorMode = true;
+    private BooleanProperty cursorMode = new SimpleBooleanProperty(true);
     private boolean lineMode = false;
     private boolean rectMode = false;
     private boolean ellipseMode = false;
@@ -55,6 +58,8 @@ public class PaintController implements Initializable {
     private ToggleGroup fillColor;
     @FXML
     private ToggleButton cursorButton;
+    @FXML
+    private ScrollPane drawingPane;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -69,17 +74,25 @@ public class PaintController implements Initializable {
      */
     private void initBindings() {
         
-        // Prevents the user from unselecting a border color
+        // Binds the value of the property cursorMode to the button cursorButton
+        cursorMode.bindBidirectional(cursorButton.selectedProperty());
+        
+        // Prevents the user from unselecting colors
         borderColor.selectedToggleProperty().addListener((obs, oldToggle, newToggle) -> {
-            if (newToggle == null) {
+            if (newToggle == null)
                 borderColor.selectToggle(oldToggle);
-            }
+        });
+        fillColor.selectedToggleProperty().addListener((obs, oldToggle, newToggle) -> {
+            if (newToggle == null)
+                fillColor.selectToggle(oldToggle);
         });
         
-        // Prevents the user from unselecting a fill color
-        fillColor.selectedToggleProperty().addListener((obs, oldToggle, newToggle) -> {
-            if (newToggle == null) {
-                fillColor.selectToggle(oldToggle);
+        // Prevents the user from panning while not in cursor mode
+        cursorMode.addListener((obs, wasCursor, isCursor) -> {
+            if (!isCursor) {
+                drawingPane.setPannable(false); // Disable panning
+            } else {
+                drawingPane.setPannable(true); // Enable panning
             }
         });
     }
@@ -106,10 +119,11 @@ public class PaintController implements Initializable {
     private void initCanvasEvents() {
         
         canvas.setOnMousePressed(e -> {
+            
             startX = e.getX();
             startY = e.getY();
 
-            if (cursorMode) {
+            if (cursorMode.get()) {
                 return;
             }
 
@@ -123,6 +137,7 @@ public class PaintController implements Initializable {
                 currentShape = new MyEllipsis(startX, startY, 0, 0, borderHex, fillHex);
                 canvas.getChildren().add(currentShape.getFxShape());
             }
+            
         });
 
         canvas.setOnMouseDragged(e -> {
@@ -228,7 +243,6 @@ public class PaintController implements Initializable {
      */
     @FXML
     private void selectCursor(ActionEvent event) {
-        cursorMode = true;
         lineMode = false;
         rectMode = false;
         ellipseMode = false;
@@ -240,7 +254,6 @@ public class PaintController implements Initializable {
      */
     @FXML
     private void selectShapeLine(ActionEvent event) {
-        cursorMode = false;
         lineMode = true;
         rectMode = false;
         ellipseMode = false;
@@ -252,7 +265,6 @@ public class PaintController implements Initializable {
      */
     @FXML
     private void selectShapeRectangle(ActionEvent event) {
-        cursorMode = false;
         lineMode = false;
         rectMode = true;
         ellipseMode = false;
@@ -264,7 +276,6 @@ public class PaintController implements Initializable {
      */
     @FXML
     private void selectShapeEllipsis(ActionEvent event) {
-        cursorMode = false;
         lineMode = false;
         rectMode = false;
         ellipseMode = true;

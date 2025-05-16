@@ -25,7 +25,7 @@
    <children>
       <BorderPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <center>
-            <ScrollPane focusTraversable="false" pannable="true" BorderPane.alignment="CENTER">
+            <ScrollPane fx:id="drawingPane" focusTraversable="false" pannable="true" BorderPane.alignment="CENTER">
                <contextMenu>
                   <ContextMenu>
                     <items>
