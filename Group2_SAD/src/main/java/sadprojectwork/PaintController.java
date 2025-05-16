@@ -66,6 +66,20 @@ public class PaintController implements Initializable {
      * Initializes the bindings of the application
      */
     private void initBindings() {
+        
+        // Prevents the user from unselecting a border color
+        borderColor.selectedToggleProperty().addListener((obs, oldToggle, newToggle) -> {
+            if (newToggle == null) {
+                borderColor.selectToggle(oldToggle);
+            }
+        });
+        
+        // Prevents the user from unselecting a fill color
+        fillColor.selectedToggleProperty().addListener((obs, oldToggle, newToggle) -> {
+            if (newToggle == null) {
+                fillColor.selectToggle(oldToggle);
+            }
+        });
     }
     
     /**

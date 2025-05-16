@@ -7,8 +7,7 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.Tab?>
-<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.input.KeyCodeCombination?>
@@ -20,6 +19,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane id="AnchorPane" fx:id="rootPane" prefHeight="720.0" prefWidth="1280.0" stylesheets="@Paint.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sadprojectwork.PaintController">
    <children>
@@ -93,7 +93,7 @@
                               <ToggleGroup fx:id="shapes" />
                            </toggleGroup>
                         </ToggleButton>
-                        <VBox alignment="BOTTOM_CENTER" spacing="5.0">
+                        <VBox alignment="BOTTOM_CENTER" spacing="10.0">
                            <children>
                               <ScrollPane focusTraversable="false" VBox.vgrow="ALWAYS">
                                  <content>
@@ -114,80 +114,71 @@
                                     </GridPane>
                                  </content>
                               </ScrollPane>
-                              <Label text="Shapes" />
+                              <Label text="Shapes">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font></Label>
                            </children>
                         </VBox>
-                        <VBox alignment="BOTTOM_CENTER">
+                        <VBox alignment="BOTTOM_CENTER" spacing="10.0">
                            <children>
-                              <HBox alignment="CENTER" spacing="25.0">
+                              <HBox alignment="CENTER" spacing="10.0">
                                  <children>
-                                    <VBox>
+                                    <VBox alignment="TOP_CENTER">
                                        <children>
                                           <Label text="Border" />
-                                          <TabPane>
-                                             <tabs>
-                                                <Tab closable="false" text="1">
-                                                   <content>
-                                                      <HBox alignment="CENTER_LEFT" prefHeight="50.0" spacing="10.0">
-                                                         <children>
-                                                            <ToggleButton mnemonicParsing="false" onAction="#selectBorderColor" selected="true" style="-fx-background-color: black;" styleClass="color-button" textAlignment="CENTER">
-                                                               <toggleGroup>
-                                                                  <ToggleGroup fx:id="borderColor" />
-                                                               </toggleGroup>
-                                                            </ToggleButton>
-                                                            <ToggleButton layoutX="10.0" layoutY="45.0" mnemonicParsing="false" onAction="#selectFillColor" style="-fx-background-color: white;" styleClass="color-button" textAlignment="CENTER" toggleGroup="$borderColor" />
-                                                            <ToggleButton layoutX="64.0" layoutY="45.0" mnemonicParsing="false" onAction="#selectFillColor" style="-fx-background-color: red;" styleClass="color-button" textAlignment="CENTER" toggleGroup="$borderColor" />
-                                                            <ToggleButton layoutX="117.0" layoutY="45.0" mnemonicParsing="false" onAction="#selectFillColor" style="-fx-background-color: orange;" styleClass="color-button" textAlignment="CENTER" toggleGroup="$borderColor" />
-                                                            <ToggleButton layoutX="171.0" layoutY="45.0" mnemonicParsing="false" onAction="#selectFillColor" style="-fx-background-color: yellow;" styleClass="color-button" textAlignment="CENTER" toggleGroup="$borderColor" />
-                                                            <ToggleButton layoutX="224.0" layoutY="45.0" mnemonicParsing="false" onAction="#selectFillColor" style="-fx-background-color: green;" styleClass="color-button" textAlignment="CENTER" toggleGroup="$borderColor" />
-                                                            <ToggleButton layoutX="278.0" layoutY="45.0" mnemonicParsing="false" onAction="#selectFillColor" style="-fx-background-color: blue;" styleClass="color-button" textAlignment="CENTER" toggleGroup="$borderColor" />
-                                                            <ToggleButton layoutX="332.0" layoutY="45.0" mnemonicParsing="false" onAction="#selectFillColor" style="-fx-background-color: purple;" styleClass="color-button" textAlignment="CENTER" toggleGroup="$borderColor" />
-                                                         </children>
-                                                         <padding>
-                                                            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                                         </padding>
-                                                      </HBox>
-                                                   </content>
-                                                </Tab>
-                                             </tabs>
-                                          </TabPane>
+                                          <HBox alignment="CENTER_LEFT" prefHeight="50.0" spacing="10.0">
+                                             <children>
+                                                <ToggleButton mnemonicParsing="false" onAction="#selectBorderColor" selected="true" style="-fx-background-color: black;" styleClass="color-button" textAlignment="CENTER">
+                                                   <toggleGroup>
+                                                      <ToggleGroup fx:id="borderColor" />
+                                                   </toggleGroup>
+                                                </ToggleButton>
+                                                <ToggleButton layoutX="10.0" layoutY="45.0" mnemonicParsing="false" onAction="#selectFillColor" style="-fx-background-color: white;" styleClass="color-button" textAlignment="CENTER" toggleGroup="$borderColor" />
+                                                <ToggleButton layoutX="64.0" layoutY="45.0" mnemonicParsing="false" onAction="#selectFillColor" style="-fx-background-color: red;" styleClass="color-button" textAlignment="CENTER" toggleGroup="$borderColor" />
+                                                <ToggleButton layoutX="117.0" layoutY="45.0" mnemonicParsing="false" onAction="#selectFillColor" style="-fx-background-color: orange;" styleClass="color-button" textAlignment="CENTER" toggleGroup="$borderColor" />
+                                                <ToggleButton layoutX="171.0" layoutY="45.0" mnemonicParsing="false" onAction="#selectFillColor" style="-fx-background-color: yellow;" styleClass="color-button" textAlignment="CENTER" toggleGroup="$borderColor" />
+                                                <ToggleButton layoutX="224.0" layoutY="45.0" mnemonicParsing="false" onAction="#selectFillColor" style="-fx-background-color: green;" styleClass="color-button" textAlignment="CENTER" toggleGroup="$borderColor" />
+                                                <ToggleButton layoutX="278.0" layoutY="45.0" mnemonicParsing="false" onAction="#selectFillColor" style="-fx-background-color: blue;" styleClass="color-button" textAlignment="CENTER" toggleGroup="$borderColor" />
+                                                <ToggleButton layoutX="332.0" layoutY="45.0" mnemonicParsing="false" onAction="#selectFillColor" style="-fx-background-color: purple;" styleClass="color-button" textAlignment="CENTER" toggleGroup="$borderColor" />
+                                             </children>
+                                             <padding>
+                                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                             </padding>
+                                          </HBox>
                                        </children>
                                     </VBox>
-                                    <VBox>
+                                    <Separator orientation="VERTICAL" />
+                                    <VBox alignment="TOP_CENTER">
                                        <children>
                                           <Label text="Fill" />
-                                          <TabPane>
-                                             <tabs>
-                                                <Tab closable="false" text="1">
-                                                   <content>
-                                                      <HBox alignment="CENTER_LEFT" prefHeight="50.0" spacing="10.0">
-                                                         <children>
-                                                            <ToggleButton mnemonicParsing="false" onAction="#selectFillColor" selected="true" style="-fx-background-color: black;" styleClass="color-button" textAlignment="CENTER">
-                                                               <toggleGroup>
-                                                                  <ToggleGroup fx:id="fillColor" />
-                                                               </toggleGroup>
-                                                            </ToggleButton>
-                                                            <ToggleButton layoutX="10.0" layoutY="45.0" mnemonicParsing="false" onAction="#selectFillColor" style="-fx-background-color: white;" styleClass="color-button" textAlignment="CENTER" toggleGroup="$fillColor" />
-                                                            <ToggleButton layoutX="64.0" layoutY="45.0" mnemonicParsing="false" onAction="#selectFillColor" style="-fx-background-color: red;" styleClass="color-button" textAlignment="CENTER" toggleGroup="$fillColor" />
-                                                            <ToggleButton layoutX="117.0" layoutY="45.0" mnemonicParsing="false" onAction="#selectFillColor" style="-fx-background-color: orange;" styleClass="color-button" textAlignment="CENTER" toggleGroup="$fillColor" />
-                                                            <ToggleButton layoutX="171.0" layoutY="45.0" mnemonicParsing="false" onAction="#selectFillColor" style="-fx-background-color: yellow;" styleClass="color-button" textAlignment="CENTER" toggleGroup="$fillColor" />
-                                                            <ToggleButton layoutX="224.0" layoutY="45.0" mnemonicParsing="false" onAction="#selectFillColor" style="-fx-background-color: green;" styleClass="color-button" textAlignment="CENTER" toggleGroup="$fillColor" />
-                                                            <ToggleButton layoutX="278.0" layoutY="45.0" mnemonicParsing="false" onAction="#selectFillColor" style="-fx-background-color: blue;" styleClass="color-button" textAlignment="CENTER" toggleGroup="$fillColor" />
-                                                            <ToggleButton layoutX="332.0" layoutY="45.0" mnemonicParsing="false" onAction="#selectFillColor" style="-fx-background-color: purple;" styleClass="color-button" textAlignment="CENTER" toggleGroup="$fillColor" />
-                                                         </children>
-                                                         <padding>
-                                                            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                                         </padding>
-                                                      </HBox>
-                                                   </content>
-                                                </Tab>
-                                             </tabs>
-                                          </TabPane>
+                                          <HBox alignment="CENTER_LEFT" prefHeight="50.0" spacing="10.0">
+                                             <children>
+                                                <ToggleButton mnemonicParsing="false" onAction="#selectFillColor" selected="true" style="-fx-background-color: black;" styleClass="color-button" textAlignment="CENTER">
+                                                   <toggleGroup>
+                                                      <ToggleGroup fx:id="fillColor" />
+                                                   </toggleGroup>
+                                                </ToggleButton>
+                                                <ToggleButton layoutX="10.0" layoutY="45.0" mnemonicParsing="false" onAction="#selectFillColor" style="-fx-background-color: white;" styleClass="color-button" textAlignment="CENTER" toggleGroup="$fillColor" />
+                                                <ToggleButton layoutX="64.0" layoutY="45.0" mnemonicParsing="false" onAction="#selectFillColor" style="-fx-background-color: red;" styleClass="color-button" textAlignment="CENTER" toggleGroup="$fillColor" />
+                                                <ToggleButton layoutX="117.0" layoutY="45.0" mnemonicParsing="false" onAction="#selectFillColor" style="-fx-background-color: orange;" styleClass="color-button" textAlignment="CENTER" toggleGroup="$fillColor" />
+                                                <ToggleButton layoutX="171.0" layoutY="45.0" mnemonicParsing="false" onAction="#selectFillColor" style="-fx-background-color: yellow;" styleClass="color-button" textAlignment="CENTER" toggleGroup="$fillColor" />
+                                                <ToggleButton layoutX="224.0" layoutY="45.0" mnemonicParsing="false" onAction="#selectFillColor" style="-fx-background-color: green;" styleClass="color-button" textAlignment="CENTER" toggleGroup="$fillColor" />
+                                                <ToggleButton layoutX="278.0" layoutY="45.0" mnemonicParsing="false" onAction="#selectFillColor" style="-fx-background-color: blue;" styleClass="color-button" textAlignment="CENTER" toggleGroup="$fillColor" />
+                                                <ToggleButton layoutX="332.0" layoutY="45.0" mnemonicParsing="false" onAction="#selectFillColor" style="-fx-background-color: purple;" styleClass="color-button" textAlignment="CENTER" toggleGroup="$fillColor" />
+                                             </children>
+                                             <padding>
+                                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                             </padding>
+                                          </HBox>
                                        </children>
                                     </VBox>
                                  </children>
                               </HBox>
-                              <Label text="Colors" />
+                              <Label text="Colors">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font></Label>
                            </children>
                            <HBox.margin>
                               <Insets />

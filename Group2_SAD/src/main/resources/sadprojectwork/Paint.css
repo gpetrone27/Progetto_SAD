@@ -18,9 +18,15 @@
 
 .color-button:hover {
     -fx-border-color: transparent;
+    -fx-scale-x: 1.25;
+    -fx-scale-y: 1.25;
 }
 
 .color-button:selected {
     -fx-scale-x: 1.5;
     -fx-scale-y: 1.5;
+}
+
+#canvas {
+    -fx-background-color: #fefefe;
 }
