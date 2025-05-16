@@ -53,8 +53,6 @@ public class PaintController implements Initializable {
     private ContextMenu rightClickMenu;
     @FXML
     private AnchorPane rootPane;
-    @FXML
-    private ToggleGroup shapes1;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
