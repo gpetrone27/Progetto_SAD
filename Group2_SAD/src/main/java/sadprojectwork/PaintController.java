@@ -25,21 +25,22 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class PaintController implements Initializable {
-
+    
     // Model reference
     private Model model = new Model();
-
+    
     // Colors variables
     private Color borderHex = Color.BLACK;
     private Color fillHex = Color.BLACK;
-
+    
+    private boolean cursorMode = true;
     private boolean lineMode = false;
     private boolean rectMode = false;
     private boolean ellipseMode = false;
     
     private Double startX = null;
     private Double startY = null;
-
+    
     @FXML
     private ToggleGroup shapes;
     @FXML
@@ -52,7 +53,9 @@ public class PaintController implements Initializable {
     private ContextMenu rightClickMenu;
     @FXML
     private AnchorPane rootPane;
-
+    @FXML
+    private ToggleGroup shapes1;
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         initBindings();
@@ -64,7 +67,7 @@ public class PaintController implements Initializable {
      */
     private void initBindings() {
     }
-
+    
     /**
      * Initializes the actions of the buttons of the application
      */
@@ -78,7 +81,7 @@ public class PaintController implements Initializable {
     @FXML
     private void newDrawing(ActionEvent event) {
     }
-
+    
     /**
      * Saves the current drawing in a file
      * @param event 
@@ -86,7 +89,7 @@ public class PaintController implements Initializable {
     @FXML
     private void saveDrawing(ActionEvent event) {
     }
-
+    
     /**
      * Loads a drawing from a file
      * @param event 
@@ -94,7 +97,7 @@ public class PaintController implements Initializable {
     @FXML
     private void loadDrawing(ActionEvent event) {
     }
-
+    
     /**
      * Undoes the last operation
      * @param event 
@@ -103,7 +106,7 @@ public class PaintController implements Initializable {
     private void undoOperation(ActionEvent event) {
         model.undoLast();
     }
-
+    
     /**
      * Redoes the last undone operation
      * @param event 
@@ -146,19 +149,39 @@ public class PaintController implements Initializable {
             fillHex = (Color) colorPaint;
         }
     }
-
+    
+    /**
+     * Selects the cursor: this allows to pan inside the canvas and select shapes
+     * @param event 
+     */
     @FXML
-    private void selectShapeEllipsis(ActionEvent event) {
+    private void selectCursor(ActionEvent event) {
     }
-
-    @FXML
-    private void selectShapeRectangle(ActionEvent event) {
-    }
-
+    
+    /**
+     * Selects the Line shape: this allows to draw lines
+     * @param event 
+     */
     @FXML
     private void selectShapeLine(ActionEvent event) {
     }
-
+    
+    /**
+     * Selects the Rectangle shape: this allows to draw rectangles
+     * @param event 
+     */
+    @FXML
+    private void selectShapeRectangle(ActionEvent event) {
+    }
+    
+    /**
+     * Selects the Ellipsis shape: this allows to draw ellipsises
+     * @param event 
+     */
+    @FXML
+    private void selectShapeEllipsis(ActionEvent event) {
+    }
+    
     /**
      * Deletes the selected shape
      * @param event 
@@ -166,7 +189,7 @@ public class PaintController implements Initializable {
     @FXML
     private void deleteShape(ActionEvent event) {
     }
-
+    
     /**
      * Copies the selected shape into the clipboard
      * @param event 
@@ -174,7 +197,7 @@ public class PaintController implements Initializable {
     @FXML
     private void copyShape(ActionEvent event) {
     }
-
+    
     /**
      * Pastes a shape from the clipboard
      * @param event 
@@ -182,7 +205,7 @@ public class PaintController implements Initializable {
     @FXML
     private void pasteShape(ActionEvent event) {
     }
-
+    
     /**
      * Copies the selected shape into the clipboard and deletes it
      * @param event 
@@ -190,7 +213,7 @@ public class PaintController implements Initializable {
     @FXML
     private void cutShape(ActionEvent event) {
     }
-
+    
     /**
      * Shows a popup window when the user clicks "Resize" in the right click menu
      * @param event 
@@ -245,5 +268,5 @@ public class PaintController implements Initializable {
      */
     private void resizeShape(int newWidth, int newHeight) { 
     }
-
+    
 }
