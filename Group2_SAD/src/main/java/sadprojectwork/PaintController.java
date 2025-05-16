@@ -48,32 +48,58 @@ public class PaintController implements Initializable {
         initBindings();
     }
     
+    /**
+     * Initializes the bindings of the application
+     */
     private void initBindings() {
-        
     }
 
+    /**
+     * Creates a new drawing
+     * @param event 
+     */
     @FXML
     private void newDrawing(ActionEvent event) {
     }
 
+    /**
+     * Saves the current drawing in a file
+     * @param event 
+     */
     @FXML
     private void saveDrawing(ActionEvent event) {
     }
 
+    /**
+     * Loads a drawing from a file
+     * @param event 
+     */
     @FXML
     private void loadDrawing(ActionEvent event) {
     }
 
+    /**
+     * Undoes the last operation
+     * @param event 
+     */
     @FXML
     private void undoOperation(ActionEvent event) {
         model.undoLast();
     }
 
+    /**
+     * Redoes the last undone operation
+     * @param event 
+     */
     @FXML
     private void redoOperation(ActionEvent event) {
         model.redoLast();
     }
 
+    /**
+     * Selects the border color from the corresponding button when clicked
+     * @param event 
+     */
     @FXML
     private void selectBorderColor(ActionEvent event) {
         ToggleButton colorButton = (ToggleButton) event.getSource();
@@ -84,6 +110,10 @@ public class PaintController implements Initializable {
         System.out.println(borderHex);
     }
 
+    /**
+     * Selects the fill color from the corresponding button when clicked
+     * @param event 
+     */
     @FXML
     private void selectFillColor(ActionEvent event) {
         ToggleButton colorButton = (ToggleButton) event.getSource();
@@ -122,6 +152,10 @@ public class PaintController implements Initializable {
     private void cutShape(ActionEvent event) {
     }
 
+    /**
+     * Shows a popup window to edit the selected shape's dimensions
+     * @param event 
+     */
     @FXML
     private void showResizeWindow(ActionEvent event) {
         
@@ -131,24 +165,24 @@ public class PaintController implements Initializable {
         popupWindow.initModality(Modality.APPLICATION_MODAL); // Blocks inputs to other windows
         
         // UI Elements
-        TextField field1 = new TextField();
-        TextField field2 = new TextField();
+        TextField widthField = new TextField();
+        TextField heightField = new TextField();
         Button submitButton = new Button("Submit");
         
-        field1.setPromptText("Width");
-        field2.setPromptText("Height");
+        widthField.setPromptText("Width");
+        heightField.setPromptText("Height");
         submitButton.setOnAction(e -> {
             try {
-                int num1 = Integer.parseInt(field1.getText().trim());
-                int num2 = Integer.parseInt(field2.getText().trim());
-                resizeShape(num1, num2); // Add the shape as a parameter here as well
+                int width = Integer.parseInt(widthField.getText().trim());
+                int height = Integer.parseInt(heightField.getText().trim());
+                resizeShape(width, height); // Add the shape as a parameter here as well
                 popupWindow.close();
             } catch (NumberFormatException ex) {}
         });
         
         VBox layout = new VBox(10,
                 new Label("Enter new dimensions"),
-                new HBox(5, field1, new Label("x"), field2),
+                new HBox(5, widthField, new Label("x"), heightField),
                 submitButton
         );
         layout.setPadding(new Insets(15));
@@ -158,9 +192,13 @@ public class PaintController implements Initializable {
         popupWindow.showAndWait();
     }
     
-    // TO DO: Add the shape to be resized as a parameter of the method
-    private void resizeShape(int width, int height) {
-        
+    /**
+     * Resizes the selected shape according to the new dimensions
+     * @param shape
+     * @param newWidth
+     * @param newHeight 
+     */
+    private void resizeShape(int newWidth, int newHeight) { 
     }
     
 }
