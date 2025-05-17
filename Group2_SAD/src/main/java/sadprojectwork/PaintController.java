@@ -160,24 +160,30 @@ public class PaintController implements Initializable {
         canvas.setOnMousePressed(e -> {
             startX = e.getX();
             startY = e.getY();
-
-            if (cursorMode.get())
+            
+            if (cursorMode.get()) {
                 return;
+            }
 
             if (rectMode) {
-                currentShape = new MyRectangle(startX, startY, 0, 0, borderHex, fillHex, model);
+                MyShape base = new MyRectangle(startX, startY, 0, 0);
+                MyShape withBorder = new BorderColorDecorator(base, borderHex);
+                MyShape withFill = new FillColorDecorator(withBorder, fillHex);
+                currentShape = withFill;
                 canvas.getChildren().add(currentShape.getFxShape());
-                model.addShape(currentShape);
                 enableSelection(currentShape);
             } else if (lineMode) {
-                currentShape = new MyLine(startX, startY, startX, startY, borderHex, model);
+                MyShape base = new MyLine(startX, startY, startX, startY);
+                MyShape withBorder = new BorderColorDecorator(base, borderHex);
+                currentShape = withBorder;
                 canvas.getChildren().add(currentShape.getFxShape());
-                model.addShape(currentShape);
                 enableSelection(currentShape);
             } else if (ellipseMode) {
-                currentShape = new MyEllipsis(startX, startY, 0, 0, borderHex, fillHex, model);
+                MyShape base = new MyEllipsis(startX, startY, 0, 0);
+                MyShape withBorder = new BorderColorDecorator(base, borderHex);
+                MyShape withFill = new FillColorDecorator(withBorder, fillHex);
+                currentShape = withFill;
                 canvas.getChildren().add(currentShape.getFxShape());
-                model.addShape(currentShape);
                 enableSelection(currentShape);
             }
         });
@@ -190,10 +196,7 @@ public class PaintController implements Initializable {
             double endX = e.getX();
             double endY = e.getY();
 
-            double width = Math.abs(endX - startX);
-            double height = Math.abs(endY - startY);
-
-            currentShape.resize(width, height);
+            currentShape.resizeTo(endX, endY); 
         });
 
         canvas.setOnMouseReleased(e -> {
