@@ -247,11 +247,6 @@ public class PaintController implements Initializable {
     @FXML
     private void undoOperation(ActionEvent event) {
         model.undoLast();
-        
-        MyShape shape = model.getSelectedShape();
-        if (shape != null) {
-            canvas.getChildren().add(shape.getFxShape());
-        }
     }
 
     /**
@@ -413,13 +408,13 @@ public class PaintController implements Initializable {
      */
     @FXML
     private void cutShape(ActionEvent event) {
-        /*MyShape selected = model.getSelectedShape();
+        MyShape selected = model.getSelectedShape();
         if (selected != null) {
             Command cutCmd = new CutCommand(selectedShape, model, canvas);
             model.execute(cutCmd);
             model.setSelectedShape(null);
             activeMenuItem();
-        }*/
+        }
     }
 
     /**

@@ -13,7 +13,7 @@ import javafx.scene.layout.Pane;
  */
 
 public class CutCommand implements Command {
-    /*private MyShape shapeToCut;
+    private MyShape shapeToCut;
     private Model model;
     private Pane canvas;
     
@@ -21,20 +21,20 @@ public class CutCommand implements Command {
         this.shapeToCut = shape;
         this.model = model;
         this.canvas = canvas;
-    } */
+    }
 
     @Override
     public void execute() {
-        /*model.setClipboardShape(shapeToCut);
+        model.setClipboardShape(shapeToCut);
         model.removeShape(shapeToCut);
-        canvas.getChildren().remove(shapeToCut.getFxShape()); */
+        canvas.getChildren().remove(shapeToCut.getFxShape());
     }
 
     @Override
     public void undo() {
-       /*model.addShape(shapeToCut);
+       model.addShape(shapeToCut);
        canvas.getChildren().add(shapeToCut.getFxShape());
-       model.setClipboardShape(null);*/
+       model.setClipboardShape(null);
     }
 
 }
