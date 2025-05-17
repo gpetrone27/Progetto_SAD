@@ -6,13 +6,22 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.Shape;
 
 public class MyLine extends MyShape {
-    
+    private Model model;
     private Line line;
 
-    public MyLine(double startX, double startY, double endX, double endY, Color borderColor) {
+    public MyLine(double startX, double startY, double endX, double endY, Color borderColor, Model model) {
         super(startX, startY);
+        this.model = model;
         this.line = new Line(startX, startY, endX, endY);
         line.setStroke(borderColor);
+        
+        line.setOnMouseClicked(e -> {
+            model.getShapes().forEach(shape -> shape.setSelected(false));
+            this.setSelected(true);
+            model.setSelectedShape(this);
+            
+            PaintController.getInstance().activeMenuItem();
+        });
     }
 
     @Override
@@ -29,7 +38,7 @@ public class MyLine extends MyShape {
     // Creates a copy of the shape, useful for the copy and paste command
     @Override
     public MyShape cloneShape() {
-        return new MyLine(startX, startY, line.getEndX(), line.getEndY(), (Color) line.getStroke());
+        return new MyLine(startX, startY, line.getEndX(), line.getEndY(), (Color) line.getStroke(), model);
     }
     
     @Override

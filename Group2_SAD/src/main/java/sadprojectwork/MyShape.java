@@ -1,12 +1,14 @@
 
 package sadprojectwork;
 
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Shape;
 
 public abstract class MyShape {
 
     protected double startX;
     protected double startY;
+    private boolean selected = false;
 
     public MyShape(double startX, double startY) {
         this.startX = startX;
@@ -30,5 +32,20 @@ public abstract class MyShape {
 
     public double getStartY() {
         return startY;
+    }
+    public boolean isSelected(){
+        return selected;
+    }
+    
+    public void setSelected(boolean selected){
+        this.selected = selected;
+        if (getFxShape() != null) {
+            if (selected) {
+                getFxShape().setStroke(Color.DODGERBLUE);
+                getFxShape().setStrokeWidth(2);
+            } else {
+                getFxShape().setStroke(null);
+            }
+        }
     }
 }

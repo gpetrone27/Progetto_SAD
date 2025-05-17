@@ -6,14 +6,23 @@ import javafx.scene.shape.Ellipse;
 import javafx.scene.shape.Shape;
 
 public class MyEllipsis extends MyShape {
-    
+    private Model model;
     private Ellipse ellipse;
 
-    public MyEllipsis(double centerX, double centerY, double radiusX, double radiusY, Color borderColor, Color fillColor) {
+    public MyEllipsis(double centerX, double centerY, double radiusX, double radiusY, Color borderColor, Color fillColor, Model model) {
         super(centerX, centerY);
+        this.model = model;
         ellipse = new Ellipse(centerX, centerY, radiusX, radiusY);
         ellipse.setStroke(borderColor);
         ellipse.setFill(fillColor);
+        
+        ellipse.setOnMouseClicked(e -> {
+            model.getShapes().forEach(shape -> shape.setSelected(false));
+            this.setSelected(true);
+            model.setSelectedShape(this);
+            
+            PaintController.getInstance().activeMenuItem();
+        });
     }
 
     @Override
@@ -31,7 +40,7 @@ public class MyEllipsis extends MyShape {
     @Override
     public MyShape cloneShape() {
         return new MyEllipsis(startX, startY, ellipse.getRadiusX(), ellipse.getRadiusY(),
-                              (Color) ellipse.getStroke(), (Color) ellipse.getFill());
+                              (Color) ellipse.getStroke(), (Color) ellipse.getFill(), model);
     }
     
      @Override

@@ -27,21 +27,21 @@
          <center>
             <ScrollPane fx:id="drawingPane" focusTraversable="false" pannable="true" BorderPane.alignment="CENTER">
                <contextMenu>
-                  <ContextMenu>
+                  <ContextMenu fx:id="rightClickMenu">
                     <items>
-                        <MenuItem disable="true" mnemonicParsing="false" onAction="#cutShape" text="Cut">
+                        <MenuItem fx:id="cutMenuItem" disable="true" mnemonicParsing="false" onAction="#cutShape" text="Cut">
                            <accelerator>
                               <KeyCodeCombination alt="UP" code="X" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                            </accelerator></MenuItem>
-                        <MenuItem disable="true" mnemonicParsing="false" onAction="#copyShape" text="Copy">
+                        <MenuItem fx:id="copyMenuItem" disable="true" mnemonicParsing="false" onAction="#copyShape" text="Copy">
                            <accelerator>
                               <KeyCodeCombination alt="UP" code="C" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                            </accelerator></MenuItem>
-                        <MenuItem disable="true" mnemonicParsing="false" onAction="#pasteShape" text="Paste">
+                        <MenuItem fx:id="pasteMenuItem" disable="true" mnemonicParsing="false" onAction="#pasteShape" text="Paste">
                            <accelerator>
                               <KeyCodeCombination alt="UP" code="V" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                            </accelerator></MenuItem>
-                      <MenuItem disable="true" mnemonicParsing="false" onAction="#deleteShape" text="Delete" />
+                      <MenuItem fx:id="deleteMenuItem" disable="true" mnemonicParsing="false" onAction="#deleteShape" text="Delete" />
                         <MenuItem disable="true" mnemonicParsing="false" onAction="#showResizeWindow" text="Resize" />
                     </items>
                   </ContextMenu>

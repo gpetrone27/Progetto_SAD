@@ -6,14 +6,22 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.paint.Color;
 
 public class MyRectangle extends MyShape {
-    
+    private Model model;
     private Rectangle rect;
 
-    public MyRectangle(double x, double y, double width, double height, Color borderColor, Color fillColor) {
+    public MyRectangle(double x, double y, double width, double height, Color borderColor, Color fillColor, Model model) {
         super(x, y);
+        this.model = model;
         rect = new Rectangle(x, y, width, height);
         rect.setStroke(borderColor);
         rect.setFill(fillColor);
+        
+        rect.setOnMouseClicked(e -> {
+            model.getShapes().forEach(shape -> shape.setSelected(false));
+            this.setSelected(true);
+            model.setSelectedShape(this);
+            PaintController.getInstance().activeMenuItem();
+        });
     }
 
     @Override
@@ -31,7 +39,7 @@ public class MyRectangle extends MyShape {
     @Override
     public MyShape cloneShape() {
         return new MyRectangle(startX, startY, rect.getWidth(), rect.getHeight(),
-                               (Color) rect.getStroke(), (Color) rect.getFill());
+                               (Color) rect.getStroke(), (Color) rect.getFill(), model);
     }
 
     @Override
