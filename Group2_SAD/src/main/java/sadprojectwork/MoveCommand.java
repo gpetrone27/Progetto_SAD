@@ -1,13 +1,6 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package sadprojectwork;
 
-/**
- *
- * @author noemi
- */
 public class MoveCommand implements Command {
     
     private MyShape shape;

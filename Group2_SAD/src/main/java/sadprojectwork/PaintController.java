@@ -357,7 +357,7 @@ public class PaintController implements Initializable {
             borderHex = (Color) colorPaint;
 
             if (selectedShape != null) {
-                Command changeColor = new ChangeColor(selectedShape, null, selectedColor);
+                Command changeColor = new ChangeColorCommand(selectedShape, null, selectedColor);
                 model.execute(changeColor);
             } else {
                 borderHex = selectedColor;
@@ -382,7 +382,7 @@ public class PaintController implements Initializable {
             Color selectedColor = color;
 
             if (selectedShape != null) {
-                Command changeColor = new ChangeColor(selectedShape, selectedColor, null);
+                Command changeColor = new ChangeColorCommand(selectedShape, selectedColor, null);
                 model.execute(changeColor);
             } else {
                 fillHex = selectedColor;

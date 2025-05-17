@@ -1,9 +1,10 @@
+
 package sadprojectwork;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Shape;
 
-public class ChangeColor implements Command {
+public class ChangeColorCommand implements Command {
 
     private final MyShape targetShape;
     private final Color newFillColor;
@@ -12,7 +13,7 @@ public class ChangeColor implements Command {
     private final Color newStrokeColor;
     private Color oldStrokeColor;
 
-    public ChangeColor(MyShape targetShape, Color newFillColor, Color newStrokeColor) {
+    public ChangeColorCommand(MyShape targetShape, Color newFillColor, Color newStrokeColor) {
         this.targetShape = targetShape;
         this.newFillColor = newFillColor;
         this.newStrokeColor = newStrokeColor;
