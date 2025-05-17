@@ -18,6 +18,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -221,18 +222,23 @@ public class PaintController implements Initializable {
         shapeSelected.set(false);
         for (javafx.scene.Node node : canvas.getChildren()) {
             if (node instanceof Shape resetShape) {
-                resetShape.setStrokeWidth(1); // Reset
+                resetShape.setEffect(null); // Reset effects
             }
         }
     }
 
     private void highlightSelected(MyShape shape) {
+        // Removes the glow effect from all shapes
         for (javafx.scene.Node node : canvas.getChildren()) {
             if (node instanceof Shape resetShape) {
-                resetShape.setStrokeWidth(1); // Reset
+                resetShape.setEffect(null); // Reset effects
             }
         }
-        shape.getFxShape().setStrokeWidth(3); // Highlight selected shape
+        // Add a glow effect around the selected shape
+        DropShadow ds = new DropShadow();
+        ds.setColor(Color.DODGERBLUE);
+        ds.setRadius(10);
+        shape.getFxShape().setEffect(ds);
     }
 
     /**
