@@ -71,5 +71,9 @@ public abstract class MyShape {
         double dy = endY - startY;
         resize(dx, dy); 
     }
+    
+    public void move(double updtX, double updtY) {
+        setPosition(getStartX() + updtX, getStartY() + updtY);
+    }
 
 }

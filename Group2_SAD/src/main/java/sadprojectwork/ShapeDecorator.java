@@ -41,6 +41,16 @@ public abstract class ShapeDecorator extends MyShape {
     public void resizeTo(double endX, double endY) {
         decoratedShape.resizeTo(endX, endY);
     }
+    
+    @Override
+    public double getStartX() {
+        return decoratedShape.getStartX();
+    }
+
+    @Override
+    public double getStartY() {
+        return decoratedShape.getStartY();
+    }
 
     // updates the position of the decorated shape
     @Override

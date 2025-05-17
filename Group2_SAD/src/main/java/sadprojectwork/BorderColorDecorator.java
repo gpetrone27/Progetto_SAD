@@ -34,4 +34,16 @@ public class BorderColorDecorator extends ShapeDecorator {
     public void resizeTo(double endX, double endY) {
         decoratedShape.resizeTo(endX, endY);
     }
+    
+    public MyShape cloneShape() {
+        MyShape clone = decoratedShape.cloneShape();
+        clone.startX = decoratedShape.getStartX();
+        clone.startY = decoratedShape.getStartY();
+        return new BorderColorDecorator(clone, getBorderColor());
+    }
+    
+    public Color getBorderColor() {
+        return (Color) getFxShape().getStroke();
+    }
+    
 }

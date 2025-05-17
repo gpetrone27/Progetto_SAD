@@ -52,6 +52,11 @@ public class PaintController implements Initializable {
 
     private MyShape currentShape = null;
     private MyShape selectedShape = null;
+    
+    private double dragStartX;
+    private double dragStartY;
+    private double originalX;
+    private double originalY;
 
     @FXML
     private AnchorPane rootPane;
@@ -161,6 +166,15 @@ public class PaintController implements Initializable {
             startX = e.getX();
             startY = e.getY();
             
+            if(selectedShape != null) {
+                dragStartX = startX;
+                dragStartY = startY;
+                originalX = selectedShape.getStartX();
+                originalY = selectedShape.getStartY();
+                e.consume();
+                return;
+            }
+            
             if (cursorMode.get()) {
                 return;
             }
@@ -172,12 +186,14 @@ public class PaintController implements Initializable {
                 currentShape = withFill;
                 canvas.getChildren().add(currentShape.getFxShape());
                 enableSelection(currentShape);
+                cursorMode.set(true);
             } else if (lineMode) {
                 MyShape base = new MyLine(startX, startY, startX, startY);
                 MyShape withBorder = new BorderColorDecorator(base, borderHex);
                 currentShape = withBorder;
                 canvas.getChildren().add(currentShape.getFxShape());
                 enableSelection(currentShape);
+                cursorMode.set(true);
             } else if (ellipseMode) {
                 MyShape base = new MyEllipsis(startX, startY, 0, 0);
                 MyShape withBorder = new BorderColorDecorator(base, borderHex);
@@ -185,11 +201,23 @@ public class PaintController implements Initializable {
                 currentShape = withFill;
                 canvas.getChildren().add(currentShape.getFxShape());
                 enableSelection(currentShape);
+                cursorMode.set(true);
             }
         });
 
         canvas.setOnMouseDragged(e -> {
             if (currentShape == null) {
+                if(selectedShape != null){
+                    double dx = e.getX() - dragStartX;
+                    double dy = e.getY() - dragStartY;
+
+                    selectedShape.move(dx, dy);
+
+                    dragStartX = e.getX();
+                    dragStartY = e.getY();
+                    
+                    e.consume();
+                }
                 return;
             }
 
@@ -200,9 +228,22 @@ public class PaintController implements Initializable {
         });
 
         canvas.setOnMouseReleased(e -> {
+            if (selectedShape != null && currentShape == null) {
+                double newX = selectedShape.getStartX();
+                double newY = selectedShape.getStartY();
+
+                if (newX != originalX || newY != originalY) {
+                    Command moveCmd = new MoveCommand(selectedShape, originalX, originalY, newX, newY);
+                    model.execute(moveCmd);
+                }
+            }
+            
             if (currentShape != null) {
                 currentShape = null;
             }
+            
+            e.consume();
+            
         });
     }
 
@@ -212,6 +253,7 @@ public class PaintController implements Initializable {
             selectedShape = shape;
             shapeSelected.set(true);
             highlightSelected(shape);
+            cursorMode.set(true);
             event.consume();
         });
         // Disables selection when user clicks on blank canvas
@@ -405,7 +447,10 @@ public class PaintController implements Initializable {
      */
     @FXML
     private void copyShape(ActionEvent event) {
-        // TO DO
+        if(selectedShape != null){
+            Command copyCmd = new CopyCommand(selectedShape, model, canvas);
+            model.execute(copyCmd);
+        }
         hasClipboard.set(model.getClipboard() != null);
     }
 
@@ -416,10 +461,12 @@ public class PaintController implements Initializable {
      */
     @FXML
     private void pasteShape(ActionEvent event) {
-        // TO DO
+        PasteCommand pasteCmd = new PasteCommand(model, canvas);
+        model.execute(pasteCmd);
         hasClipboard.set(model.getClipboard() != null);
-    }
- 
+        enableSelection(pasteCmd.getPastedShape());
+        cursorMode.set(true);
+    } 
     /**
      * Deletes the selected shape
      * @param event

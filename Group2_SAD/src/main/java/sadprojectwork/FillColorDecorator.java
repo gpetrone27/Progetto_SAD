@@ -27,4 +27,15 @@ public class FillColorDecorator extends ShapeDecorator {
         Shape fxShape = getFxShape();
         fxShape.setFill(fillColor);
     }
+    
+    public MyShape cloneShape() {
+        MyShape clone = decoratedShape.cloneShape();
+        clone.startX = decoratedShape.getStartX();
+        clone.startY = decoratedShape.getStartY();
+        return new FillColorDecorator(clone, getFillColor());
+    }
+    
+    public Color getFillColor() {
+        return (Color) getFxShape().getFill();
+    }
 }
