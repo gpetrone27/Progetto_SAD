@@ -170,6 +170,9 @@ public class PaintController implements Initializable {
 
     }
 
+    /**
+     * Initializes all the events related to the canvas
+     */
     private void initCanvasEvents() {
 
         canvas.setOnMousePressed(e -> {
@@ -259,6 +262,10 @@ public class PaintController implements Initializable {
         });
     }
 
+    /**
+     * Enables the selection of the given shape
+     * @param shape 
+     */
     private void enableSelection(MyShape shape) {
         
         // Enables selection when user clicks on a shape
@@ -271,6 +278,9 @@ public class PaintController implements Initializable {
         });
     }
     
+    /**
+     * Deactivates the current selection and clears all effects
+     */
     private void disableSelection() {
         selectedShape = null;
         shapeSelected.set(false);
@@ -281,16 +291,20 @@ public class PaintController implements Initializable {
         }
     }
 
+    /**
+     * Adds an effect around the selected shape
+     * @param shape 
+     */
     private void highlightSelected(MyShape shape) {
         
-        // Removes the glow effect from all shapes
+        // Removes the effect from all shapes
         for (javafx.scene.Node node : canvas.getChildren()) {
             if (node instanceof Shape resetShape) {
                 resetShape.setEffect(null); // Reset effects
             }
         }
         
-        // Add a glow effect around the selected shape
+        // Add the effect to the selected shape
         DropShadow ds = new DropShadow();
         ds.setColor(Color.DODGERBLUE);
         ds.setRadius(10);
