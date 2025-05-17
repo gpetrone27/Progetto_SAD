@@ -27,7 +27,7 @@
          <center>
             <ScrollPane fx:id="drawingPane" focusTraversable="false" pannable="true" BorderPane.alignment="CENTER">
                <contextMenu>
-                  <ContextMenu fx:id="rightClickMenu">
+                  <ContextMenu>
                     <items>
                         <MenuItem fx:id="cutMenuItem" disable="true" mnemonicParsing="false" onAction="#cutShape" text="Cut">
                            <accelerator>
@@ -42,7 +42,7 @@
                               <KeyCodeCombination alt="UP" code="V" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                            </accelerator></MenuItem>
                       <MenuItem fx:id="deleteMenuItem" disable="true" mnemonicParsing="false" onAction="#deleteShape" text="Delete" />
-                        <MenuItem disable="true" mnemonicParsing="false" onAction="#showResizeWindow" text="Resize" />
+                        <MenuItem fx:id="resizeMenuItem" disable="true" mnemonicParsing="false" onAction="#showResizeWindow" text="Resize" />
                     </items>
                   </ContextMenu>
                </contextMenu>

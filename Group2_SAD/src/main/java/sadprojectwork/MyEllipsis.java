@@ -20,8 +20,6 @@ public class MyEllipsis extends MyShape {
             model.getShapes().forEach(shape -> shape.setSelected(false));
             this.setSelected(true);
             model.setSelectedShape(this);
-            
-            PaintController.getInstance().activeMenuItem();
         });
     }
 
