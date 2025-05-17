@@ -1,7 +1,6 @@
 
 package sadprojectwork;
 
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Shape;
 
@@ -9,7 +8,6 @@ import javafx.scene.shape.Shape;
  * Represents a custom line shape in the drawing application.
  * Extends the abstract MyShape class and wraps a JavaFX Line.
  */
-
 public class MyLine extends MyShape {
     private Line line;
 

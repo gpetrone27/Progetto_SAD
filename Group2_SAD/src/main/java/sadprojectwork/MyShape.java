@@ -1,14 +1,12 @@
 
 package sadprojectwork;
 
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Shape;
 
 /**
  * Abstract base class for all custom shapes in the drawing application.
  * Defines common properties and methods shared by all shapes.
  */
-
 public abstract class MyShape {
 
     protected double startX;
@@ -51,18 +49,6 @@ public abstract class MyShape {
         return selected;
     }
     
-    public void setSelected(boolean selected){
-        this.selected = selected;
-        if (getFxShape() != null) {
-            if (selected) {
-                getFxShape().setStroke(Color.DODGERBLUE);
-                getFxShape().setStrokeWidth(2);
-            } else {
-                getFxShape().setStroke(null);
-            }
-        }
-    }
-    
     // resizes the shape to reach a target coordinate.
     // converts the end coordinates to delta values and delegates to resize().
     // can be overridden by shapes (like lines) that interpret resizing differently.
@@ -72,8 +58,12 @@ public abstract class MyShape {
         resize(dx, dy); 
     }
     
-    public void move(double updtX, double updtY) {
+    public void moveOf(double updtX, double updtY) {
         setPosition(getStartX() + updtX, getStartY() + updtY);
+    }
+    
+    public void moveTo(double xNew, double yNew) {
+        setPosition(xNew, yNew);
     }
 
 }

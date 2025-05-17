@@ -1,6 +1,6 @@
+
 package sadprojectwork;
 
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Ellipse;
 import javafx.scene.shape.Shape;
 
@@ -8,7 +8,6 @@ import javafx.scene.shape.Shape;
  * Represents a custom ellipse shape in the drawing application.
  * Extends MyShape and wraps a JavaFX Ellipse.
  */
-
 public class MyEllipsis extends MyShape {
 
     private Ellipse ellipse;

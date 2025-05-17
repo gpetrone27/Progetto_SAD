@@ -3,14 +3,11 @@ package sadprojectwork;
 
 import javafx.scene.shape.Shape;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.paint.Color;
-
 
 /**
  * Represents a custom rectangle shape in the drawing application.
  * Extends MyShape and wraps a JavaFX Rectangle.
  */
-
 public class MyRectangle extends MyShape {
     private Rectangle rect;
 

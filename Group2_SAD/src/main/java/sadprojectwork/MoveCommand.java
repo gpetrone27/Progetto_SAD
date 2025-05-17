@@ -9,6 +9,7 @@ package sadprojectwork;
  * @author noemi
  */
 public class MoveCommand implements Command {
+    
     private MyShape shape;
     private double oldX, oldY;
     private double newX, newY;

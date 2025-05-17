@@ -9,6 +9,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
+import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -57,6 +58,9 @@ public class PaintController implements Initializable {
     private double dragStartY;
     private double originalX;
     private double originalY;
+    
+    private double lastMouseX;
+    private double lastMouseY;
 
     @FXML
     private AnchorPane rootPane;
@@ -98,6 +102,12 @@ public class PaintController implements Initializable {
      */
     private void initBindings() {
 
+        // Updates the last position of the mouse, relative to the canvas, whenever it moves
+        canvas.setOnMouseMoved(event -> {
+            lastMouseX = event.getX();
+            lastMouseY = event.getY();   
+        });
+        
         // Binds the value of the property cursorMode to the button cursorButton
         cursorMode.bindBidirectional(cursorButton.selectedProperty());
         
@@ -186,14 +196,12 @@ public class PaintController implements Initializable {
                 currentShape = withFill;
                 canvas.getChildren().add(currentShape.getFxShape());
                 enableSelection(currentShape);
-                cursorMode.set(true);
             } else if (lineMode) {
                 MyShape base = new MyLine(startX, startY, startX, startY);
                 MyShape withBorder = new BorderColorDecorator(base, borderHex);
                 currentShape = withBorder;
                 canvas.getChildren().add(currentShape.getFxShape());
                 enableSelection(currentShape);
-                cursorMode.set(true);
             } else if (ellipseMode) {
                 MyShape base = new MyEllipsis(startX, startY, 0, 0);
                 MyShape withBorder = new BorderColorDecorator(base, borderHex);
@@ -201,17 +209,16 @@ public class PaintController implements Initializable {
                 currentShape = withFill;
                 canvas.getChildren().add(currentShape.getFxShape());
                 enableSelection(currentShape);
-                cursorMode.set(true);
             }
         });
 
         canvas.setOnMouseDragged(e -> {
             if (currentShape == null) {
-                if(selectedShape != null){
+                if (selectedShape != null){
                     double dx = e.getX() - dragStartX;
                     double dy = e.getY() - dragStartY;
 
-                    selectedShape.move(dx, dy);
+                    selectedShape.moveOf(dx, dy);
 
                     dragStartX = e.getX();
                     dragStartY = e.getY();
@@ -228,6 +235,7 @@ public class PaintController implements Initializable {
         });
 
         canvas.setOnMouseReleased(e -> {
+            
             if (selectedShape != null && currentShape == null) {
                 double newX = selectedShape.getStartX();
                 double newY = selectedShape.getStartY();
@@ -243,11 +251,11 @@ public class PaintController implements Initializable {
             }
             
             e.consume();
-            
         });
     }
 
     private void enableSelection(MyShape shape) {
+        
         // Enables selection when user clicks on a shape
         shape.getFxShape().setOnMouseClicked(event -> {
             selectedShape = shape;
@@ -256,6 +264,7 @@ public class PaintController implements Initializable {
             cursorMode.set(true);
             event.consume();
         });
+        
         // Disables selection when user clicks on blank canvas
         canvas.setOnMouseClicked(event -> {
             disableSelection();
@@ -273,12 +282,14 @@ public class PaintController implements Initializable {
     }
 
     private void highlightSelected(MyShape shape) {
+        
         // Removes the glow effect from all shapes
         for (javafx.scene.Node node : canvas.getChildren()) {
             if (node instanceof Shape resetShape) {
                 resetShape.setEffect(null); // Reset effects
             }
         }
+        
         // Add a glow effect around the selected shape
         DropShadow ds = new DropShadow();
         ds.setColor(Color.DODGERBLUE);
@@ -428,7 +439,6 @@ public class PaintController implements Initializable {
 
     /**
      * Copies the selected shape into the clipboard and deletes it
-     *
      * @param event
      */
     @FXML
@@ -442,7 +452,6 @@ public class PaintController implements Initializable {
  
     /**
      * Copies the selected shape into the clipboard
-     *
      * @param event
      */
     @FXML
@@ -456,17 +465,15 @@ public class PaintController implements Initializable {
 
     /**
      * Pastes a shape from the clipboard
-     *
      * @param event
      */
     @FXML
     private void pasteShape(ActionEvent event) {
-        PasteCommand pasteCmd = new PasteCommand(model, canvas);
+        PasteCommand pasteCmd = new PasteCommand(model, canvas, lastMouseX, lastMouseY);
         model.execute(pasteCmd);
-        hasClipboard.set(model.getClipboard() != null);
         enableSelection(pasteCmd.getPastedShape());
-        cursorMode.set(true);
-    } 
+    }
+    
     /**
      * Deletes the selected shape
      * @param event
@@ -479,6 +486,16 @@ public class PaintController implements Initializable {
         }
     }
 
+    /**
+     * Resizes the selected shape according to the new dimensions
+     * @param shape
+     * @param newWidth
+     * @param newHeight
+     */
+    private void resizeShape(MyShape shape, int newWidth, int newHeight) {
+        // TO DO
+    }
+    
     /**
      * Shows a popup window when the user clicks "Resize" in the right click menu
      * @param event
@@ -523,15 +540,6 @@ public class PaintController implements Initializable {
         // Shows the window
         popupWindow.setScene(new Scene(layout, 240, 160));
         popupWindow.showAndWait();
-    }
-
-    /**
-     * Resizes the selected shape according to the new dimensions
-     * @param shape
-     * @param newWidth
-     * @param newHeight
-     */
-    private void resizeShape(MyShape shape, int newWidth, int newHeight) {
     }
 
 }
