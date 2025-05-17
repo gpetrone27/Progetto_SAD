@@ -76,6 +76,8 @@ public class PaintController implements Initializable {
     private MenuItem resizeMenuItem;
     @FXML
     private MenuItem pasteMenuItem;
+    @FXML
+    private VBox propertiesPanel;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -93,7 +95,7 @@ public class PaintController implements Initializable {
         // Binds the value of the property cursorMode to the button cursorButton
         cursorMode.bindBidirectional(cursorButton.selectedProperty());
         
-        // Binds the disable property of the right click menu items to the state of selectedShape
+        // Binds the disable property of the right click menu items to shapeSelected
         cutMenuItem.disableProperty().bind(shapeSelected.not());
         copyMenuItem.disableProperty().bind(shapeSelected.not());
         deleteMenuItem.disableProperty().bind(shapeSelected.not());
@@ -101,6 +103,10 @@ public class PaintController implements Initializable {
         
         // Binds the disable property of the paste operation to the state of clipboard
         pasteMenuItem.disableProperty().bind(hasClipboard.not());
+        
+        // Binds the visible and managed property of the propertiesPanel to shapeSelected
+        propertiesPanel.visibleProperty().bind(shapeSelected);
+        propertiesPanel.managedProperty().bind(shapeSelected);
         
         // Prevents the user from unselecting colors
         borderColor.selectedToggleProperty().addListener((obs, oldToggle, newToggle) -> {
@@ -197,11 +203,16 @@ public class PaintController implements Initializable {
     }
 
     private void enableSelection(MyShape shape) {
+        // Enables selection when user clicks on a shape
         shape.getFxShape().setOnMouseClicked(event -> {
             selectedShape = shape;
             shapeSelected.set(true);
             highlightSelected(shape);
             event.consume();
+        });
+        // Disables selection when user clicks on blank canvas
+        canvas.setOnMouseClicked(event -> {
+            disableSelection();
         });
     }
     
