@@ -446,10 +446,11 @@ public class PaintController implements Initializable {
         if (selectedShape != null) {
             Command cutCmd = new CutCommand(selectedShape, model, canvas);
             model.execute(cutCmd);
+            shapeSelected.set(false);
         }
         hasClipboard.set(model.getClipboard() != null);
     }
- 
+    
     /**
      * Copies the selected shape into the clipboard
      * @param event
@@ -483,6 +484,7 @@ public class PaintController implements Initializable {
         if (selectedShape != null) {
             Command deleteCmd = new DeleteCommand(model, selectedShape, canvas);
             model.execute(deleteCmd);
+            shapeSelected.set(false);
         }
     }
 
