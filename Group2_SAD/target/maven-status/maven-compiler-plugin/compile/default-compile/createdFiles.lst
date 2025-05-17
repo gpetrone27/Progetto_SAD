@@ -8,7 +8,7 @@ sadprojectwork\Model.class
 sadprojectwork\CopyCommand.class
 sadprojectwork\FillColorDecorator.class
 sadprojectwork\PasteCommand.class
-sadprojectwork\ChangeColor.class
+sadprojectwork\ChangeColorCommand.class
 sadprojectwork\MyEllipsis.class
 sadprojectwork\MyLine.class
 sadprojectwork\MoveCommand.class

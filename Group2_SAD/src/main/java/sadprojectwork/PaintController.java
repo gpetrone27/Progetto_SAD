@@ -186,7 +186,7 @@ public class PaintController implements Initializable {
             }
             
             if (cursorMode.get()) {
-                return;
+                disableSelection();
             }
 
             if (rectMode) {
@@ -252,6 +252,11 @@ public class PaintController implements Initializable {
             
             e.consume();
         });
+        
+        // Disables selection when user clicks on blank canvas
+        canvas.setOnMouseClicked(event -> {
+            disableSelection();
+        });
     }
 
     private void enableSelection(MyShape shape) {
@@ -263,11 +268,6 @@ public class PaintController implements Initializable {
             highlightSelected(shape);
             cursorMode.set(true);
             event.consume();
-        });
-        
-        // Disables selection when user clicks on blank canvas
-        canvas.setOnMouseClicked(event -> {
-            disableSelection();
         });
     }
     
