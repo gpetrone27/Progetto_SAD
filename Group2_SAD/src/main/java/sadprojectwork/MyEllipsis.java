@@ -15,12 +15,6 @@ public class MyEllipsis extends MyShape {
         ellipse = new Ellipse(centerX, centerY, radiusX, radiusY);
         ellipse.setStroke(borderColor);
         ellipse.setFill(fillColor);
-        
-        ellipse.setOnMouseClicked(e -> {
-            model.getShapes().forEach(shape -> shape.setSelected(false));
-            this.setSelected(true);
-            model.setSelectedShape(this);
-        });
     }
 
     @Override

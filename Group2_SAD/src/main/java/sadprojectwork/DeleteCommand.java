@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package sadprojectwork;
 
 import javafx.scene.layout.Pane;
@@ -14,13 +11,12 @@ import javafx.scene.layout.Pane;
  * Quando annullato (undo), ripristina la figura nel modello.
  * ------------------------------------------------------------------------------
  * Implements the Command interface and represents an operation that allows you to
- * delete a figure present in the drawing.
- * When executed, removes the specified figure from the drawing.
- * When canceled (undo), it restores the figure to the model.
- * 
- * @author noemi
+ * delete a shape present in the drawing.
+ * When executed, removes the selected shape from the drawing.
+ * When canceled (undo), it restores the shape to the model.
  */
 public class DeleteCommand implements Command {
+    
     private Model model;
     private MyShape shapeToDelete;
     private Pane canvas;
@@ -38,7 +34,6 @@ public class DeleteCommand implements Command {
     public void execute() {
         model.removeShape(shapeToDelete);
         canvas.getChildren().remove(shapeToDelete.getFxShape());
-        model.setSelectedShape(null);
     }
 
     /* Annulla l'operazione di eliminazione, ripristinando la figura.
@@ -48,6 +43,5 @@ public class DeleteCommand implements Command {
     public void undo() {
         model.addShape(shapeToDelete);
         canvas.getChildren().add(shapeToDelete.getFxShape());
-        model.setSelectedShape(shapeToDelete);
     }
 }

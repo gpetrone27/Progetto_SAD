@@ -33,6 +33,7 @@ public abstract class MyShape {
     public double getStartY() {
         return startY;
     }
+    
     public boolean isSelected(){
         return selected;
     }

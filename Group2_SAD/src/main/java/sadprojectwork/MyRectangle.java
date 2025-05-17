@@ -15,12 +15,6 @@ public class MyRectangle extends MyShape {
         rect = new Rectangle(x, y, width, height);
         rect.setStroke(borderColor);
         rect.setFill(fillColor);
-        
-        rect.setOnMouseClicked(e -> {
-            model.getShapes().forEach(shape -> shape.setSelected(false));
-            this.setSelected(true);
-            model.setSelectedShape(this);
-        });
     }
 
     @Override

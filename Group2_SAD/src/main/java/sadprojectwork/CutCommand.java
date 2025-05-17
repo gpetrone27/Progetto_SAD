@@ -17,7 +17,7 @@ public class CutCommand implements Command {
 
     @Override
     public void execute() {
-        model.setClipboardShape(shapeToCut);
+        model.setClipboard(shapeToCut);
         model.removeShape(shapeToCut);
         canvas.getChildren().remove(shapeToCut.getFxShape());
     }
@@ -26,7 +26,7 @@ public class CutCommand implements Command {
     public void undo() {
        model.addShape(shapeToCut);
        canvas.getChildren().add(shapeToCut.getFxShape());
-       model.setClipboardShape(null);
+       model.setClipboard(null);
     }
 
 }

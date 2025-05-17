@@ -12,7 +12,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
@@ -41,6 +40,7 @@ public class PaintController implements Initializable {
 
     private BooleanProperty cursorMode = new SimpleBooleanProperty(true);
     private BooleanProperty shapeSelected = new SimpleBooleanProperty(false);
+    private BooleanProperty hasClipboard = new SimpleBooleanProperty(false);
     
     private boolean lineMode = false;
     private boolean rectMode = false;
@@ -51,8 +51,6 @@ public class PaintController implements Initializable {
 
     private MyShape currentShape = null;
     private MyShape selectedShape = null;
-    
-    private static PaintController instance;
 
     @FXML
     private AnchorPane rootPane;
@@ -100,6 +98,9 @@ public class PaintController implements Initializable {
         copyMenuItem.disableProperty().bind(shapeSelected.not());
         deleteMenuItem.disableProperty().bind(shapeSelected.not());
         resizeMenuItem.disableProperty().bind(shapeSelected.not());
+        
+        // Binds the disable property of the paste operation to the state of clipboard
+        pasteMenuItem.disableProperty().bind(hasClipboard.not());
         
         // Prevents the user from unselecting colors
         borderColor.selectedToggleProperty().addListener((obs, oldToggle, newToggle) -> {
@@ -254,6 +255,7 @@ public class PaintController implements Initializable {
     @FXML
     private void undoOperation(ActionEvent event) {
         model.undoLast();
+        hasClipboard.set(model.getClipboard() != null);
     }
 
     /**
@@ -263,6 +265,7 @@ public class PaintController implements Initializable {
     @FXML
     private void redoOperation(ActionEvent event) {
         model.redoLast();
+        hasClipboard.set(model.getClipboard() != null);
     }
 
     /**
@@ -362,18 +365,19 @@ public class PaintController implements Initializable {
     }
 
     /**
-     * Deletes the selected shape
+     * Copies the selected shape into the clipboard and deletes it
+     *
      * @param event
      */
     @FXML
-    private void deleteShape(ActionEvent event) {
-        MyShape selected = model.getSelectedShape();
-        if (selected != null) {
-            Command deleteCmd = new DeleteCommand(model, selected, canvas);
-            model.execute(deleteCmd);
+    private void cutShape(ActionEvent event) {
+        if (selectedShape != null) {
+            Command cutCmd = new CutCommand(selectedShape, model, canvas);
+            model.execute(cutCmd);
         }
+        hasClipboard.set(model.getClipboard() != null);
     }
-
+ 
     /**
      * Copies the selected shape into the clipboard
      *
@@ -381,6 +385,8 @@ public class PaintController implements Initializable {
      */
     @FXML
     private void copyShape(ActionEvent event) {
+        // TO DO
+        hasClipboard.set(model.getClipboard() != null);
     }
 
     /**
@@ -390,20 +396,19 @@ public class PaintController implements Initializable {
      */
     @FXML
     private void pasteShape(ActionEvent event) {
+        // TO DO
+        hasClipboard.set(model.getClipboard() != null);
     }
-
+ 
     /**
-     * Copies the selected shape into the clipboard and deletes it
-     *
+     * Deletes the selected shape
      * @param event
      */
     @FXML
-    private void cutShape(ActionEvent event) {
-        MyShape selected = model.getSelectedShape();
-        if (selected != null) {
-            Command cutCmd = new CutCommand(selectedShape, model, canvas);
-            model.execute(cutCmd);
-            model.setSelectedShape(null);
+    private void deleteShape(ActionEvent event) {
+        if (selectedShape != null) {
+            Command deleteCmd = new DeleteCommand(model, selectedShape, canvas);
+            model.execute(deleteCmd);
         }
     }
 
@@ -432,7 +437,7 @@ public class PaintController implements Initializable {
             try {
                 int width = Integer.parseInt(widthField.getText().trim());
                 int height = Integer.parseInt(heightField.getText().trim());
-                resizeShape(model.getSelectedShape(), width, height);
+                resizeShape(selectedShape, width, height);
                 popupWindow.close();
             } catch (NumberFormatException ex) {
             }

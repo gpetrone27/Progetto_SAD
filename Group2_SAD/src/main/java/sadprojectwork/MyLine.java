@@ -14,12 +14,6 @@ public class MyLine extends MyShape {
         this.model = model;
         this.line = new Line(startX, startY, endX, endY);
         line.setStroke(borderColor);
-        
-        line.setOnMouseClicked(e -> {
-            model.getShapes().forEach(shape -> shape.setSelected(false));
-            this.setSelected(true);
-            model.setSelectedShape(this);
-        });
     }
 
     @Override

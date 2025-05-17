@@ -11,7 +11,6 @@ public class Model {
     private Deque<Command> commandHistory;
     private Deque<Command> deletedCommands;
     private List<MyShape> shapes = new ArrayList<>();
-    private MyShape selected;
     private MyShape clipboard;
     
     public Model() {
@@ -47,20 +46,12 @@ public class Model {
     public List<MyShape> getShapes() {
         return shapes;
     }
-
-    public void setSelectedShape(MyShape s) {
-        selected = s;
-    }
     
-    public void setClipboardShape(MyShape s){
+    public void setClipboard(MyShape s){
         clipboard = s;
     }
-
-    public MyShape getSelectedShape() {
-        return selected;
-    }
     
-    public MyShape getClipboardShape(){
+    public MyShape getClipboard(){
         return clipboard;
     }
 }
