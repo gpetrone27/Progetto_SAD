@@ -31,7 +31,7 @@ public class Model {
     }
 
     public void redoLast() {
-        if(!commandHistory.isEmpty()) {
+        if(!deletedCommands.isEmpty()) {
             Command last = deletedCommands.removeLast();
             commandHistory.addLast(last);
             last.execute();
