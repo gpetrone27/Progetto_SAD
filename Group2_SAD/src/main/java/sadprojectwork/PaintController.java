@@ -44,9 +44,7 @@ public class PaintController implements Initializable {
     private BooleanProperty shapeSelected = new SimpleBooleanProperty(false);
     private BooleanProperty hasClipboard = new SimpleBooleanProperty(false);
 
-    private boolean lineMode = false;
-    private boolean rectMode = false;
-    private boolean ellipseMode = false;
+    private Shapes mode = Shapes.CURSOR;
 
     private Double startX = null;
     private Double startY = null;
@@ -184,9 +182,11 @@ public class PaintController implements Initializable {
     private void initCanvasEvents() {
 
         canvas.setOnMousePressed(e -> {
+            
             startX = e.getX();
             startY = e.getY();
 
+            // Saves the original coordinates when the move operation starts
             if (selectedShape != null) {
                 dragStartX = startX;
                 dragStartY = startY;
@@ -195,37 +195,36 @@ public class PaintController implements Initializable {
                 e.consume();
                 return;
             }
-
-            if (cursorMode.get()) {
-                disableSelection();
-            }
-
-            if (rectMode) {
-                MyShape base = new MyRectangle(startX, startY, 0, 0);
-                MyShape withBorder = new BorderColorDecorator(base, borderHex);
-                MyShape withFill = new FillColorDecorator(withBorder, fillHex);
-                currentShape = withFill;
-                addShape(currentShape);
-                enableSelection(currentShape);
-            } else if (lineMode) {
-                MyShape base = new MyLine(startX, startY, startX, startY);
-                MyShape withBorder = new BorderColorDecorator(base, borderHex);
-                currentShape = withBorder;
-                addShape(currentShape);
-                enableSelection(currentShape);
-            } else if (ellipseMode) {
-                MyShape base = new MyEllipse(startX, startY, 0, 0);
-                MyShape withBorder = new BorderColorDecorator(base, borderHex);
-                MyShape withFill = new FillColorDecorator(withBorder, fillHex);
-                currentShape = withFill;
-                addShape(currentShape);
-                enableSelection(currentShape);
+            
+            // Draws the shape if any of them is selected
+            switch(mode) {
+                case LINE -> {
+                    BorderColorDecorator myLine = new BorderColorDecorator(new MyLine(startX, startY, startX, startY), borderHex);
+                    addShape(myLine);
+                    enableSelection(myLine);
+                    currentShape = myLine;
+                }
+                case RECTANGLE -> {
+                    BorderColorDecorator myRectangle = new BorderColorDecorator(new FillColorDecorator(new MyRectangle(startX, startY, 0, 0), fillHex), borderHex);
+                    addShape(myRectangle);
+                    enableSelection(myRectangle);
+                    currentShape = myRectangle;
+                }
+                case ELLIPSE -> {
+                    BorderColorDecorator myEllipse = new BorderColorDecorator(new FillColorDecorator(new MyEllipse(startX, startY, 0, 0), fillHex), borderHex);
+                    addShape(myEllipse);
+                    enableSelection(myEllipse);
+                    currentShape = myEllipse;
+                }
             }
         });
 
         canvas.setOnMouseDragged(e -> {
+            
+            // Moves the shape while the user is dragging it
             if (currentShape == null) {
                 if (selectedShape != null) {
+                    
                     double dx = e.getX() - dragStartX;
                     double dy = e.getY() - dragStartY;
 
@@ -236,27 +235,34 @@ public class PaintController implements Initializable {
 
                     e.consume();
                 }
-                return;
             }
-
+            
             double endX = e.getX();
             double endY = e.getY();
-
-            currentShape.resizeTo(endX, endY);
+            
+            switch(mode) {
+                case LINE -> {
+                    currentShape.resize(endX, endY);
+                }
+                default -> {
+                    currentShape.resize(endX - startX, endY - startY);
+                }
+            }
         });
 
         canvas.setOnMouseReleased(e -> {
 
+            // Finalizes the move command when the user releases the shape
             if (selectedShape != null && currentShape == null) {
                 double newX = selectedShape.getStartX();
                 double newY = selectedShape.getStartY();
-
                 if (newX != originalX || newY != originalY) {
                     Command moveCmd = new MoveCommand(selectedShape, originalX, originalY, newX, newY);
                     model.execute(moveCmd);
                 }
             }
 
+            // Creation of the shape is completed
             if (currentShape != null) {
                 currentShape = null;
             }
@@ -278,6 +284,13 @@ public class PaintController implements Initializable {
         for (MyShape shapeToAdd : model.getShapes()) {
             canvas.getChildren().add(shapeToAdd.getFxShape());
         }
+    }
+    
+    /**
+     * Sets the mode
+     */
+    private void setMode(Shapes mode) {
+        this.mode = mode;
     }
     
     /**
@@ -337,10 +350,8 @@ public class PaintController implements Initializable {
         shapeSelected.set(false);
         currentShape = null;
         hasClipboard.set(false);
-        lineMode = false;
-        rectMode = false;
-        ellipseMode = false;
         cursorMode.set(true);
+        setMode(Shapes.CURSOR);
     }
 
     /**
@@ -435,9 +446,7 @@ public class PaintController implements Initializable {
      */
     @FXML
     private void selectCursor(ActionEvent event) {
-        lineMode = false;
-        rectMode = false;
-        ellipseMode = false;
+        setMode(Shapes.CURSOR);
     }
 
     /**
@@ -447,9 +456,7 @@ public class PaintController implements Initializable {
     @FXML
     private void selectShapeLine(ActionEvent event) {
         disableSelection();
-        lineMode = true;
-        rectMode = false;
-        ellipseMode = false;
+        setMode(Shapes.LINE);
     }
 
     /**
@@ -459,9 +466,7 @@ public class PaintController implements Initializable {
     @FXML
     private void selectShapeRectangle(ActionEvent event) {
         disableSelection();
-        lineMode = false;
-        rectMode = true;
-        ellipseMode = false;
+        setMode(Shapes.RECTANGLE);
     }
 
     /**
@@ -471,9 +476,7 @@ public class PaintController implements Initializable {
     @FXML
     private void selectShapeEllipse(ActionEvent event) {
         disableSelection();
-        lineMode = false;
-        rectMode = false;
-        ellipseMode = true;
+        setMode(Shapes.ELLIPSE);
     }
 
     /**

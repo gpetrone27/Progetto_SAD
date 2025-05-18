@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package sadprojectwork;
 
 import javafx.scene.shape.Shape;
@@ -14,10 +10,8 @@ import javafx.scene.shape.Shape;
  */
 public abstract class ShapeDecorator extends MyShape {
 
-    // the shape being decorated (wrapped)
-    protected MyShape decoratedShape;
+    protected MyShape decoratedShape; // Wrapped shape to be decorated
 
-    // initializes the decorator with the shape to be decorated
     public ShapeDecorator(MyShape decoratedShape) {
         super(decoratedShape.getStartX(), decoratedShape.getStartY());
         this.decoratedShape = decoratedShape;
@@ -34,12 +28,6 @@ public abstract class ShapeDecorator extends MyShape {
     @Override
     public void resize(double newWidth, double newHeight) {
         decoratedShape.resize(newWidth, newHeight);
-    }
-
-    // forwards the resizeTo call to the decorated shape
-    @Override
-    public void resizeTo(double endX, double endY) {
-        decoratedShape.resizeTo(endX, endY);
     }
 
     @Override
@@ -63,18 +51,5 @@ public abstract class ShapeDecorator extends MyShape {
     public MyShape cloneShape() {
         return decoratedShape.cloneShape();
     }
-
-    // gets the width of the decorated shape
-    // this simply delegates the call to the underlying shape
-    @Override
-    public double getWidth() {
-        return decoratedShape.getWidth();
-    }
-
-    // gets the height of the decorated shape
-    // this simply delegates the call to the underlying shape
-    @Override
-    public double getHeight() {
-        return decoratedShape.getHeight();
-    }
+    
 }

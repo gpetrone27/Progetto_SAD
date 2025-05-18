@@ -1,3 +1,4 @@
+
 package sadprojectwork;
 
 import javafx.scene.shape.Line;
@@ -11,7 +12,7 @@ public class MyLine extends MyShape {
 
     private Line line;
 
-    // initializes the line with a start and end point
+    // Initializes the line with a start and end point
     public MyLine(double startX, double startY, double endX, double endY) {
         super(startX, startY);
         this.line = new Line(startX, startY, endX, endY);
@@ -19,24 +20,17 @@ public class MyLine extends MyShape {
         line.setPickOnBounds(true);
     }
 
-    // returns the JavaFX shape object to be added to the pane
+    // Returns the JavaFX shape object to be added to the pane
     @Override
     public Shape getFxShape() {
         return line;
     }
 
-    // resizes the line by setting new absolute end coordinates
+    // Resizes the line by setting new absolute end coordinates
     @Override
     public void resize(double endX, double endY) {
         line.setEndX(endX);
         line.setEndY(endY);
-    }
-
-    // alternative to resize: used during mouse dragging to specify the target end point.
-    // for lines, this is the same as resize, since both take absolute coordinates
-    @Override
-    public void resizeTo(double endX, double endY) {
-        resize(endX, endY);
     }
 
     // Creates a copy of the shape, useful for the copy and paste command
@@ -45,7 +39,8 @@ public class MyLine extends MyShape {
         return new MyLine(startX, startY, line.getEndX(), line.getEndY());
     }
 
-    // sets a new position for the start of the line, moving both start and end points accordingly
+    // Sets a new position for the start of the line, moving both start and
+    // end points accordingly
     @Override
     public void setPosition(double x, double y) {
         double dx = x - startX;
@@ -58,13 +53,13 @@ public class MyLine extends MyShape {
         line.setEndY(line.getEndY() + dy);
     }
 
-    // gets the horizontal component of the line's length
+    // Gets the horizontal component of the line's length
     @Override
     public double getWidth() {
         return line.getEndX() - startX;
     }
 
-    // gets the vertical component of the line's length
+    // Gets the vertical component of the line's length
     @Override
     public double getHeight() {
         return line.getEndY() - startY;

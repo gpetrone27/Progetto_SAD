@@ -5,6 +5,7 @@ sadprojectwork\Command.class
 sadprojectwork\Model.class
 sadprojectwork\PasteCommand.class
 sadprojectwork\ChangeColorCommand.class
+sadprojectwork\Shapes.class
 sadprojectwork\MyLine.class
 sadprojectwork\MoveCommand.class
 sadprojectwork\MyEllipse.class
@@ -14,4 +15,5 @@ sadprojectwork\BorderColorDecorator.class
 sadprojectwork\CopyCommand.class
 sadprojectwork\FillColorDecorator.class
 sadprojectwork\ResizeCommand.class
+sadprojectwork\PaintController$1.class
 sadprojectwork\DeleteCommand.class

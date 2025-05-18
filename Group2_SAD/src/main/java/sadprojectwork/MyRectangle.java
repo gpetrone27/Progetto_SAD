@@ -1,3 +1,4 @@
+
 package sadprojectwork;
 
 import javafx.scene.shape.Shape;
@@ -11,21 +12,22 @@ public class MyRectangle extends MyShape {
 
     private Rectangle rect;
 
-    // creates a rectangle at position (x, y)with the specified width and height
+    // Creates a rectangle at position (x, y)with the specified width and
+    // height
     public MyRectangle(double x, double y, double width, double height) {
         super(x, y);
         rect = new Rectangle(x, y, width, height);
     }
 
-    // returns the JavaFX shape object to be added to the pane
+    // Returns the JavaFX shape object to be added to the pane
     @Override
     public Shape getFxShape() {
         return rect;
     }
 
-    // resizes the rectangle based on the given width and height.
-    // supports resizing in all directions by adjusting X and Y
-    // when width or height is negative
+    // Resizes the rectangle based on the given width and height.
+    // Supports resizing in all directions by adjusting X and Y when width or
+    // height is negative
     @Override
     public void resize(double newWidth, double newHeight) {
         if (newWidth < 0) {
@@ -51,8 +53,8 @@ public class MyRectangle extends MyShape {
         return new MyRectangle(startX, startY, rect.getWidth(), rect.getHeight());
     }
 
-    // sets a new top-left position for the rectangle.
-    // only updates X and Y, width and height remain unchanged
+    // Sets a new top-left position for the rectangle.
+    // Only updates X and Y, width and height remain unchanged
     @Override
     public void setPosition(double x, double y) {
         this.startX = x;

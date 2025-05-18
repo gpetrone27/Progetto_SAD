@@ -1,24 +1,19 @@
+
 package sadprojectwork;
 
 /**
 * Implements the Command interface to move a shape.
 * When executed, moves the shape to new coordinates.
 * When undone, returns it to its original position.
-* 
-* @author noemi
-*
 */
 public class MoveCommand implements Command {
-    // shape to move
+    
     private MyShape shapeToMove;
-    // original coordinates 
-    private double oldX, oldY;
-    // new coordinates
-    private double newX, newY;
+    private double oldX, oldY; // Original coordinates
+    private double newX, newY; // New coordinates
 
     /**
     * Create a move command.
-    * 
     * @param shape: shape to move
     * @param oldX: original X coordinate
     * @param oldY: original Y coordinate
