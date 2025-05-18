@@ -76,6 +76,6 @@ public class MyRectangle extends MyShape {
 
     @Override
     public String toCSV() {
-        return Shapes.RECTANGLE + ";" + startX + ";" + startY + ";" + getWidth() + ";" + getHeight() + ";" + rect.getFill() + ";" + rect.getStroke();
+        return Shapes.RECTANGLE + ";" + rect.getX() + ";" + rect.getY() + ";" + rect.getWidth() + ";" + rect.getHeight() + ";" + rect.getFill() + ";" + rect.getStroke();
     }
 }
