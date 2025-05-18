@@ -1,8 +1,16 @@
-
 package sadprojectwork;
 
 import javafx.scene.layout.Pane;
 
+/**
+ * Implements the Command interface to paste a shape.
+ * When executed, pastes a cloned shape from the clipboard
+ * to a new position and adds it into the canvas and into the model.
+ * When undo, it removes the pasted shape.
+ * 
+ * @author noemi
+ * 
+ */
 public class PasteCommand implements Command {
     
     private MyShape shapeToPaste;
