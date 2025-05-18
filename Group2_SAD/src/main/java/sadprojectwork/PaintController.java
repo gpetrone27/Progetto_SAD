@@ -223,6 +223,7 @@ public class PaintController implements Initializable {
             
             // Moves the shape while the user is dragging it
             if (currentShape == null) {
+                
                 if (selectedShape != null) {
                     
                     double dx = e.getX() - dragStartX;
@@ -237,15 +238,19 @@ public class PaintController implements Initializable {
                 }
             }
             
-            double endX = e.getX();
-            double endY = e.getY();
-            
-            switch(mode) {
-                case LINE -> {
-                    currentShape.resize(endX, endY);
-                }
-                default -> {
-                    currentShape.resize(endX - startX, endY - startY);
+            // Preview of the shape while the user is creating it
+            else {
+                
+                double endX = e.getX();
+                double endY = e.getY();
+
+                switch(mode) {
+                    case LINE -> {
+                        currentShape.resize(endX, endY);
+                    }
+                    default -> {
+                        currentShape.resize(endX - startX, endY - startY);
+                    }
                 }
             }
         });
