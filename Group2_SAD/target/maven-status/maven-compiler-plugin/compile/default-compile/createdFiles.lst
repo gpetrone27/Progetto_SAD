@@ -7,11 +7,11 @@ sadprojectwork\PasteCommand.class
 sadprojectwork\ChangeColorCommand.class
 sadprojectwork\MyLine.class
 sadprojectwork\MoveCommand.class
+sadprojectwork\MyEllipse.class
 sadprojectwork\AddShapeCommand.class
 sadprojectwork\CutCommand.class
 sadprojectwork\BorderColorDecorator.class
 sadprojectwork\CopyCommand.class
 sadprojectwork\FillColorDecorator.class
-sadprojectwork\MyEllipsis.class
 sadprojectwork\ResizeCommand.class
 sadprojectwork\DeleteCommand.class

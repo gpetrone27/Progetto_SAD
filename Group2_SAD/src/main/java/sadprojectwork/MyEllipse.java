@@ -7,13 +7,13 @@ import javafx.scene.shape.Shape;
  * Represents a custom ellipse shape in the drawing application. Extends MyShape
  * and wraps a JavaFX Ellipse.
  */
-public class MyEllipsis extends MyShape {
+public class MyEllipse extends MyShape {
 
     private Ellipse ellipse;
 
     // creates an ellipse centered at (centerX, centerY)
     // with the given horizontal and vertical radii
-    public MyEllipsis(double centerX, double centerY, double radiusX, double radiusY) {
+    public MyEllipse(double centerX, double centerY, double radiusX, double radiusY) {
         super(centerX, centerY);
         ellipse = new Ellipse(centerX, centerY, radiusX, radiusY);
     }
@@ -40,7 +40,7 @@ public class MyEllipsis extends MyShape {
     // Creates a copy of the shape, useful for the copy and paste command
     @Override
     public MyShape cloneShape() {
-        return new MyEllipsis(startX, startY, ellipse.getRadiusX(), ellipse.getRadiusY());
+        return new MyEllipse(startX, startY, ellipse.getRadiusX(), ellipse.getRadiusY());
     }
 
     // sets a new position for the center of the ellipse

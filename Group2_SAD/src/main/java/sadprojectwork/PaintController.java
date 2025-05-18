@@ -214,7 +214,7 @@ public class PaintController implements Initializable {
                 model.addShape(currentShape);
                 enableSelection(currentShape);
             } else if (ellipseMode) {
-                MyShape base = new MyEllipsis(startX, startY, 0, 0);
+                MyShape base = new MyEllipse(startX, startY, 0, 0);
                 MyShape withBorder = new BorderColorDecorator(base, borderHex);
                 MyShape withFill = new FillColorDecorator(withBorder, fillHex);
                 currentShape = withFill;
@@ -468,11 +468,11 @@ public class PaintController implements Initializable {
     }
 
     /**
-     * Selects the Ellipsis shape: this allows to draw ellipsises
+     * Selects the Ellipse shape: this allows to draw ellipsises
      * @param event
      */
     @FXML
-    private void selectShapeEllipsis(ActionEvent event) {
+    private void selectShapeEllipse(ActionEvent event) {
         disableSelection();
         lineMode = false;
         rectMode = false;
