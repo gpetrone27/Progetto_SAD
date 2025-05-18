@@ -1,14 +1,15 @@
+
 package sadprojectwork;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
-import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -106,6 +107,11 @@ public class PaintController implements Initializable {
             lastMouseX = event.getX();
             lastMouseY = event.getY();
         });
+        
+        // Adds a listener to update the canvas every time the model changes
+        model.getShapes().addListener((ListChangeListener<MyShape>) change -> {
+            redrawCanvas();
+        });
 
         // Binds the value of the property cursorMode to the button cursorButton
         cursorMode.bindBidirectional(cursorButton.selectedProperty());
@@ -199,20 +205,20 @@ public class PaintController implements Initializable {
                 MyShape withBorder = new BorderColorDecorator(base, borderHex);
                 MyShape withFill = new FillColorDecorator(withBorder, fillHex);
                 currentShape = withFill;
-                canvas.getChildren().add(currentShape.getFxShape());
+                model.addShape(currentShape);
                 enableSelection(currentShape);
             } else if (lineMode) {
                 MyShape base = new MyLine(startX, startY, startX, startY);
                 MyShape withBorder = new BorderColorDecorator(base, borderHex);
                 currentShape = withBorder;
-                canvas.getChildren().add(currentShape.getFxShape());
+                model.addShape(currentShape);
                 enableSelection(currentShape);
             } else if (ellipseMode) {
                 MyShape base = new MyEllipsis(startX, startY, 0, 0);
                 MyShape withBorder = new BorderColorDecorator(base, borderHex);
                 MyShape withFill = new FillColorDecorator(withBorder, fillHex);
                 currentShape = withFill;
-                canvas.getChildren().add(currentShape.getFxShape());
+                model.addShape(currentShape);
                 enableSelection(currentShape);
             }
         });
@@ -265,8 +271,17 @@ public class PaintController implements Initializable {
     }
 
     /**
+     * Redraws the canvas based on the model list of shapes
+     */
+    private void redrawCanvas() {
+        canvas.getChildren().clear();
+        for (MyShape shapeToAdd : model.getShapes()) {
+            canvas.getChildren().add(shapeToAdd.getFxShape());
+        }
+    }
+    
+    /**
      * Enables the selection of the given shape
-     *
      * @param shape
      */
     private void enableSelection(MyShape shape) {
@@ -295,8 +310,6 @@ public class PaintController implements Initializable {
     }
 
     /**
-     * Adds an effect around the selected shape
-     *
      * @param shape
      */
     private void highlightSelected(MyShape shape) {
@@ -317,28 +330,23 @@ public class PaintController implements Initializable {
 
     /**
      * Cleares the current drawing and opens a new "untitled" temporary file
-     *
      * @param event
      */
     @FXML
     private void newDrawing(ActionEvent event) {
-        canvas.getChildren().clear(); 
         model.clear();                
         selectedShape = null;
         shapeSelected.set(false);
         currentShape = null;
-
+        hasClipboard.set(false);
         lineMode = false;
         rectMode = false;
         ellipseMode = false;
         cursorMode.set(true);
-
-        hasClipboard.set(false);
     }
 
     /**
      * Saves the current drawing in a file
-     *
      * @param event
      */
     @FXML
@@ -347,7 +355,6 @@ public class PaintController implements Initializable {
 
     /**
      * Loads a drawing from a file
-     *
      * @param event
      */
     @FXML
@@ -356,7 +363,6 @@ public class PaintController implements Initializable {
 
     /**
      * Undoes the last operation
-     *
      * @param event
      */
     @FXML
@@ -378,7 +384,6 @@ public class PaintController implements Initializable {
 
     /**
      * Updates the variable borderHex to match the user selection
-     *
      * @param event
      */
     @FXML
@@ -403,7 +408,6 @@ public class PaintController implements Initializable {
 
     /**
      * Updates the variable fillHex to match the user selection
-     *
      * @param event
      */
     @FXML
@@ -430,7 +434,6 @@ public class PaintController implements Initializable {
     /**
      * Selects the cursor: this allows to pan inside the canvas and select
      * shapes
-     *
      * @param event
      */
     @FXML
@@ -442,7 +445,6 @@ public class PaintController implements Initializable {
 
     /**
      * Selects the Line shape: this allows to draw lines
-     *
      * @param event
      */
     @FXML
@@ -455,7 +457,6 @@ public class PaintController implements Initializable {
 
     /**
      * Selects the Rectangle shape: this allows to draw rectangles
-     *
      * @param event
      */
     @FXML
@@ -468,7 +469,6 @@ public class PaintController implements Initializable {
 
     /**
      * Selects the Ellipsis shape: this allows to draw ellipsises
-     *
      * @param event
      */
     @FXML
@@ -481,13 +481,12 @@ public class PaintController implements Initializable {
 
     /**
      * Copies the selected shape into the clipboard and deletes it
-     *
      * @param event
      */
     @FXML
     private void cutShape(ActionEvent event) {
         if (selectedShape != null) {
-            Command cutCmd = new CutCommand(selectedShape, model, canvas);
+            Command cutCmd = new CutCommand(model, selectedShape);
             model.execute(cutCmd);
             shapeSelected.set(false);
         }
@@ -496,13 +495,12 @@ public class PaintController implements Initializable {
 
     /**
      * Copies the selected shape into the clipboard
-     *
      * @param event
      */
     @FXML
     private void copyShape(ActionEvent event) {
         if (selectedShape != null) {
-            Command copyCmd = new CopyCommand(selectedShape, model, canvas);
+            Command copyCmd = new CopyCommand(model, selectedShape);
             model.execute(copyCmd);
         }
         hasClipboard.set(model.getClipboard() != null);
@@ -510,25 +508,23 @@ public class PaintController implements Initializable {
 
     /**
      * Pastes a shape from the clipboard
-     *
      * @param event
      */
     @FXML
     private void pasteShape(ActionEvent event) {
-        PasteCommand pasteCmd = new PasteCommand(model, canvas, lastMouseX, lastMouseY);
+        PasteCommand pasteCmd = new PasteCommand(model, lastMouseX, lastMouseY);
         model.execute(pasteCmd);
         enableSelection(pasteCmd.getPastedShape());
     }
 
     /**
      * Deletes the selected shape
-     *
      * @param event
      */
     @FXML
     private void deleteShape(ActionEvent event) {
         if (selectedShape != null) {
-            Command deleteCmd = new DeleteCommand(model, selectedShape, canvas);
+            Command deleteCmd = new DeleteCommand(model, selectedShape);
             model.execute(deleteCmd);
             shapeSelected.set(false);
         }
@@ -536,7 +532,6 @@ public class PaintController implements Initializable {
 
     /**
      * Resizes the selected shape according to the new dimensions
-     *
      * @param shape
      * @param newWidth
      * @param newHeight
@@ -547,11 +542,18 @@ public class PaintController implements Initializable {
             model.execute(resizeCmd);
         }
     }
+    
+    /**
+     * Adds a shape to the model
+     * @param shape 
+     */
+    private void addShape(MyShape shape) {
+        model.addShape(shape);
+    }
 
     /**
      * Shows a popup window when the user clicks "Resize" in the right click
      * menu
-     *
      * @param event
      */
     @FXML

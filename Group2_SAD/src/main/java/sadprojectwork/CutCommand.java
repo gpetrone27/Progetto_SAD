@@ -1,45 +1,34 @@
-package sadprojectwork;
 
-import javafx.scene.layout.Pane;
+package sadprojectwork;
 
 /**
 * Implements the Command interface to cut a shape.
 * When executed, removes the selected shape from the canvas and from the model,
 * saving it into the clipboard.
 * When undone, restores the shape to its original position.
-* 
-* @author noemi
-*
 */
 public class CutCommand implements Command {
-    // shape to cut
-    private MyShape shapeToCut;
-    // reference to the model
+    
     private Model model;
-    // canvas
-    private Pane canvas;
+    private MyShape shapeToCut;
     
     /**
-    * Create a cut command.
-    * 
-    * @param shape: shape to cut
+    * Creates a cut command.
     * @param model: data model that contains the clipboard
-    * @param canvas: graphic canvas
+    * @param shapeToCut: shape to cut
     */
-    public CutCommand(MyShape shape, Model model, Pane canvas){
-        this.shapeToCut = shape;
+    public CutCommand(Model model, MyShape shapeToCut){
         this.model = model;
-        this.canvas = canvas;
+        this.shapeToCut = shapeToCut;
     } 
 
     /**
-    * Removes the selected shape from the drawing and saves it to the clipboard. 
+    * Removes the selected shape from the model and saves it to the clipboard. 
     */
     @Override
     public void execute() {
         model.setClipboard(shapeToCut);
         model.removeShape(shapeToCut);
-        canvas.getChildren().remove(shapeToCut.getFxShape());
     }
 
     /**
@@ -48,7 +37,6 @@ public class CutCommand implements Command {
     @Override
     public void undo() {
        model.addShape(shapeToCut);
-       canvas.getChildren().add(shapeToCut.getFxShape());
        model.setClipboard(null);
     }
 

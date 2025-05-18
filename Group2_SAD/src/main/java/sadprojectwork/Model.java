@@ -1,15 +1,16 @@
+
 package sadprojectwork;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.ArrayList;
-import java.util.List;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 public class Model {
 
     private Deque<Command> commandHistory;
     private Deque<Command> deletedCommands;
-    private List<MyShape> shapes = new ArrayList<>();
+    private ObservableList<MyShape> shapes = FXCollections.observableArrayList();
     private MyShape clipboard;
 
     public Model() {
@@ -46,7 +47,7 @@ public class Model {
         shapes.remove(s);
     }
 
-    public List<MyShape> getShapes() {
+    public ObservableList<MyShape> getShapes() {
         return shapes;
     }
 

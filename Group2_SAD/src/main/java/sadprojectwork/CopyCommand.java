@@ -1,44 +1,34 @@
-package sadprojectwork;
 
-import javafx.scene.layout.Pane;
+package sadprojectwork;
 
 /**
 * Implements the Command interface to copy a shape.
 * When executed, saves a copy of the selected shape to the clipboard,
 * including “decorations” via clone.
 * When undone, empties the clipboard.
-* 
-* @author noemi
-*
 */
 public class CopyCommand implements Command {
-    // shape to copy
-    private MyShape shapeToCopy;
-    // reference to the model
+    
     private Model model;
-    // canvas
-    private Pane canvas;
+    private MyShape shapeToCopy;
     
     /**
     * Create a copy command.
     * 
-    * @param shape: shape to copy
+    * @param shapeToCopy: shape to copy
     * @param model: data model that contains the clipboard
-    * @param canvas: graphic canvas
     */
-    public CopyCommand(MyShape shape, Model model, Pane canvas){
-        this.shapeToCopy = shape;
+    public CopyCommand(Model model, MyShape shapeToCopy) {
         this.model = model;
-        this.canvas = canvas;
+        this.shapeToCopy = shapeToCopy;
     }
 
     /**
-    * Saves a decorated copy of the current shape to the clipboard. 
+    * Saves a decorated copy of the current shape into the clipboard. 
     */
     @Override
     public void execute() {
-        MyShape clonedCopy = shapeToCopy.cloneShape();
-        model.setClipboard(clonedCopy);
+        model.setClipboard(shapeToCopy.cloneShape());
     }
 
     /**
