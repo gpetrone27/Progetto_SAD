@@ -1,14 +1,14 @@
-
 package sadprojectwork;
 
 import javafx.scene.shape.Shape;
 import javafx.scene.shape.Rectangle;
 
 /**
- * Represents a custom rectangle shape in the drawing application.
- * Extends MyShape and wraps a JavaFX Rectangle.
+ * Represents a custom rectangle shape in the drawing application. Extends
+ * MyShape and wraps a JavaFX Rectangle.
  */
 public class MyRectangle extends MyShape {
+
     private Rectangle rect;
 
     // creates a rectangle at position (x, y)with the specified width and height
@@ -28,7 +28,7 @@ public class MyRectangle extends MyShape {
     // when width or height is negative
     @Override
     public void resize(double newWidth, double newHeight) {
-         if (newWidth < 0) {
+        if (newWidth < 0) {
             rect.setX(startX + newWidth);
             rect.setWidth(-newWidth);
         } else {
@@ -59,5 +59,17 @@ public class MyRectangle extends MyShape {
         this.startY = y;
         rect.setX(x);
         rect.setY(y);
+    }
+
+    // gets the current width of the rectangle
+    @Override
+    public double getWidth() {
+        return rect.getWidth();
+    }
+
+    // gets the current height of the rectangle
+    @Override
+    public double getHeight() {
+        return rect.getHeight();
     }
 }

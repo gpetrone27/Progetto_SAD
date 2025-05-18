@@ -1,12 +1,11 @@
-
 package sadprojectwork;
 
 import javafx.scene.shape.Ellipse;
 import javafx.scene.shape.Shape;
 
 /**
- * Represents a custom ellipse shape in the drawing application.
- * Extends MyShape and wraps a JavaFX Ellipse.
+ * Represents a custom ellipse shape in the drawing application. Extends MyShape
+ * and wraps a JavaFX Ellipse.
  */
 public class MyEllipsis extends MyShape {
 
@@ -16,7 +15,7 @@ public class MyEllipsis extends MyShape {
     // with the given horizontal and vertical radii
     public MyEllipsis(double centerX, double centerY, double radiusX, double radiusY) {
         super(centerX, centerY);
-        ellipse = new Ellipse(centerX, centerY, radiusX, radiusY);        
+        ellipse = new Ellipse(centerX, centerY, radiusX, radiusY);
     }
 
     // returns the JavaFX shape object to be added to the pane
@@ -51,5 +50,17 @@ public class MyEllipsis extends MyShape {
         this.startY = y;
         ellipse.setCenterX(x);
         ellipse.setCenterY(y);
+    }
+
+    // gets the width of the ellipse, defined as the horizontal radius
+    @Override
+    public double getWidth() {
+        return ellipse.getRadiusX();
+    }
+
+    // gets the height of the ellipse, defined as the vertical radius
+    @Override
+    public double getHeight() {
+        return ellipse.getRadiusY();
     }
 }
