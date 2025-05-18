@@ -3,8 +3,8 @@ package sadprojectwork;
 import javafx.scene.layout.Pane;
 
 /**
-* Implements the Command interface to copy a figure.
-* When executed, saves a copy of the selected figure to the clipboard,
+* Implements the Command interface to copy a shape.
+* When executed, saves a copy of the selected shape to the clipboard,
 * including “decorations” via clone.
 * When undo, empties the clipboard.
 * 

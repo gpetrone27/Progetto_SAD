@@ -1,11 +1,9 @@
-
 package sadprojectwork;
 
 import javafx.scene.layout.Pane;
 
 /**
- * Implements the Command interface and represents an operation that allows you to
- * delete a shape present in the drawing.
+ * Implements the Command interface to delete a shape.
  * When executed, removes the selected shape from the drawing.
  * When undo, it restores the shape to the model.
  * 
@@ -24,7 +22,7 @@ public class DeleteCommand implements Command {
     * Create a delete command.
     * 
     * @param shape: shape to delete
-    * @param model: data model that contains the clipboard
+    * @param model: data model
     * @param canvas: graphic canvas
     */
     public DeleteCommand(Model model, MyShape shape, Pane canvas) {
