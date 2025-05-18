@@ -6,7 +6,7 @@ import javafx.scene.layout.Pane;
 * Implements the Command interface to cut a shape.
 * When executed, removes the selected shape from the canvas and from the model,
 * saving it into the clipboard.
-* When undo, restores the shape to its original position.
+* When undone, restores the shape to its original position.
 * 
 * @author noemi
 *
@@ -43,7 +43,7 @@ public class CutCommand implements Command {
     }
 
     /**
-    * Undo the cut, emptying the clipboard. 
+    * Undoes the cut, emptying the clipboard. 
     */
     @Override
     public void undo() {

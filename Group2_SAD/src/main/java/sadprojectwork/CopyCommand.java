@@ -6,7 +6,7 @@ import javafx.scene.layout.Pane;
 * Implements the Command interface to copy a shape.
 * When executed, saves a copy of the selected shape to the clipboard,
 * including “decorations” via clone.
-* When undo, empties the clipboard.
+* When undone, empties the clipboard.
 * 
 * @author noemi
 *
@@ -42,7 +42,7 @@ public class CopyCommand implements Command {
     }
 
     /**
-    * Undo the copy, emptying the clipboard. 
+    * Undoes the copy, emptying the clipboard. 
     */
     @Override
     public void undo() {
