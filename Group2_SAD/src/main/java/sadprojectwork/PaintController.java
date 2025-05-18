@@ -7,11 +7,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.ListChangeListener;
@@ -406,7 +402,8 @@ public class PaintController implements Initializable {
         if (file != null) {
             model.clear();
             try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-                String line = reader.readLine();
+                reader.readLine();
+                String line;
                 while ((line = reader.readLine()) != null) {
                     String[] parts = line.split(";");
                     Shapes loadedMode = Shapes.valueOf(parts[0]);
