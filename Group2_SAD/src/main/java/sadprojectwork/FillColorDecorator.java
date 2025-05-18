@@ -20,7 +20,7 @@ public class FillColorDecorator extends ShapeDecorator {
     
     @Override
     public MyShape cloneShape() {
-        return new FillColorDecorator(decoratedShape.cloneShape(), getFillColor());
+        return new FillColorDecorator(decoratedShape.cloneShape(), (Color) decoratedShape.getFxShape().getFill());
     }
     
     private void setFillColor() {
