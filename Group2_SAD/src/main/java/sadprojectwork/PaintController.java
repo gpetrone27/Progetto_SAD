@@ -68,6 +68,8 @@ public class PaintController implements Initializable {
     @FXML
     private AnchorPane rootPane;
     @FXML
+    private ScrollPane drawingPane;
+    @FXML
     private Pane canvas;
     @FXML
     private ToggleGroup shapes;
@@ -76,9 +78,17 @@ public class PaintController implements Initializable {
     @FXML
     private ToggleGroup fillColor;
     @FXML
+    private ToggleGroup borderColor1;
+    @FXML
+    private ToggleGroup fillColor1;
+    @FXML
     private ToggleButton cursorButton;
     @FXML
-    private ScrollPane drawingPane;
+    private ToggleButton ellipseButton;
+    @FXML
+    private ToggleButton rectangleButton;
+    @FXML
+    private ToggleButton lineButton;
     @FXML
     private MenuItem cutMenuItem;
     @FXML
@@ -91,12 +101,6 @@ public class PaintController implements Initializable {
     private MenuItem pasteMenuItem;
     @FXML
     private VBox propertiesPanel;
-    @FXML
-    private ToggleButton ellipseButton;
-    @FXML
-    private ToggleButton rectangleButton;
-    @FXML
-    private ToggleButton lineButton;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -151,9 +155,19 @@ public class PaintController implements Initializable {
                 borderColor.selectToggle(oldToggle);
             }
         });
+        borderColor1.selectedToggleProperty().addListener((obs, oldToggle, newToggle) -> {
+            if (newToggle == null) {
+                borderColor1.selectToggle(oldToggle);
+            }
+        });
         fillColor.selectedToggleProperty().addListener((obs, oldToggle, newToggle) -> {
             if (newToggle == null) {
                 fillColor.selectToggle(oldToggle);
+            }
+        });
+        fillColor1.selectedToggleProperty().addListener((obs, oldToggle, newToggle) -> {
+            if (newToggle == null) {
+                fillColor1.selectToggle(oldToggle);
             }
         });
 
@@ -467,22 +481,9 @@ public class PaintController implements Initializable {
      */
     @FXML
     private void selectBorderColor(ActionEvent event) {
-
-        // Reads the background color of the button that generated the event
         ToggleButton colorButton = (ToggleButton) event.getSource();
-        Paint colorPaint = colorButton.getBackground().getFills().get(0).getFill();
-
-        // Updates the variable borderHex to match the selected color
-        if (colorPaint instanceof Color selectedColor) {
-            borderHex = (Color) colorPaint;
-
-            if (selectedShape.get() != null) {
-                Command changeColor = new ChangeColorCommand(selectedShape.get(), null, selectedColor);
-                model.execute(changeColor);
-            } else {
-                borderHex = selectedColor;
-            }
-        }
+        Paint selectedColor = colorButton.getBackground().getFills().get(0).getFill(); // Reads the background color of the button that generated the event
+        borderHex = (Color) selectedColor;
     }
 
     /**
@@ -491,23 +492,9 @@ public class PaintController implements Initializable {
      */
     @FXML
     private void selectFillColor(ActionEvent event) {
-
-        // Reads the background color of the button that generated the event
         ToggleButton colorButton = (ToggleButton) event.getSource();
-        Paint colorPaint = colorButton.getBackground().getFills().get(0).getFill();
-
-        // Updates the variable fillHex to match the selected color
-        if (colorPaint instanceof Color color) {
-            fillHex = color;
-            Color selectedColor = color;
-
-            if (selectedShape.get() != null) {
-                Command changeColor = new ChangeColorCommand(selectedShape.get(), selectedColor, null);
-                model.execute(changeColor);
-            } else {
-                fillHex = selectedColor;
-            }
-        }
+        Paint selectedColor = colorButton.getBackground().getFills().get(0).getFill(); // Reads the background color of the button that generated the event
+        fillHex = (Color) selectedColor;
     }
 
     /**
@@ -624,6 +611,31 @@ public class PaintController implements Initializable {
         // Shows the window
         popupWindow.setScene(new Scene(layout, 240, 160));
         popupWindow.showAndWait();
+    }
+
+    /**
+     * Updates the border color of the selected shape
+     * @param event 
+     */
+    @FXML
+    private void changeBorderColor(ActionEvent event) {
+        ToggleButton colorButton = (ToggleButton) event.getSource();
+        Paint selectedColor = colorButton.getBackground().getFills().get(0).getFill();
+        Command changeColor = new ChangeColorCommand(selectedShape.get(), null, (Color) selectedColor);
+        model.execute(changeColor);
+    }
+
+    
+    /**
+     * Updates the fill color of the selected shape
+     * @param event
+     */
+    @FXML
+    private void changeFillColor(ActionEvent event) {
+        ToggleButton colorButton = (ToggleButton) event.getSource();
+        Paint selectedColor = colorButton.getBackground().getFills().get(0).getFill();
+        Command changeColor = new ChangeColorCommand(selectedShape.get(), (Color) selectedColor, null);
+        model.execute(changeColor);
     }
 
 }

@@ -207,13 +207,49 @@
             <VBox fx:id="propertiesPanel" managed="false" prefWidth="150.0" spacing="20.0" visible="false" BorderPane.alignment="CENTER">
                <children>
                   <TitledPane animated="false" text="Border">
-                    <content>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                    </content>
+                     <content>
+                        <HBox alignment="CENTER_LEFT" prefHeight="50.0" spacing="10.0">
+                           <children>
+                              <ToggleButton mnemonicParsing="false" onAction="#changeBorderColor" selected="true" style="-fx-background-color: black;" styleClass="color-button" textAlignment="CENTER">
+                                 <toggleGroup>
+                                    <ToggleGroup fx:id="borderColor1" />
+                                 </toggleGroup>
+                              </ToggleButton>
+                              <ToggleButton layoutX="10.0" layoutY="45.0" mnemonicParsing="false" onAction="#changeBorderColor" style="-fx-background-color: white;" styleClass="color-button" textAlignment="CENTER" toggleGroup="$borderColor1" />
+                              <ToggleButton layoutX="64.0" layoutY="45.0" mnemonicParsing="false" onAction="#changeBorderColor" style="-fx-background-color: red;" styleClass="color-button" textAlignment="CENTER" toggleGroup="$borderColor1" />
+                              <ToggleButton layoutX="117.0" layoutY="45.0" mnemonicParsing="false" onAction="#changeBorderColor" style="-fx-background-color: orange;" styleClass="color-button" textAlignment="CENTER" toggleGroup="$borderColor1" />
+                              <ToggleButton layoutX="171.0" layoutY="45.0" mnemonicParsing="false" onAction="#changeBorderColor" style="-fx-background-color: yellow;" styleClass="color-button" textAlignment="CENTER" toggleGroup="$borderColor1" />
+                              <ToggleButton layoutX="224.0" layoutY="45.0" mnemonicParsing="false" onAction="#changeBorderColor" style="-fx-background-color: green;" styleClass="color-button" textAlignment="CENTER" toggleGroup="$borderColor1" />
+                              <ToggleButton layoutX="278.0" layoutY="45.0" mnemonicParsing="false" onAction="#changeBorderColor" style="-fx-background-color: blue;" styleClass="color-button" textAlignment="CENTER" toggleGroup="$borderColor1" />
+                              <ToggleButton layoutX="332.0" layoutY="45.0" mnemonicParsing="false" onAction="#changeBorderColor" style="-fx-background-color: purple;" styleClass="color-button" textAlignment="CENTER" toggleGroup="$borderColor1" />
+                           </children>
+                           <padding>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </padding>
+                        </HBox>
+                     </content>
                   </TitledPane>
                   <TitledPane animated="false" layoutX="10.0" layoutY="10.0" text="Fill">
                      <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                        <HBox alignment="CENTER_LEFT" prefHeight="50.0" spacing="10.0">
+                           <children>
+                              <ToggleButton mnemonicParsing="false" onAction="#changeFillColor" selected="true" style="-fx-background-color: black;" styleClass="color-button" textAlignment="CENTER">
+                                 <toggleGroup>
+                                    <ToggleGroup fx:id="fillColor1" />
+                                 </toggleGroup>
+                              </ToggleButton>
+                              <ToggleButton layoutX="10.0" layoutY="45.0" mnemonicParsing="false" onAction="#changeFillColor" style="-fx-background-color: white;" styleClass="color-button" textAlignment="CENTER" toggleGroup="$fillColor1" />
+                              <ToggleButton layoutX="64.0" layoutY="45.0" mnemonicParsing="false" onAction="#changeFillColor" style="-fx-background-color: red;" styleClass="color-button" textAlignment="CENTER" toggleGroup="$fillColor1" />
+                              <ToggleButton layoutX="117.0" layoutY="45.0" mnemonicParsing="false" onAction="#changeFillColor" style="-fx-background-color: orange;" styleClass="color-button" textAlignment="CENTER" toggleGroup="$fillColor1" />
+                              <ToggleButton layoutX="171.0" layoutY="45.0" mnemonicParsing="false" onAction="#changeFillColor" style="-fx-background-color: yellow;" styleClass="color-button" textAlignment="CENTER" toggleGroup="$fillColor1" />
+                              <ToggleButton layoutX="224.0" layoutY="45.0" mnemonicParsing="false" onAction="#changeFillColor" style="-fx-background-color: green;" styleClass="color-button" textAlignment="CENTER" toggleGroup="$fillColor1" />
+                              <ToggleButton layoutX="278.0" layoutY="45.0" mnemonicParsing="false" onAction="#changeFillColor" style="-fx-background-color: blue;" styleClass="color-button" textAlignment="CENTER" toggleGroup="$fillColor1" />
+                              <ToggleButton layoutX="332.0" layoutY="45.0" mnemonicParsing="false" onAction="#changeFillColor" style="-fx-background-color: purple;" styleClass="color-button" textAlignment="CENTER" toggleGroup="$fillColor1" />
+                           </children>
+                           <padding>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </padding>
+                        </HBox>
                      </content>
                   </TitledPane>
                </children>

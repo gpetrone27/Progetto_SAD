@@ -12,11 +12,12 @@ public class MyRectangle extends MyShape {
 
     private Rectangle rect;
 
-    // Creates a rectangle at position (x, y)with the specified width and
+    // Creates a rectangle at position (x, y) with the specified width and
     // height
     public MyRectangle(double x, double y, double width, double height) {
         super(x, y);
         rect = new Rectangle(x, y, width, height);
+        rect.setStrokeWidth(3);
     }
 
     // Returns the JavaFX shape object to be added to the pane

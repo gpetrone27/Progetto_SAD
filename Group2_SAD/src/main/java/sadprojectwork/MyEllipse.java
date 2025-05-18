@@ -17,6 +17,7 @@ public class MyEllipse extends MyShape {
     public MyEllipse(double centerX, double centerY, double radiusX, double radiusY) {
         super(centerX, centerY);
         ellipse = new Ellipse(centerX, centerY, radiusX, radiusY);
+        ellipse.setStrokeWidth(3);
     }
 
     // Returns the JavaFX shape object to be added to the pane

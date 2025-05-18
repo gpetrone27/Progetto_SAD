@@ -16,7 +16,7 @@ public class MyLine extends MyShape {
     public MyLine(double startX, double startY, double endX, double endY) {
         super(startX, startY);
         this.line = new Line(startX, startY, endX, endY);
-        line.setStrokeWidth(2);
+        line.setStrokeWidth(3);
         line.setPickOnBounds(true);
     }
 
