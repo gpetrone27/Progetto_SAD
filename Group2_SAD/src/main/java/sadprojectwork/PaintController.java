@@ -112,7 +112,7 @@ public class PaintController implements Initializable {
         model.getShapes().addListener((ListChangeListener<MyShape>) change -> {
             redrawCanvas();
         });
-
+        
         // Binds the value of the property cursorMode to the button cursorButton
         cursorMode.bindBidirectional(cursorButton.selectedProperty());
 
@@ -205,20 +205,20 @@ public class PaintController implements Initializable {
                 MyShape withBorder = new BorderColorDecorator(base, borderHex);
                 MyShape withFill = new FillColorDecorator(withBorder, fillHex);
                 currentShape = withFill;
-                model.addShape(currentShape);
+                addShape(currentShape);
                 enableSelection(currentShape);
             } else if (lineMode) {
                 MyShape base = new MyLine(startX, startY, startX, startY);
                 MyShape withBorder = new BorderColorDecorator(base, borderHex);
                 currentShape = withBorder;
-                model.addShape(currentShape);
+                addShape(currentShape);
                 enableSelection(currentShape);
             } else if (ellipseMode) {
                 MyShape base = new MyEllipse(startX, startY, 0, 0);
                 MyShape withBorder = new BorderColorDecorator(base, borderHex);
                 MyShape withFill = new FillColorDecorator(withBorder, fillHex);
                 currentShape = withFill;
-                model.addShape(currentShape);
+                addShape(currentShape);
                 enableSelection(currentShape);
             }
         });
@@ -285,8 +285,6 @@ public class PaintController implements Initializable {
      * @param shape
      */
     private void enableSelection(MyShape shape) {
-
-        // Enables selection when user clicks on a shape
         shape.getFxShape().setOnMouseClicked(event -> {
             selectedShape = shape;
             shapeSelected.set(true);
@@ -321,7 +319,7 @@ public class PaintController implements Initializable {
             }
         }
 
-        // Add the effect to the selected shape
+        // Adds the effect to the selected shape
         DropShadow ds = new DropShadow();
         ds.setColor(Color.DODGERBLUE);
         ds.setRadius(10);
@@ -373,7 +371,6 @@ public class PaintController implements Initializable {
 
     /**
      * Redoes the last undone operation
-     *
      * @param event
      */
     @FXML
@@ -548,7 +545,8 @@ public class PaintController implements Initializable {
      * @param shape 
      */
     private void addShape(MyShape shape) {
-        model.addShape(shape);
+        AddShapeCommand addCmd = new AddShapeCommand(model, shape);
+        model.execute(addCmd);
     }
 
     /**
