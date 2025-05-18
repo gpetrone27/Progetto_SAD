@@ -12,11 +12,21 @@ import javafx.scene.layout.Pane;
  * 
  */
 public class PasteCommand implements Command {
-    
+    // shape to paste
     private MyShape shapeToPaste;
+    // reference to the model
     private Model model;
+    // canvas
     private Pane canvas;
     
+    /**
+    * Create a paste command.
+    * 
+    * @param model: data model that contains the clipboard
+    * @param canvas: graphic canvas
+    * @param xPos: X coordinate where paste the shape
+    * @param yPos: Y coordinate where paste the shape
+    */
     public PasteCommand(Model model, Pane canvas, double xPos, double yPos) {
         
         this.model = model;
@@ -29,18 +39,29 @@ public class PasteCommand implements Command {
         }
     }
 
+    /**
+    * Adds a decorated copy shape to the model and to the canvas. 
+    */
     @Override
     public void execute() {
         model.addShape(shapeToPaste);
         canvas.getChildren().add(shapeToPaste.getFxShape());
     }
 
+    /**
+    * Undo the paste, removing the shape from the model and from the canvas. 
+    */
     @Override
     public void undo() {
         model.removeShape(shapeToPaste);
         canvas.getChildren().remove(shapeToPaste.getFxShape());  
     }
     
+    /**
+    * Returns the pasted shape, to immediatly select the shape in the UI. 
+    * 
+    * @return pasted shape
+    */
     public MyShape getPastedShape() {
         return shapeToPaste;
     }
