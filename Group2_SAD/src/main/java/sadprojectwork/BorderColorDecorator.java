@@ -15,6 +15,7 @@ public class BorderColorDecorator extends ShapeDecorator {
     public BorderColorDecorator(MyShape decoratedShape, Color borderColor) {
         super(decoratedShape);
         this.borderColor = borderColor;
+        setBorderColor();
     }
     
     @Override
@@ -31,6 +32,11 @@ public class BorderColorDecorator extends ShapeDecorator {
     
     public Color getBorderColor() {
         return borderColor;
+    }
+
+    @Override
+    public String toCSV() {
+        return decoratedShape.toCSV();
     }
     
 }

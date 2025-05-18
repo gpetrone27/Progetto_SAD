@@ -65,4 +65,10 @@ public class MyEllipse extends MyShape {
     public double getHeight() {
         return ellipse.getRadiusY();
     }
+
+    @Override
+    public String toCSV() {
+        return Shapes.ELLIPSE + ";" + Double.toString(ellipse.getCenterX() - ellipse.getRadiusX()) + ";" + Double.toString(ellipse.getCenterY() - ellipse.getRadiusY()) + ";" + getWidth() + ";" + getHeight() + ";" + ellipse.getFill() + ";" + ellipse.getStroke();
+    }
+    
 }

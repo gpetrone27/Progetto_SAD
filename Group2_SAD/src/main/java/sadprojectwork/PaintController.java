@@ -1,8 +1,17 @@
 
 package sadprojectwork;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.ListChangeListener;
@@ -27,6 +36,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Shape;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.kordamp.ikonli.javafx.FontIcon;
@@ -365,14 +375,70 @@ public class PaintController implements Initializable {
      */
     @FXML
     private void saveDrawing(ActionEvent event) {
+        
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save drawing as CSV");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
+        File file = fileChooser.showSaveDialog(rootPane.getScene().getWindow());
+        
+        if (file != null) {
+            try (PrintWriter writer = new PrintWriter(file)) {
+                writer.println("SHAPE;STARTX;STARTY;WIDTH;HEIGHT;FILL;BORDER");
+                for (MyShape shape : model.getShapes()) {
+                    writer.println(shape.toCSV());
+                }
+            } catch (IOException e) {}
+        }
     }
-
+    
     /**
      * Loads a drawing from a file
      * @param event
      */
     @FXML
     private void loadDrawing(ActionEvent event) {
+        
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Load drawing from CSV");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
+        File file = fileChooser.showOpenDialog(rootPane.getScene().getWindow());
+        
+        if (file != null) {
+            model.clear();
+            try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+                String line = reader.readLine();
+                while ((line = reader.readLine()) != null) {
+                    String[] parts = line.split(";");
+                    Shapes loadedMode = Shapes.valueOf(parts[0]);
+                    double loadedStartX = Double.parseDouble(parts[1]);
+                    double loadedStartY = Double.parseDouble(parts[2]);
+                    double loadedWidth = Double.parseDouble(parts[3]);
+                    double loadedHeight = Double.parseDouble(parts[4]);
+                    Color loadedFill = Color.valueOf(parts[5]);
+                    Color loadedBorder = Color.valueOf(parts[6]);
+                    switch(loadedMode) {
+                        case LINE -> {
+                            BorderColorDecorator myLine = new BorderColorDecorator(new MyLine(loadedStartX, loadedStartY, loadedStartX, loadedStartY), loadedBorder);
+                            myLine.resize(loadedWidth, loadedHeight);
+                            addShape(myLine);
+                            enableSelection(myLine);
+                        }
+                        case RECTANGLE -> {
+                            BorderColorDecorator myRectangle = new BorderColorDecorator(new FillColorDecorator(new MyRectangle(loadedStartX, loadedStartY, 0, 0), loadedFill), loadedBorder);
+                            myRectangle.resize(loadedWidth, loadedHeight);
+                            addShape(myRectangle);
+                            enableSelection(myRectangle);
+                        }
+                        case ELLIPSE -> {
+                            BorderColorDecorator myEllipse = new BorderColorDecorator(new FillColorDecorator(new MyEllipse(loadedStartX, loadedStartY, 0, 0), loadedFill), loadedBorder);
+                            myEllipse.resize(loadedWidth, loadedHeight);
+                            addShape(myEllipse);
+                            enableSelection(myEllipse);
+                        }
+                    }
+                }
+            } catch (IOException ex) { }
+        }
     }
 
     /**

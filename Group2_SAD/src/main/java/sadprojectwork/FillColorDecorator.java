@@ -15,6 +15,7 @@ public class FillColorDecorator extends ShapeDecorator {
     public FillColorDecorator(MyShape decoratedShape, Color fillColor) {
         super(decoratedShape);
         this.fillColor = fillColor;
+        setFillColor();
     }
     
     @Override
@@ -31,5 +32,10 @@ public class FillColorDecorator extends ShapeDecorator {
     
     public Color getFillColor() {
         return fillColor;
+    }
+
+    @Override
+    public String toCSV() {
+        return decoratedShape.toCSV();
     }
 }

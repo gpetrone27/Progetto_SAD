@@ -66,5 +66,7 @@ public abstract class MyShape {
     public void moveTo(double xNew, double yNew) {
         setPosition(xNew, yNew);
     }
+    
+    public abstract String toCSV();
 
 }

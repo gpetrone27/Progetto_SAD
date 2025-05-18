@@ -37,7 +37,6 @@ public class MyRectangle extends MyShape {
             rect.setX(startX);
             rect.setWidth(newWidth);
         }
-
         if (newHeight < 0) {
             rect.setY(startY + newHeight);
             rect.setHeight(-newHeight);
@@ -73,5 +72,10 @@ public class MyRectangle extends MyShape {
     @Override
     public double getHeight() {
         return rect.getHeight();
+    }
+
+    @Override
+    public String toCSV() {
+        return Shapes.RECTANGLE + ";" + startX + ";" + startY + ";" + getWidth() + ";" + getHeight() + ";" + rect.getFill() + ";" + rect.getStroke();
     }
 }

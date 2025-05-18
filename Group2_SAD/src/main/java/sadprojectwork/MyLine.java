@@ -64,4 +64,9 @@ public class MyLine extends MyShape {
     public double getHeight() {
         return line.getEndY() - startY;
     }
+
+    @Override
+    public String toCSV() {
+        return Shapes.LINE + ";" + startX + ";" + startY + ";" + line.getEndX() + ";" + line.getEndY() + ";" + line.getStroke() + ";" + line.getStroke();
+    }
 }
