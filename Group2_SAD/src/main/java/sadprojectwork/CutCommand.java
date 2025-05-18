@@ -27,7 +27,7 @@ public class CutCommand implements Command {
     */
     @Override
     public void execute() {
-        model.setClipboard(shapeToCut);
+        model.setClipboard(shapeToCut.cloneShape());
         model.removeShape(shapeToCut);
     }
 

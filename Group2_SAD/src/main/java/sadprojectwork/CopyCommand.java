@@ -13,8 +13,7 @@ public class CopyCommand implements Command {
     private MyShape shapeToCopy;
     
     /**
-    * Create a copy command.
-    * 
+    * Creates a copy command.
     * @param shapeToCopy: shape to copy
     * @param model: data model that contains the clipboard
     */

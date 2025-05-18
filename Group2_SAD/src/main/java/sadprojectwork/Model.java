@@ -3,6 +3,8 @@ package sadprojectwork;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -11,7 +13,7 @@ public class Model {
     private Deque<Command> commandHistory;
     private Deque<Command> deletedCommands;
     private ObservableList<MyShape> shapes = FXCollections.observableArrayList();
-    private MyShape clipboard;
+    private ObjectProperty<MyShape> clipboard = new SimpleObjectProperty<>();
 
     public Model() {
         commandHistory = new ArrayDeque<>();
@@ -52,10 +54,14 @@ public class Model {
     }
 
     public void setClipboard(MyShape s) {
-        clipboard = s;
+        clipboard.set(s);
     }
 
     public MyShape getClipboard() {
+        return clipboard.get();
+    }
+    
+    public ObjectProperty<MyShape> clipboardProperty() {
         return clipboard;
     }
 
@@ -67,6 +73,6 @@ public class Model {
         shapes.clear();              
         commandHistory.clear();      
         deletedCommands.clear();     
-        clipboard = null;            
+        clipboard.set(null);
     }
 }

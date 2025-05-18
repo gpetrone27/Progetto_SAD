@@ -20,13 +20,10 @@ public class BorderColorDecorator extends ShapeDecorator {
     
     @Override
     public MyShape cloneShape() {
-        MyShape clone = decoratedShape.cloneShape();
-        clone.startX = decoratedShape.getStartX();
-        clone.startY = decoratedShape.getStartY();
-        return new BorderColorDecorator(clone, getBorderColor());
+        return new BorderColorDecorator(decoratedShape.cloneShape(), getBorderColor());
     }
     
-    public void setBorderColor() {
+    private void setBorderColor() {
         decoratedShape.getFxShape().setStroke(borderColor);
     }
     

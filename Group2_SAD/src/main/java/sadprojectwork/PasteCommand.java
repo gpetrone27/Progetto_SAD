@@ -22,9 +22,8 @@ public class PasteCommand implements Command {
         
         this.model = model;
 
-        MyShape clipboard = model.getClipboard();
-        if (clipboard != null) {
-            this.shapeToPaste = clipboard.cloneShape();
+        if (model.getClipboard() != null) {
+            this.shapeToPaste = model.getClipboard().cloneShape();
             this.shapeToPaste.moveTo(xPos, yPos);
         }
     }

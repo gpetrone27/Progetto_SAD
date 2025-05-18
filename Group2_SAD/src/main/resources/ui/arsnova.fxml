@@ -62,7 +62,7 @@
                   </MenuBar>
                   <HBox alignment="CENTER_LEFT" spacing="20.0" VBox.vgrow="ALWAYS">
                      <children>
-                        <ToggleButton fx:id="cursorButton" mnemonicParsing="false" onAction="#selectCursor" prefHeight="60.0" prefWidth="60.0" selected="true" textAlignment="CENTER">
+                        <ToggleButton fx:id="cursorButton" mnemonicParsing="false" prefHeight="60.0" prefWidth="60.0" selected="true" textAlignment="CENTER">
                            <toggleGroup>
                               <ToggleGroup fx:id="shapes" />
                            </toggleGroup>
@@ -82,9 +82,9 @@
                                           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                       </rowConstraints>
                                        <children>
-                                          <ToggleButton mnemonicParsing="false" onAction="#selectShapeEllipse" prefHeight="30.0" prefWidth="100.0" text="Ellipse" textAlignment="CENTER" toggleGroup="$shapes" GridPane.rowIndex="1" />
-                                          <ToggleButton mnemonicParsing="false" onAction="#selectShapeRectangle" prefHeight="30.0" prefWidth="100.0" text="Rectangle" textAlignment="CENTER" toggleGroup="$shapes" GridPane.columnIndex="1" />
-                                          <ToggleButton mnemonicParsing="false" onAction="#selectShapeLine" prefHeight="30.0" prefWidth="100.0" text="Line" textAlignment="CENTER" toggleGroup="$shapes" />
+                                          <ToggleButton fx:id="ellipseButton" mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" text="Ellipse" textAlignment="CENTER" toggleGroup="$shapes" GridPane.rowIndex="1" />
+                                          <ToggleButton fx:id="rectangleButton" mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" text="Rectangle" textAlignment="CENTER" toggleGroup="$shapes" GridPane.columnIndex="1" />
+                                          <ToggleButton fx:id="lineButton" mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" text="Line" textAlignment="CENTER" toggleGroup="$shapes" />
                                        </children>
                                        <padding>
                                           <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

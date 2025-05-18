@@ -8,8 +8,11 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -22,6 +25,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.effect.DropShadow;
@@ -46,17 +50,12 @@ public class PaintController implements Initializable {
     private Color borderHex = Color.BLACK;
     private Color fillHex = Color.BLACK;
 
-    private BooleanProperty cursorMode = new SimpleBooleanProperty(true);
-    private BooleanProperty shapeSelected = new SimpleBooleanProperty(false);
-    private BooleanProperty hasClipboard = new SimpleBooleanProperty(false);
-
-    private Shapes mode = Shapes.CURSOR;
+    private ObjectProperty<Shapes> modeProperty = new SimpleObjectProperty<>(Shapes.CURSOR);
+    private ObjectProperty<MyShape> currentShape = new SimpleObjectProperty<>(null);
+    private ObjectProperty<MyShape> selectedShape = new SimpleObjectProperty<>(null);
 
     private Double startX = null;
     private Double startY = null;
-
-    private MyShape currentShape = null;
-    private MyShape selectedShape = null;
 
     private double dragStartX;
     private double dragStartY;
@@ -92,13 +91,29 @@ public class PaintController implements Initializable {
     private MenuItem pasteMenuItem;
     @FXML
     private VBox propertiesPanel;
+    @FXML
+    private ToggleButton ellipseButton;
+    @FXML
+    private ToggleButton rectangleButton;
+    @FXML
+    private ToggleButton lineButton;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        initBindings();
         initButtonActions();
+        initBindings();
         initButtonIcons();
         initCanvasEvents();
+    }
+
+    /**
+     * Initializes the actions of the buttons of the application
+     */
+    private void initButtonActions() {
+        cursorButton.setUserData(Shapes.CURSOR);
+        lineButton.setUserData(Shapes.LINE);
+        rectangleButton.setUserData(Shapes.RECTANGLE);
+        ellipseButton.setUserData(Shapes.ELLIPSE);
     }
 
     /**
@@ -117,21 +132,18 @@ public class PaintController implements Initializable {
             redrawCanvas();
         });
         
-        // Binds the value of the property cursorMode to the button cursorButton
-        cursorMode.bindBidirectional(cursorButton.selectedProperty());
-
         // Binds the disable property of the right click menu items to shapeSelected
-        cutMenuItem.disableProperty().bind(shapeSelected.not());
-        copyMenuItem.disableProperty().bind(shapeSelected.not());
-        deleteMenuItem.disableProperty().bind(shapeSelected.not());
-        resizeMenuItem.disableProperty().bind(shapeSelected.not());
+        cutMenuItem.disableProperty().bind(Bindings.createBooleanBinding(() -> selectedShape.get() == null, selectedShape));
+        copyMenuItem.disableProperty().bind(Bindings.createBooleanBinding(() -> selectedShape.get() == null, selectedShape));
+        deleteMenuItem.disableProperty().bind(Bindings.createBooleanBinding(() -> selectedShape.get() == null, selectedShape));
+        resizeMenuItem.disableProperty().bind(Bindings.createBooleanBinding(() -> selectedShape.get() == null, selectedShape));
 
-        // Binds the disable property of the paste operation to the state of clipboard
-        pasteMenuItem.disableProperty().bind(hasClipboard.not());
+        // Binds the disable property of the paste operation to the state of clipboard and the cursor selection
+        pasteMenuItem.disableProperty().bind(Bindings.or(Bindings.createBooleanBinding(() -> model.getClipboard() == null, model.clipboardProperty()), Bindings.createBooleanBinding(() -> modeProperty.get() != Shapes.CURSOR, modeProperty)));
 
         // Binds the visible and managed property of the propertiesPanel to shapeSelected
-        propertiesPanel.visibleProperty().bind(shapeSelected);
-        propertiesPanel.managedProperty().bind(shapeSelected);
+        propertiesPanel.visibleProperty().bind(Bindings.createBooleanBinding(() -> selectedShape.get() != null, selectedShape));
+        propertiesPanel.managedProperty().bind(Bindings.createBooleanBinding(() -> selectedShape.get() != null, selectedShape));
 
         // Prevents the user from unselecting colors
         borderColor.selectedToggleProperty().addListener((obs, oldToggle, newToggle) -> {
@@ -150,23 +162,30 @@ public class PaintController implements Initializable {
             if (newToggle == null) {
                 shapes.selectToggle(oldToggle);
             }
+            else {
+                modeProperty.set((Shapes) newToggle.getUserData());
+            }
         });
-
-        // Prevents the user from panning while not in cursor mode
-        cursorMode.addListener((obs, wasCursor, isCursor) -> {
-            if (!isCursor) {
-                drawingPane.setPannable(false); // Disable panning
-            } else {
-                drawingPane.setPannable(true); // Enable panning
+        
+        // Updates toggle buttons when the selected mode changes
+        modeProperty.addListener((obs, oldMode, newMode) -> {
+            for (Toggle toggle : shapes.getToggles()) {
+                if (toggle.getUserData() == newMode) {
+                    shapes.selectToggle(toggle);
+                    break;
+                }
             }
         });
 
-    }
+        // Prevents the user from panning while not in cursor mode
+        modeProperty.addListener((obs, wasCursor, isCursor) -> {
+            if (isCursor == Shapes.CURSOR) {
+                drawingPane.setPannable(true); // Enable panning
+            } else {
+                drawingPane.setPannable(false); // Disable panning
+            }
+        });
 
-    /**
-     * Initializes the actions of the buttons of the application
-     */
-    private void initButtonActions() {
     }
 
     /**
@@ -193,34 +212,34 @@ public class PaintController implements Initializable {
             startY = e.getY();
 
             // Saves the original coordinates when the move operation starts
-            if (selectedShape != null) {
+            if (selectedShape.get() != null) {
                 dragStartX = startX;
                 dragStartY = startY;
-                originalX = selectedShape.getStartX();
-                originalY = selectedShape.getStartY();
+                originalX = selectedShape.get().getStartX();
+                originalY = selectedShape.get().getStartY();
                 e.consume();
                 return;
             }
             
             // Draws the shape if any of them is selected
-            switch(mode) {
+            switch(modeProperty.get()) {
                 case LINE -> {
                     BorderColorDecorator myLine = new BorderColorDecorator(new MyLine(startX, startY, startX, startY), borderHex);
                     addShape(myLine);
                     enableSelection(myLine);
-                    currentShape = myLine;
+                    currentShape.set(myLine);
                 }
                 case RECTANGLE -> {
                     BorderColorDecorator myRectangle = new BorderColorDecorator(new FillColorDecorator(new MyRectangle(startX, startY, 0, 0), fillHex), borderHex);
                     addShape(myRectangle);
                     enableSelection(myRectangle);
-                    currentShape = myRectangle;
+                    currentShape.set(myRectangle);
                 }
                 case ELLIPSE -> {
                     BorderColorDecorator myEllipse = new BorderColorDecorator(new FillColorDecorator(new MyEllipse(startX, startY, 0, 0), fillHex), borderHex);
                     addShape(myEllipse);
                     enableSelection(myEllipse);
-                    currentShape = myEllipse;
+                    currentShape.set(myEllipse);
                 }
             }
         });
@@ -228,14 +247,14 @@ public class PaintController implements Initializable {
         canvas.setOnMouseDragged(e -> {
             
             // Moves the shape while the user is dragging it
-            if (currentShape == null) {
+            if (currentShape.get() == null) {
                 
-                if (selectedShape != null) {
+                if (selectedShape.get() != null) {
                     
                     double dx = e.getX() - dragStartX;
                     double dy = e.getY() - dragStartY;
 
-                    selectedShape.moveOf(dx, dy);
+                    selectedShape.get().moveOf(dx, dy);
 
                     dragStartX = e.getX();
                     dragStartY = e.getY();
@@ -250,12 +269,12 @@ public class PaintController implements Initializable {
                 double endX = e.getX();
                 double endY = e.getY();
 
-                switch(mode) {
+                switch(modeProperty.get()) {
                     case LINE -> {
-                        currentShape.resize(endX, endY);
+                        currentShape.get().resize(endX, endY);
                     }
                     default -> {
-                        currentShape.resize(endX - startX, endY - startY);
+                        currentShape.get().resize(endX - startX, endY - startY);
                     }
                 }
             }
@@ -264,18 +283,18 @@ public class PaintController implements Initializable {
         canvas.setOnMouseReleased(e -> {
 
             // Finalizes the move command when the user releases the shape
-            if (selectedShape != null && currentShape == null) {
-                double newX = selectedShape.getStartX();
-                double newY = selectedShape.getStartY();
+            if (selectedShape.get() != null && currentShape.get() == null) {
+                double newX = selectedShape.get().getStartX();
+                double newY = selectedShape.get().getStartY();
                 if (newX != originalX || newY != originalY) {
-                    Command moveCmd = new MoveCommand(selectedShape, originalX, originalY, newX, newY);
+                    Command moveCmd = new MoveCommand(selectedShape.get(), originalX, originalY, newX, newY);
                     model.execute(moveCmd);
                 }
             }
 
             // Creation of the shape is completed
-            if (currentShape != null) {
-                currentShape = null;
+            if (currentShape.get() != null) {
+                currentShape.set(null);
             }
 
             e.consume();
@@ -283,7 +302,7 @@ public class PaintController implements Initializable {
 
         // Disables selection when user clicks on blank canvas
         canvas.setOnMouseClicked(event -> {
-            disableSelection();
+            clearSelection();
         });
     }
 
@@ -298,22 +317,13 @@ public class PaintController implements Initializable {
     }
     
     /**
-     * Sets the mode
-     */
-    private void setMode(Shapes mode) {
-        this.mode = mode;
-    }
-    
-    /**
      * Enables the selection of the given shape
      * @param shape
      */
     private void enableSelection(MyShape shape) {
         shape.getFxShape().setOnMouseClicked(event -> {
-            selectedShape = shape;
-            shapeSelected.set(true);
+            selectedShape.set(shape);
             highlightSelected(shape);
-            cursorMode.set(true);
             event.consume();
         });
     }
@@ -321,9 +331,8 @@ public class PaintController implements Initializable {
     /**
      * Deactivates the current selection and clears all effects
      */
-    private void disableSelection() {
-        selectedShape = null;
-        shapeSelected.set(false);
+    private void clearSelection() {
+        selectedShape.set(null);
         for (javafx.scene.Node node : canvas.getChildren()) {
             if (node instanceof Shape resetShape) {
                 resetShape.setEffect(null); // Reset effects
@@ -357,12 +366,8 @@ public class PaintController implements Initializable {
     @FXML
     private void newDrawing(ActionEvent event) {
         model.clear();                
-        selectedShape = null;
-        shapeSelected.set(false);
-        currentShape = null;
-        hasClipboard.set(false);
-        cursorMode.set(true);
-        setMode(Shapes.CURSOR);
+        selectedShape.set(null);
+        currentShape.set(null);
     }
 
     /**
@@ -445,7 +450,6 @@ public class PaintController implements Initializable {
     @FXML
     private void undoOperation(ActionEvent event) {
         model.undoLast();
-        hasClipboard.set(model.getClipboard() != null);
     }
 
     /**
@@ -455,7 +459,6 @@ public class PaintController implements Initializable {
     @FXML
     private void redoOperation(ActionEvent event) {
         model.redoLast();
-        hasClipboard.set(model.getClipboard() != null);
     }
 
     /**
@@ -473,8 +476,8 @@ public class PaintController implements Initializable {
         if (colorPaint instanceof Color selectedColor) {
             borderHex = (Color) colorPaint;
 
-            if (selectedShape != null) {
-                Command changeColor = new ChangeColorCommand(selectedShape, null, selectedColor);
+            if (selectedShape.get() != null) {
+                Command changeColor = new ChangeColorCommand(selectedShape.get(), null, selectedColor);
                 model.execute(changeColor);
             } else {
                 borderHex = selectedColor;
@@ -498,8 +501,8 @@ public class PaintController implements Initializable {
             fillHex = color;
             Color selectedColor = color;
 
-            if (selectedShape != null) {
-                Command changeColor = new ChangeColorCommand(selectedShape, selectedColor, null);
+            if (selectedShape.get() != null) {
+                Command changeColor = new ChangeColorCommand(selectedShape.get(), selectedColor, null);
                 model.execute(changeColor);
             } else {
                 fillHex = selectedColor;
@@ -508,57 +511,15 @@ public class PaintController implements Initializable {
     }
 
     /**
-     * Selects the cursor: this allows to pan inside the canvas and select
-     * shapes
-     * @param event
-     */
-    @FXML
-    private void selectCursor(ActionEvent event) {
-        setMode(Shapes.CURSOR);
-    }
-
-    /**
-     * Selects the Line shape: this allows to draw lines
-     * @param event
-     */
-    @FXML
-    private void selectShapeLine(ActionEvent event) {
-        disableSelection();
-        setMode(Shapes.LINE);
-    }
-
-    /**
-     * Selects the Rectangle shape: this allows to draw rectangles
-     * @param event
-     */
-    @FXML
-    private void selectShapeRectangle(ActionEvent event) {
-        disableSelection();
-        setMode(Shapes.RECTANGLE);
-    }
-
-    /**
-     * Selects the Ellipse shape: this allows to draw ellipsises
-     * @param event
-     */
-    @FXML
-    private void selectShapeEllipse(ActionEvent event) {
-        disableSelection();
-        setMode(Shapes.ELLIPSE);
-    }
-
-    /**
      * Copies the selected shape into the clipboard and deletes it
      * @param event
      */
     @FXML
     private void cutShape(ActionEvent event) {
-        if (selectedShape != null) {
-            Command cutCmd = new CutCommand(model, selectedShape);
+        if (selectedShape.get() != null) {
+            Command cutCmd = new CutCommand(model, selectedShape.get());
             model.execute(cutCmd);
-            shapeSelected.set(false);
         }
-        hasClipboard.set(model.getClipboard() != null);
     }
 
     /**
@@ -567,11 +528,10 @@ public class PaintController implements Initializable {
      */
     @FXML
     private void copyShape(ActionEvent event) {
-        if (selectedShape != null) {
-            Command copyCmd = new CopyCommand(model, selectedShape);
+        if (selectedShape.get() != null) {
+            Command copyCmd = new CopyCommand(model, selectedShape.get());
             model.execute(copyCmd);
         }
-        hasClipboard.set(model.getClipboard() != null);
     }
 
     /**
@@ -591,10 +551,9 @@ public class PaintController implements Initializable {
      */
     @FXML
     private void deleteShape(ActionEvent event) {
-        if (selectedShape != null) {
-            Command deleteCmd = new DeleteCommand(model, selectedShape);
+        if (selectedShape.get() != null) {
+            Command deleteCmd = new DeleteCommand(model, selectedShape.get());
             model.execute(deleteCmd);
-            shapeSelected.set(false);
         }
     }
 
@@ -646,7 +605,7 @@ public class PaintController implements Initializable {
             try {
                 int width = Integer.parseInt(widthField.getText().trim());
                 int height = Integer.parseInt(heightField.getText().trim());
-                resizeShape(selectedShape, width, height);
+                resizeShape(selectedShape.get(), width, height);
                 popupWindow.close();
             } catch (NumberFormatException ex) {
             }
