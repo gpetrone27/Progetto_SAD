@@ -1,4 +1,3 @@
-
 package sadprojectwork;
 
 import java.util.ArrayDeque;
@@ -12,29 +11,29 @@ public class Model {
     private Deque<Command> deletedCommands;
     private List<MyShape> shapes = new ArrayList<>();
     private MyShape clipboard;
-    
+
     public Model() {
         commandHistory = new ArrayDeque<>();
         deletedCommands = new ArrayDeque<>();
     }
-    
+
     public void execute(Command command) {
         commandHistory.addLast(command);
         command.execute();
     }
-    
+
     public void undoLast() {
         Command last = commandHistory.removeLast();
         deletedCommands.addLast(last);
         last.undo();
     }
-    
+
     public void redoLast() {
         Command last = deletedCommands.removeLast();
         commandHistory.addLast(last);
         last.execute();
     }
-    
+
     public void addShape(MyShape s) {
         shapes.add(s);
     }
@@ -46,12 +45,23 @@ public class Model {
     public List<MyShape> getShapes() {
         return shapes;
     }
-    
-    public void setClipboard(MyShape s){
+
+    public void setClipboard(MyShape s) {
         clipboard = s;
     }
-    
-    public MyShape getClipboard(){
+
+    public MyShape getClipboard() {
         return clipboard;
+    }
+
+    /**
+     * Clears the entire model: shapes, command history, redo stack, and
+     * clipboard.
+     */
+    public void clear() {
+        shapes.clear();              
+        commandHistory.clear();      
+        deletedCommands.clear();     
+        clipboard = null;            
     }
 }

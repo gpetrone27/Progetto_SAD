@@ -322,6 +322,18 @@ public class PaintController implements Initializable {
      */
     @FXML
     private void newDrawing(ActionEvent event) {
+        canvas.getChildren().clear(); 
+        model.clear();                
+        selectedShape = null;
+        shapeSelected.set(false);
+        currentShape = null;
+
+        lineMode = false;
+        rectMode = false;
+        ellipseMode = false;
+        cursorMode.set(true);
+
+        hasClipboard.set(false);
     }
 
     /**
