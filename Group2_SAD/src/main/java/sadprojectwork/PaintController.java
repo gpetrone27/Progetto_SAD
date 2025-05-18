@@ -29,6 +29,7 @@ import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -179,6 +180,7 @@ public class PaintController implements Initializable {
             else {
                 modeProperty.set((Shapes) newToggle.getUserData());
             }
+            clearSelection();
         });
         
         // Updates toggle buttons when the selected mode changes
@@ -222,38 +224,41 @@ public class PaintController implements Initializable {
 
         canvas.setOnMousePressed(e -> {
             
-            startX = e.getX();
-            startY = e.getY();
-
-            // Saves the original coordinates when the move operation starts
-            if (selectedShape.get() != null) {
-                dragStartX = startX;
-                dragStartY = startY;
-                originalX = selectedShape.get().getStartX();
-                originalY = selectedShape.get().getStartY();
-                e.consume();
-                return;
-            }
+            if (e.getButton() == MouseButton.PRIMARY) {
             
-            // Draws the shape if any of them is selected
-            switch(modeProperty.get()) {
-                case LINE -> {
-                    BorderColorDecorator myLine = new BorderColorDecorator(new MyLine(startX, startY, startX, startY), borderHex);
-                    addShape(myLine);
-                    enableSelection(myLine);
-                    currentShape.set(myLine);
+                startX = e.getX();
+                startY = e.getY();
+
+                // Saves the original coordinates when the move operation starts
+                if (selectedShape.get() != null) {
+                    dragStartX = startX;
+                    dragStartY = startY;
+                    originalX = selectedShape.get().getStartX();
+                    originalY = selectedShape.get().getStartY();
+                    e.consume();
+                    return;
                 }
-                case RECTANGLE -> {
-                    BorderColorDecorator myRectangle = new BorderColorDecorator(new FillColorDecorator(new MyRectangle(startX, startY, 0, 0), fillHex), borderHex);
-                    addShape(myRectangle);
-                    enableSelection(myRectangle);
-                    currentShape.set(myRectangle);
-                }
-                case ELLIPSE -> {
-                    BorderColorDecorator myEllipse = new BorderColorDecorator(new FillColorDecorator(new MyEllipse(startX, startY, 0, 0), fillHex), borderHex);
-                    addShape(myEllipse);
-                    enableSelection(myEllipse);
-                    currentShape.set(myEllipse);
+
+                // Draws the shape if any of them is selected
+                switch(modeProperty.get()) {
+                    case LINE -> {
+                        BorderColorDecorator myLine = new BorderColorDecorator(new MyLine(startX, startY, startX, startY), borderHex);
+                        addShape(myLine);
+                        enableSelection(myLine);
+                        currentShape.set(myLine);
+                    }
+                    case RECTANGLE -> {
+                        BorderColorDecorator myRectangle = new BorderColorDecorator(new FillColorDecorator(new MyRectangle(startX, startY, 0, 0), fillHex), borderHex);
+                        addShape(myRectangle);
+                        enableSelection(myRectangle);
+                        currentShape.set(myRectangle);
+                    }
+                    case ELLIPSE -> {
+                        BorderColorDecorator myEllipse = new BorderColorDecorator(new FillColorDecorator(new MyEllipse(startX, startY, 0, 0), fillHex), borderHex);
+                        addShape(myEllipse);
+                        enableSelection(myEllipse);
+                        currentShape.set(myEllipse);
+                    }
                 }
             }
         });
@@ -371,6 +376,26 @@ public class PaintController implements Initializable {
         ds.setColor(Color.DODGERBLUE);
         ds.setRadius(10);
         shape.getFxShape().setEffect(ds);
+        
+        // Reads shape's parameters and sets them in the parameters panel
+        Color shapeBorderColor = (Color) shape.getFxShape().getStroke();
+        Color shapeFillColor = (Color) shape.getFxShape().getFill();
+        for (Toggle toggle : borderColor1.getToggles()) {
+            ToggleButton btn = (ToggleButton) toggle;
+            Color btnColor = (Color) btn.getBackground().getFills().get(0).getFill();
+            if (btnColor.equals(shapeBorderColor)) {
+                borderColor1.selectToggle(btn);
+                break;
+            }
+        }
+        for (Toggle toggle : fillColor1.getToggles()) {
+            ToggleButton btn = (ToggleButton) toggle;
+            Color btnColor = (Color) btn.getBackground().getFills().get(0).getFill();
+            if (btnColor.equals(shapeFillColor)) {
+                fillColor1.selectToggle(btn);
+                break;
+            }
+        }
     }
 
     /**
