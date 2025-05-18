@@ -39,13 +39,11 @@ public class ChangeColorCommand implements Command {
         Shape fxShape = targetShape.getFxShape();
 
         if (newFillColor != null) {
-            oldFillColor = (Color) fxShape.getFill();
-            fxShape.setFill(newFillColor);
+            fxShape.setFill(oldFillColor);
         }
 
         if (newStrokeColor != null) {
-            oldStrokeColor = (Color) fxShape.getStroke();
-            fxShape.setStroke(newStrokeColor);
+            fxShape.setStroke(oldStrokeColor);
         }
     }
 }
