@@ -12,7 +12,6 @@ import javafx.scene.layout.Pane;
 *
 */
 public class CopyCommand implements Command {
-    
     // shape to copy
     private MyShape shapeToCopy;
     // reference to the model
