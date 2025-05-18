@@ -23,15 +23,19 @@ public class Model {
     }
 
     public void undoLast() {
-        Command last = commandHistory.removeLast();
-        deletedCommands.addLast(last);
-        last.undo();
+        if(!commandHistory.isEmpty()) {
+            Command last = commandHistory.removeLast();
+            deletedCommands.addLast(last);
+            last.undo();
+        }
     }
 
     public void redoLast() {
-        Command last = deletedCommands.removeLast();
-        commandHistory.addLast(last);
-        last.execute();
+        if(!commandHistory.isEmpty()) {
+            Command last = deletedCommands.removeLast();
+            commandHistory.addLast(last);
+            last.execute();
+        }
     }
 
     public void addShape(MyShape s) {
