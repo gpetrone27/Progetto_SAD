@@ -4,8 +4,7 @@ package sadprojectwork;
 import javafx.scene.layout.Pane;
 
 /**
- * Implementa l'interfaccia Command e rappresenta un'operazione che permette di
- * eliminare una figura presente nel disegno.
+ * Implementa l'interfaccia Command per eliminare una figura presente nel disegno.
  * Quando eseguito, rimuove la figura specificata dal disegno.
  * Quando annullato (undo), ripristina la figura nel modello.
  * ------------------------------------------------------------------------------
