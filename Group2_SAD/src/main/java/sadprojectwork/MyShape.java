@@ -20,6 +20,10 @@ public abstract class MyShape {
 
     // return the javaFX shape
     public abstract Shape getFxShape();
+    
+    public abstract double getWidth();
+
+    public abstract double getHeight();
 
     // resizes the shape based on width and height or delta values
     // for shapes like rectangles and ellipses, this changes size.

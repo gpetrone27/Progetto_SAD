@@ -41,7 +41,7 @@ public abstract class ShapeDecorator extends MyShape {
     public void resizeTo(double endX, double endY) {
         decoratedShape.resizeTo(endX, endY);
     }
-    
+
     @Override
     public double getStartX() {
         return decoratedShape.getStartX();
@@ -62,5 +62,19 @@ public abstract class ShapeDecorator extends MyShape {
     @Override
     public MyShape cloneShape() {
         return decoratedShape.cloneShape();
+    }
+
+    // gets the width of the decorated shape
+    // this simply delegates the call to the underlying shape
+    @Override
+    public double getWidth() {
+        return decoratedShape.getWidth();
+    }
+
+    // gets the height of the decorated shape
+    // this simply delegates the call to the underlying shape
+    @Override
+    public double getHeight() {
+        return decoratedShape.getHeight();
     }
 }
