@@ -990,19 +990,19 @@ public class PaintControllerTest {
     */
    @Test
    void testPasteRectangleAfterCopy(FxRobot robot) {
-       MyShape[] original = new MyShape[1];
+       MyShape[] shapeRef = new MyShape[1];
 
        Platform.runLater(() -> {
-           MyShape rect = new MyRectangle(385, 290, 30, 20);
-           rect.getFxShape().setFill(Color.RED);
-           rect.getFxShape().setStroke(Color.ORANGE);
-           original[0] = rect;
-           controller.getModel().addShape(rect);
-           controller.enableSelection(rect);
+           MyShape rectangle = new BorderColorDecorator(
+                                new FillColorDecorator(
+                                        new MyRectangle(385, 290, 30, 20), Color.RED), Color.BLUE);
+           shapeRef[0] = rectangle;
+           controller.getModel().addShape(rectangle);
+           controller.enableSelection(rectangle);
        });
 
        robot.interact(() -> {});
-       robot.moveTo(original[0].getFxShape()).clickOn();
+       robot.moveTo(shapeRef[0].getFxShape()).clickOn();
 
        robot.interact(() -> {
            controller.copyShape(new ActionEvent());
@@ -1022,9 +1022,9 @@ public class PaintControllerTest {
        MyShape[] shapeRef = new MyShape[1];
 
        Platform.runLater(() -> {
-           MyShape ellipse = new MyEllipse(385, 290, 30, 20);
-           ellipse.getFxShape().setFill(Color.ORANGE);
-           ellipse.getFxShape().setStroke(Color.RED);
+           MyShape ellipse = new BorderColorDecorator(
+                                new FillColorDecorator(
+                                        new MyEllipse(385, 290, 30, 20), Color.RED), Color.ORANGE);
            shapeRef[0] = ellipse;
            controller.getModel().addShape(ellipse);
            controller.enableSelection(ellipse);
@@ -1048,18 +1048,18 @@ public class PaintControllerTest {
     */
    @Test
    void testPasteLineAfterCopy(FxRobot robot) {
-       MyShape[] lineRef = new MyShape[1];
+       MyShape[] shapeRef = new MyShape[1];
 
        Platform.runLater(() -> {
-           MyShape line = new MyLine(385, 290, 30, 20);
-           line.getFxShape().setStroke(Color.GREEN);
-           lineRef[0] = line;
+           MyShape line = new BorderColorDecorator(
+                                new MyLine(385, 290, 30, 20), Color.GREEN);
+           shapeRef[0] = line;
            controller.getModel().addShape(line);
            controller.enableSelection(line);
        });
 
        robot.interact(() -> {});
-       robot.moveTo(lineRef[0].getFxShape()).clickOn();
+       robot.moveTo(shapeRef[0].getFxShape()).clickOn();
 
        robot.interact(() -> {
            controller.copyShape(new ActionEvent());
@@ -1077,9 +1077,9 @@ public class PaintControllerTest {
        MyShape[] shapeRef = new MyShape[1];
 
        Platform.runLater(() -> {
-           MyShape rectangle = new MyRectangle(385, 290, 30, 20);
-           rectangle.getFxShape().setFill(Color.GREY);
-           rectangle.getFxShape().setStroke(Color.PURPLE);
+           MyShape rectangle = new BorderColorDecorator(
+                                new FillColorDecorator(
+                                        new MyRectangle(385, 290, 30, 20), Color.GREY), Color.PURPLE);
            shapeRef[0] = rectangle;
            controller.getModel().addShape(rectangle);
            controller.enableSelection(rectangle);
@@ -1105,9 +1105,9 @@ public class PaintControllerTest {
        MyShape[] shapeRef = new MyShape[1];
 
        Platform.runLater(() -> {
-           MyShape ellipse = new MyEllipse(385, 290, 30, 20);
-           ellipse.getFxShape().setFill(Color.BLUE);
-           ellipse.getFxShape().setStroke(Color.BLACK);
+           MyShape ellipse = new BorderColorDecorator(
+                                new FillColorDecorator(
+                                        new MyEllipse(385, 290, 30, 20), Color.BLUE), Color.BLACK);
            shapeRef[0] = ellipse;
            controller.getModel().addShape(ellipse);
            controller.enableSelection(ellipse);
