@@ -95,5 +95,32 @@ public abstract class MyShape {
      * @return 
      */
     public abstract String toCSV();
+    
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof MyShape other)) return false;
+
+        return Double.compare(startX, other.startX) == 0 &&
+               Double.compare(startY, other.startY) == 0 &&
+               Double.compare(getWidth(), other.getWidth()) == 0 &&
+               Double.compare(getHeight(), other.getHeight()) == 0 &&
+               this.getClass() == other.getClass(); // importante: confronta il tipo di forma
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getClass().hashCode();
+        long temp;
+        temp = Double.doubleToLongBits(startX);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(startY);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(getWidth());
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(getHeight());
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        return result;
+    }
 
 }

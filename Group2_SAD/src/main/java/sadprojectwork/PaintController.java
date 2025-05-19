@@ -712,6 +712,11 @@ public class PaintController implements Initializable {
     public MyShape getSelectedShape() {
         return selectedShape.get();
     }
+    
+    public void selectShape(MyShape shape) {
+        selectedShape.set(shape);
+        highlightSelected(shape);
+    }
 
     public void setModel(Model model) {
         this.model = model;
@@ -730,7 +735,14 @@ public class PaintController implements Initializable {
     }
 
     public boolean isShapeSelected(MyShape shape) {
-        return selectedShape.get() != null && selectedShape.get().getFxShape() == shape.getFxShape();
+        return selectedShape.get() != null && selectedShape.get().equals(shape);
+    }
+    
+    public void setBorderColorGroup(ToggleGroup group) {
+        this.borderColorPanel = group;
     }
 
+    public void setFillColorGroup(ToggleGroup group) {
+        this.fillColorPanel = group;
+    }
 }
