@@ -70,7 +70,7 @@ public class PaintControllerTest {
     @Test
     void testRectangleSelected(FxRobot robot) {
         Platform.runLater(() -> {
-            MyShape rectangle = new MyRectangle(50, 50, 80, 60);
+            MyShape rectangle = new MyRectangle(385, 290, 30, 20);
             rectangle.getFxShape().setFill(Color.GREEN);
             rectangle.getFxShape().setStroke(Color.YELLOW);
             controller.getModel().addShape(rectangle);
@@ -95,7 +95,7 @@ public class PaintControllerTest {
     @Test
     void testEllipseSelected(FxRobot robot) {
         Platform.runLater(() -> {
-            MyShape ellipse = new MyEllipse(50, 60, 35, 20);
+            MyShape ellipse = new MyEllipse(385, 290, 30, 20);
             ellipse.getFxShape().setFill(Color.BLUE);
             ellipse.getFxShape().setStroke(Color.PURPLE);
             controller.getModel().addShape(ellipse);
@@ -120,7 +120,7 @@ public class PaintControllerTest {
     @Test
     void testLineSelected(FxRobot robot) {
         Platform.runLater(() -> {
-            MyShape line = new MyLine(0, 0, 30, 20);
+            MyShape line = new MyLine(385, 290, 30, 20);
             line.getFxShape().setStroke(Color.BLACK);
             controller.getModel().addShape(line);
             controller.enableSelection(line);
@@ -144,7 +144,7 @@ public class PaintControllerTest {
     @Test
     void testDisableSelection(FxRobot robot){
        Platform.runLater(() -> {
-            MyShape rectangle = new MyRectangle(100, 100, 40, 30);
+            MyShape rectangle = new MyRectangle(385, 290, 30, 20);
             rectangle.getFxShape().setFill(Color.BLUE);
             rectangle.getFxShape().setStroke(Color.PURPLE);
             controller.getModel().addShape(rectangle);
@@ -166,7 +166,7 @@ public class PaintControllerTest {
     @Test
     public void testNewSelectionWithShapeSelected(FxRobot robot){
         Platform.runLater(() -> {
-            MyShape rectangle = new MyRectangle(40, 40, 30, 30);
+            MyShape rectangle = new MyRectangle(385, 290, 30, 20);
             rectangle.getFxShape().setFill(Color.GREEN);
             rectangle.getFxShape().setStroke(Color.YELLOW);
             MyShape ellipse = new MyEllipse(100, 100, 40, 40);
@@ -201,7 +201,7 @@ public class PaintControllerTest {
         MyShape[] shapeRef = new MyShape[1];
 
         Platform.runLater(() -> {
-            MyShape rectangle = new MyRectangle(70, 70, 50, 40);
+            MyShape rectangle = new MyRectangle(385, 290, 30, 20);
             rectangle.getFxShape().setFill(Color.GREEN);
             rectangle.getFxShape().setStroke(Color.YELLOW);
             shapeRef[0] = rectangle;
@@ -232,7 +232,7 @@ public class PaintControllerTest {
         MyShape[] shapeRef = new MyShape[1];
 
         Platform.runLater(() -> {
-            MyShape ellipse = new MyEllipse(150, 200, 50, 30);
+            MyShape ellipse = new MyEllipse(385, 290, 30, 20);
             ellipse.getFxShape().setFill(Color.GREEN);
             ellipse.getFxShape().setStroke(Color.YELLOW);
             shapeRef[0] = ellipse;
@@ -263,7 +263,7 @@ public class PaintControllerTest {
         MyShape[] shapeRef = new MyShape[1];
 
         Platform.runLater(() -> {
-            MyShape line = new MyLine(0, 0, 24, 50);
+            MyShape line = new MyLine(385, 290, 30, 20);
             line.getFxShape().setStroke(Color.PURPLE);
             shapeRef[0] = line;
             controller.getModel().addShape(line);
@@ -292,7 +292,7 @@ public class PaintControllerTest {
         MyShape[] shapeRef = new MyShape[1];
 
         Platform.runLater(() -> {
-            MyShape line = new MyLine(0, 0, 70, 100);
+            MyShape line = new MyLine(385, 290, 30, 20);
             line.getFxShape().setStroke(Color.ORANGE);
             shapeRef[0] = line;
             controller.getModel().addShape(line);
@@ -324,8 +324,8 @@ public class PaintControllerTest {
         });
 
         robot.interact(() -> {
-            assertNull(controller.getSelectedShape(), "No shape should be selected.");
-            assertEquals(0, controller.getModel().getShapes().size(), "No shapes must be present in the model.");
+            assertNull(controller.getSelectedShape(), "No shape should be selected!");
+            assertEquals(0, controller.getModel().getShapes().size(), "No shapes must be present in the model!");
         });
     }
     
@@ -355,8 +355,8 @@ public class PaintControllerTest {
         Platform.runLater(() -> shapeRef[0].moveTo(newX, newY));
         robot.interact(() -> {});
 
-        assertEquals(newX, shapeRef[0].getStartX(), "Shape X should be updated.");
-        assertEquals(newY, shapeRef[0].getStartY(), "Shape Y should be updated.");
+        assertEquals(newX, shapeRef[0].getStartX(), "Shape X should be updated!");
+        assertEquals(newY, shapeRef[0].getStartY(), "Shape Y should be updated!");
     }
     
     /**
@@ -385,8 +385,8 @@ public class PaintControllerTest {
         Platform.runLater(() -> shapeRef[0].moveTo(newX, newY));
         robot.interact(() -> {});
 
-        assertEquals(newX, shapeRef[0].getStartX(), "Shape X should be updated.");
-        assertEquals(newY, shapeRef[0].getStartY(), "Shape Y should be updated.");
+        assertEquals(newX, shapeRef[0].getStartX(), "Shape X should be updated!");
+        assertEquals(newY, shapeRef[0].getStartY(), "Shape Y should be updated!");
     }
     
     /**
@@ -414,8 +414,8 @@ public class PaintControllerTest {
         Platform.runLater(() -> shapeRef[0].moveTo(newX, newY));
         robot.interact(() -> {});
 
-        assertEquals(newX, shapeRef[0].getStartX(), "Shape X should be updated.");
-        assertEquals(newY, shapeRef[0].getStartY(), "Shape Y should be updated.");
+        assertEquals(newX, shapeRef[0].getStartX(), "Shape X should be updated!");
+        assertEquals(newY, shapeRef[0].getStartY(), "Shape Y should be updated!");
     }
    
     /**
@@ -447,13 +447,336 @@ public class PaintControllerTest {
        });
        robot.interact(() -> {});
 
-       assertEquals(newX, shapeRef[0].getStartX(), "X should be updated after move.");
-       assertEquals(newY, shapeRef[0].getStartY(), "Y should be updated after move.");
+       assertEquals(newX, shapeRef[0].getStartX(), "X should be updated after move!");
+       assertEquals(newY, shapeRef[0].getStartY(), "Y should be updated after move!");
 
        robot.interact(() -> controller.undoOperation(new ActionEvent()));
 
-       assertEquals(oldX, shapeRef[0].getStartX(), "X should return to original after undo.");
-       assertEquals(oldY, shapeRef[0].getStartY(), "Y should return to original after undo.");
+       assertEquals(oldX, shapeRef[0].getStartX(), "X should return to original after undo!");
+       assertEquals(oldY, shapeRef[0].getStartY(), "Y should return to original after undo!");
    }
+   
+   /**
+    * Tests the border color change of a selected rectangle.
+    *
+    *
+    * @param TestFX robot: robot to simulate user interaction
+    */
+   @Test
+   void testChangeBorderColorRectangle(FxRobot robot) {
+         MyShape[] shapeRef = new MyShape[1];
 
+        Platform.runLater(() -> {
+            MyShape rectangle = new MyRectangle(385, 290, 30, 20);
+            rectangle.getFxShape().setFill(Color.RED);
+            rectangle.getFxShape().setStroke(Color.YELLOW);
+            shapeRef[0] = rectangle;
+            controller.getModel().addShape(rectangle);
+            controller.enableSelection(rectangle);
+        });
+
+        robot.interact(() -> {});
+        robot.moveTo(shapeRef[0].getFxShape()).clickOn();
+
+        Color newBorder = Color.BLUE;
+        robot.interact(() -> {
+            Command changeColor = new ChangeColorCommand(shapeRef[0], null, newBorder);
+            controller.getModel().execute(changeColor);
+        });
+
+        assertEquals(newBorder, shapeRef[0].getFxShape().getStroke(), "Border color should be updated!");
+    }
+   
+   /**
+    * Tests the fill color change of a selected rectangle.
+    *
+    *
+    * @param TestFX robot: robot to simulate user interaction
+    */
+   @Test
+   void testChangeFillColorRectangle(FxRobot robot) {
+        MyShape[] shapeRef = new MyShape[1];
+
+        Platform.runLater(() -> {
+            MyShape rectangle = new MyRectangle(385, 290, 30, 20);
+            rectangle.getFxShape().setFill(Color.RED);
+            rectangle.getFxShape().setStroke(Color.YELLOW);
+            shapeRef[0] = rectangle;
+            controller.getModel().addShape(rectangle);
+            controller.enableSelection(rectangle);
+        });
+
+        robot.interact(() -> {});
+        robot.moveTo(shapeRef[0].getFxShape()).clickOn();
+
+        Color newFill = Color.PINK;
+        robot.interact(() -> {
+            Command changeColor = new ChangeColorCommand(shapeRef[0], newFill, null);
+            controller.getModel().execute(changeColor);
+        });
+
+        assertEquals(newFill, shapeRef[0].getFxShape().getFill(), "Fill color should be updated!");
+    }
+   
+   /**
+    * Tests the color change of a selected rectangle.
+    *
+    *
+    * @param TestFX robot: robot to simulate user interaction
+    */
+   @Test
+   void testChangeColorRectangle(FxRobot robot) {
+        MyShape[] shapeRef = new MyShape[1];
+
+        Platform.runLater(() -> {
+            MyShape rectangle = new MyRectangle(385, 290, 30, 20);
+            rectangle.getFxShape().setFill(Color.RED);
+            rectangle.getFxShape().setStroke(Color.YELLOW);
+            shapeRef[0] = rectangle;
+            controller.getModel().addShape(rectangle);
+            controller.enableSelection(rectangle);
+        });
+
+        robot.interact(() -> {});
+        robot.moveTo(shapeRef[0].getFxShape()).clickOn();
+
+        Color newFill = Color.PINK;
+        Color newBorder = Color.BLUE;
+        robot.interact(() -> {
+            Command changeColor = new ChangeColorCommand(shapeRef[0], newFill, newBorder);
+            controller.getModel().execute(changeColor);
+        });
+
+        assertEquals(newFill, shapeRef[0].getFxShape().getFill(), "Fill color should be updated!");
+        assertEquals(newBorder, shapeRef[0].getFxShape().getStroke(), "Border color should be updated!");
+    }
+   
+   /**
+    * Tests the border color change of a selected ellipse.
+    *
+    *
+    * @param TestFX robot: robot to simulate user interaction
+    */
+   @Test
+   void testChangeBorderColorEllipse(FxRobot robot) {
+        MyShape[] shapeRef = new MyShape[1];
+
+        Platform.runLater(() -> {
+            MyShape ellipse = new MyEllipse(385, 290, 30, 20);
+            ellipse.getFxShape().setFill(Color.BLUE);
+            ellipse.getFxShape().setStroke(Color.GREEN);
+            shapeRef[0] = ellipse;
+            controller.getModel().addShape(ellipse);
+            controller.enableSelection(ellipse);
+        });
+
+        robot.interact(() -> {});
+        robot.moveTo(shapeRef[0].getFxShape()).clickOn();
+
+        Color newBorder = Color.ORANGE;
+        robot.interact(() -> {
+            Command changeColor = new ChangeColorCommand(shapeRef[0], null, newBorder);
+            controller.getModel().execute(changeColor);
+        });
+
+        assertEquals(newBorder, shapeRef[0].getFxShape().getStroke(), "Border color should be updated!");
+    }
+   
+   /**
+    * Tests the fill color change of a selected ellipse.
+    *
+    *
+    * @param TestFX robot: robot to simulate user interaction
+    */
+   @Test
+   void testChangeFillColorEllipse(FxRobot robot) {
+        MyShape[] shapeRef = new MyShape[1];
+
+        Platform.runLater(() -> {
+            MyShape ellipse = new MyEllipse(385, 290, 30, 20);
+            ellipse.getFxShape().setFill(Color.BLUE);
+            ellipse.getFxShape().setStroke(Color.GREEN);
+            shapeRef[0] = ellipse;
+            controller.getModel().addShape(ellipse);
+            controller.enableSelection(ellipse);
+        });
+
+        robot.interact(() -> {});
+        robot.moveTo(shapeRef[0].getFxShape()).clickOn();
+
+        Color newFill = Color.PINK;
+        robot.interact(() -> {
+            Command changeColor = new ChangeColorCommand(shapeRef[0], newFill, null);
+            controller.getModel().execute(changeColor);
+        });
+
+        assertEquals(newFill, shapeRef[0].getFxShape().getFill(), "Fill color should be updated!");
+    }
+
+   /**
+    * Tests the color change of a selected ellipse.
+    *
+    *
+    * @param TestFX robot: robot to simulate user interaction
+    */
+   @Test
+   void testChangeColorEllipse(FxRobot robot) {
+        MyShape[] shapeRef = new MyShape[1];
+
+        Platform.runLater(() -> {
+            MyShape ellipse = new MyEllipse(385, 290, 30, 20);
+            ellipse.getFxShape().setFill(Color.BLUE);
+            ellipse.getFxShape().setStroke(Color.GREEN);
+            shapeRef[0] = ellipse;
+            controller.getModel().addShape(ellipse);
+            controller.enableSelection(ellipse);
+        });
+
+        robot.interact(() -> {});
+        robot.moveTo(shapeRef[0].getFxShape()).clickOn();
+
+        Color newFill = Color.PINK;
+        Color newBorder = Color.BLUE;
+        robot.interact(() -> {
+            Command changeColor = new ChangeColorCommand(shapeRef[0], newFill, newBorder);
+            controller.getModel().execute(changeColor);
+        });
+
+        assertEquals(newFill, shapeRef[0].getFxShape().getFill(), "Fill color should be updated!");
+        assertEquals(newBorder, shapeRef[0].getFxShape().getStroke(), "Border color should be updated!");
+    }
+   
+   /**
+    * Tests the border color change of a selected line.
+    *
+    *
+    * @param TestFX robot: robot to simulate user interaction
+    */
+   @Test
+   void testChangeColorLine(FxRobot robot) {
+        MyShape[] shapeRef = new MyShape[1];
+
+        Platform.runLater(() -> {
+            MyShape line = new MyLine(385, 290, 30, 20);
+            line.getFxShape().setStroke(Color.PURPLE);
+            shapeRef[0] = line;
+            controller.getModel().addShape(line);
+            controller.enableSelection(line);
+        });
+
+        robot.interact(() -> {});
+        robot.moveTo(shapeRef[0].getFxShape()).clickOn();
+
+        Color newBorder = Color.BROWN;
+        robot.interact(() -> {
+            Command changeColor = new ChangeColorCommand(shapeRef[0], null, newBorder);
+            controller.getModel().execute(changeColor);
+        });
+
+        assertEquals(newBorder, shapeRef[0].getFxShape().getStroke(), "Border color should be updated!");
+    }
+   
+   /**
+    * Tests that a change fill color shape can be undone correctly.
+    * 
+    * @param TestFX robot: robot to simulate user interactions.
+    */
+   @Test
+    void testUndoFillChangeColor(FxRobot robot) {
+        MyShape[] shapeRef = new MyShape[1];
+        Color originalFill = Color.RED;
+        Color newFill = Color.GREEN;
+
+        Platform.runLater(() -> {
+            MyShape ellipse = new MyEllipse(385, 290, 30, 20);
+            ellipse.getFxShape().setFill(originalFill);
+            ellipse.getFxShape().setStroke(Color.BLACK);
+            shapeRef[0] = ellipse;
+            controller.getModel().addShape(ellipse);
+            controller.enableSelection(ellipse);
+        });
+
+        robot.interact(() -> {});
+        robot.moveTo(shapeRef[0].getFxShape()).clickOn();
+
+        robot.interact(() -> {
+            Command changeColor = new ChangeColorCommand(shapeRef[0], newFill, null);
+            controller.getModel().execute(changeColor);
+        });
+
+        assertEquals(newFill, shapeRef[0].getFxShape().getFill(), "Fill color should be updated!");
+
+        robot.interact(() -> controller.undoOperation(new ActionEvent()));
+        assertEquals(originalFill, shapeRef[0].getFxShape().getFill(), "Undo should restore original fill color.");
+    }
+    
+    /**
+    * Tests that a change border color shape can be undone correctly.
+    * 
+    * @param TestFX robot: robot to simulate user interactions.
+    */
+   @Test
+    void testUndoBorderChangeColor(FxRobot robot) {
+        MyShape[] shapeRef = new MyShape[1];
+        Color originalBorder = Color.PURPLE;
+        Color newBorder = Color.GREEN;
+
+        Platform.runLater(() -> {
+            MyShape rectangle = new MyRectangle(385, 290, 30, 20);
+            rectangle.getFxShape().setFill(Color.RED);
+            rectangle.getFxShape().setStroke(originalBorder);
+            shapeRef[0] = rectangle;
+            controller.getModel().addShape(rectangle);
+            controller.enableSelection(rectangle);
+        });
+
+        robot.interact(() -> {});
+        robot.moveTo(shapeRef[0].getFxShape()).clickOn();
+
+        robot.interact(() -> {
+            Command changeColor = new ChangeColorCommand(shapeRef[0], null, newBorder);
+            controller.getModel().execute(changeColor);
+        });
+
+        assertEquals(newBorder, shapeRef[0].getFxShape().getStroke(), "Border color should be updated!");
+
+        robot.interact(() -> controller.undoOperation(new ActionEvent()));
+        assertEquals(originalBorder, shapeRef[0].getFxShape().getStroke(), "Undo should restore original border color!");
+    }
+    
+    /**
+    * Tests that a change fill color shape can be undone correctly.
+    * 
+    * @param TestFX robot: robot to simulate user interactions.
+    */
+   @Test
+    void testUndoChangeColor(FxRobot robot) {
+        MyShape[] shapeRef = new MyShape[1];
+        Color originalFill = Color.RED;
+        Color newFill = Color.GREEN;
+        Color originalBorder = Color.YELLOW;
+        Color newBorder = Color.BROWN;
+
+        Platform.runLater(() -> {
+            MyShape ellipse = new MyEllipse(385, 290, 30, 20);
+            ellipse.getFxShape().setFill(originalFill);
+            ellipse.getFxShape().setStroke(originalBorder);
+            shapeRef[0] = ellipse;
+            controller.getModel().addShape(ellipse);
+            controller.enableSelection(ellipse);
+        });
+
+        robot.interact(() -> {});
+        robot.moveTo(shapeRef[0].getFxShape()).clickOn();
+
+        robot.interact(() -> {
+           Command changeColor = new ChangeColorCommand(shapeRef[0], newFill, newBorder);
+            controller.getModel().execute(changeColor);
+            controller.undoOperation(new ActionEvent());
+        });
+
+        assertEquals(originalFill, shapeRef[0].getFxShape().getFill(), "Undo should restore original fill color!");
+        assertEquals(originalBorder, shapeRef[0].getFxShape().getStroke(), "Undo should restore original border color!");
+}
+    
 }
