@@ -452,7 +452,7 @@ public class PaintController implements Initializable {
      * @param event
      */
     @FXML
-    private void undoOperation(ActionEvent event) {
+    public void undoOperation(ActionEvent event) {
         model.undoLast();
     }
 

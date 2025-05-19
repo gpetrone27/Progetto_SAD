@@ -189,6 +189,13 @@ public class PaintControllerTest {
         assertNull(rect.getFxShape().getEffect(), "The first shape should no longer be selected and highlighted!");
     }
     
+    /**
+    * Verifies that a selected rectangle is correctly deleted
+    * from the model and canvas, and that the selection is reset to zero.
+    * 
+    * @param TestFX robot: robot to simulate user interactions.
+    *
+    */
     @Test
     void testDeleteRectangle(FxRobot robot) {
         MyShape[] shapeRef = new MyShape[1];
@@ -213,6 +220,13 @@ public class PaintControllerTest {
         assertNull(controller.getSelectedShape(), "After deletion, the selection must not be present!");
     }
     
+    /**
+    * Verifies that a selected ellipse is correctly deleted
+    * from the model and canvas, and that the selection is reset to zero.
+    * 
+    * @param TestFX robot: robot to simulate user interactions.
+    *
+    */
     @Test
     void testDeleteEllipse(FxRobot robot) {
         MyShape[] shapeRef = new MyShape[1];
@@ -237,6 +251,13 @@ public class PaintControllerTest {
         assertNull(controller.getSelectedShape(), "After deletion, the selection must not be present!");
     }
     
+    /**
+    * Verifies that a selected line is correctly deleted
+    * from the model and canvas, and that the selection is reset to zero.
+    * 
+    * @param TestFX robot: robot to simulate user interactions.
+    *
+    */
     @Test
     void testDeleteLine(FxRobot robot) {
         MyShape[] shapeRef = new MyShape[1];
@@ -258,5 +279,53 @@ public class PaintControllerTest {
         assertFalse(controller.getModel().getShapes().contains(shapeRef[0]), "The shape must be removed from the model!");
         assertFalse(controller.getCanvas().getChildren().contains(shapeRef[0].getFxShape()), "The shape must be removed from the canvas!");
         assertNull(controller.getSelectedShape(), "After deletion, the selection must not be present!");
+    }
+    
+    /**
+    * Verifies that, after deleting a shape, the undo operation
+    * correctly restores the shape to the model.
+    * 
+    * @param TestFX robot: robot to simulate user interactions.
+    */
+    @Test
+    void testUndoAfterDelete(FxRobot robot) {
+        MyShape[] shapeRef = new MyShape[1];
+
+        Platform.runLater(() -> {
+            MyShape line = new MyLine(0, 0, 70, 100);
+            line.getFxShape().setStroke(Color.ORANGE);
+            shapeRef[0] = line;
+            controller.getModel().addShape(line);
+            controller.getCanvas().getChildren().add(line.getFxShape());
+            controller.enableSelection(line);
+        });
+
+        robot.interact(() -> {});
+        robot.moveTo(shapeRef[0].getFxShape()).clickOn();
+        robot.interact(() -> controller.deleteShape(new ActionEvent()));
+
+        assertFalse(controller.getModel().getShapes().contains(shapeRef[0]));
+
+        robot.interact(() -> controller.undoOperation(new ActionEvent()));
+
+        assertTrue(controller.getModel().getShapes().contains(shapeRef[0]), "The shape must be restored!");
+    }
+    
+    /**
+    * Check for errors when attempting to perform
+    * deletion without any shape selected or drawn.
+    * 
+    * @param TestFX robot: robot to simulate user interactions.
+    */
+    @Test
+    void testDeleteWithNoDrawing(FxRobot robot) {
+        Platform.runLater(() -> {
+            controller.deleteShape(null);
+        });
+
+        robot.interact(() -> {
+            assertNull(controller.getSelectedShape(), "No shape shpuld be selected.");
+            assertEquals(0, controller.getModel().getShapes().size(), "No shapes must be present in the model.");
+        });
     }
 }
