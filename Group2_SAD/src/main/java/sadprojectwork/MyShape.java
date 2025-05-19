@@ -9,6 +9,9 @@ import javafx.scene.shape.Shape;
  */
 public abstract class MyShape {
 
+    // Wrapped FX shape
+    protected Shape fxShape;
+    
     // Start coordinates of the shape
     protected double startX;
     protected double startY;
@@ -16,19 +19,43 @@ public abstract class MyShape {
     // Dimensions of the shape
     protected double width;
     protected double height;
-
+    
     public MyShape(double startX, double startY) {
         this.startX = startX;
         this.startY = startY;
     }
 
-    // Return the javaFX shape
-    public abstract Shape getFxShape();
+    /**
+     * Returns the wrapped FX shape.
+     * @return fxShape
+     */
+    public Shape getFxShape() {
+        return fxShape;
+    }
+    
+    /**
+     * Returns the starting position X value.
+     * @return startX
+     */
+    public double getStartX() {
+        return startX;
+    }
 
-    // Resizes the shape based on width and height or delta values
-    // for shapes like rectangles and ellipses, this changes size.
-    // for lines, this may be interpreted differently.
-    public abstract void resize(double newWidth, double newHeight);
+    /**
+     * Returns the starting position Y value.
+     * @return startY
+     */
+    public double getStartY() {
+        return startY;
+    }
+
+    /**
+     * Resizes the shape based on the new dimensions.
+     * Lines only use length.
+     * Rectangles and ellipses use width and height.
+     * @param dimensions
+     */
+    public abstract void resize(double... dimensions);
 
     // Creates and returns a copy of the shape
     public abstract MyShape cloneShape();
@@ -39,34 +66,34 @@ public abstract class MyShape {
         this.startY = y;
     }
 
-    // Return the starting X coordinate of the shape
-    public double getStartX() {
-        return startX;
-    }
-
-    // Return the starting X coordinate of the shape 
-    public double getStartY() {
-        return startY;
+    /**
+     * Returns the first dimension of the shape.
+     * Lines return their length.
+     * Rectangles and ellipses return their width.
+     * @return 
+     */
+    public abstract double getWidth();
+    
+    /**
+     * Returns the second dimension of the shape.
+     * Lines return 0.
+     * Rectangles and ellipses return their height.
+     * @return 
+     */
+    public abstract double getHeight();
+    
+    public void moveOf(double dx, double dy) {
+        setPosition(getStartX() + dx, getStartY() + dy);
     }
     
-    // Return the width of the shape
-    public double getWidth() {
-        return width;
+    public void moveTo(double x, double y) {
+        setPosition(x, y);
     }
     
-    // Return the height of the shape
-    public double getHeight() {
-        return height;
-    }
-    
-    public void moveOf(double updtX, double updtY) {
-        setPosition(getStartX() + updtX, getStartY() + updtY);
-    }
-    
-    public void moveTo(double xNew, double yNew) {
-        setPosition(xNew, yNew);
-    }
-    
+    /**
+     * Returns a String in CSV format containing all the shapes fields
+     * @return 
+     */
     public abstract String toCSV();
 
 }

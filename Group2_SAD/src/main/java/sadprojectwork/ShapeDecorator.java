@@ -17,17 +17,9 @@ public abstract class ShapeDecorator extends MyShape {
         this.decoratedShape = decoratedShape;
     }
 
-    // returns the actual JavaFX shape being rendered (delegated)
     @Override
     public Shape getFxShape() {
         return decoratedShape.getFxShape();
-    }
-
-    // delegates the resize logic to the original shape
-    // this class doesn't handle resizing logic by itself
-    @Override
-    public void resize(double newWidth, double newHeight) {
-        decoratedShape.resize(newWidth, newHeight);
     }
 
     @Override
@@ -39,17 +31,35 @@ public abstract class ShapeDecorator extends MyShape {
     public double getStartY() {
         return decoratedShape.getStartY();
     }
+    
+    @Override
+    public double getWidth() {
+        return decoratedShape.getWidth();
+    }
+    
+    @Override
+    public double getHeight() {
+        return decoratedShape.getHeight();
+    }
+    
+    @Override
+    public void resize(double... dimensions) {
+        decoratedShape.resize(dimensions);
+    }
 
-    // updates the position of the decorated shape
     @Override
     public void setPosition(double x, double y) {
         decoratedShape.setPosition(x, y);
     }
 
-    // clones the underlying shape (note: decorators are not cloned here)
     @Override
     public MyShape cloneShape() {
         return decoratedShape.cloneShape();
+    }
+    
+    @Override
+    public String toCSV() {
+        return decoratedShape.toCSV();
     }
     
 }

@@ -2,7 +2,6 @@
 package sadprojectwork;
 
 import javafx.scene.shape.Ellipse;
-import javafx.scene.shape.Shape;
 
 /**
  * Represents a custom ellipse shape in the drawing application.
@@ -10,37 +9,46 @@ import javafx.scene.shape.Shape;
  */
 public class MyEllipse extends MyShape {
 
+    // Strongly typed reference to wrapped FX shape
     private Ellipse ellipse;
 
-    // Creates an ellipse centered at (centerX, centerY)
-    // with the given horizontal and vertical radii
+    /**
+     * Creates an ellipse centered in (centerX, centerY) with the given radii
+     * @param centerX
+     * @param centerY
+     * @param radiusX
+     * @param radiusY 
+     */
     public MyEllipse(double centerX, double centerY, double radiusX, double radiusY) {
         super(centerX, centerY);
         ellipse = new Ellipse(centerX, centerY, radiusX, radiusY);
-        ellipse.setStrokeWidth(3);
-    }
-
-    // Returns the JavaFX shape object to be added to the pane
-    @Override
-    public Shape getFxShape() {
-        return ellipse;
+        ellipse.setStrokeWidth(3); // Temporary: set border width to 3
+        this.fxShape = ellipse;
     }
 
     // Resizes the ellipse by adjusting its radii and center position
     // based on the specified deltas
     @Override
-    public void resize(double newRadiusX, double newRadiusY) {
+    public void resize(double... dimensions) {
         
-        double centerX = startX + newRadiusX;
-        double centerY = startY + newRadiusY;
-
+        // Checks if two parameters were given
+        if (dimensions.length != 2) {
+            throw new IllegalArgumentException("Ellipse needs radiusX and radiusY");
+        }
+        
+        // Resizes the ellipse
+        double centerX = startX + dimensions[0];
+        double centerY = startY + dimensions[1];
         ellipse.setCenterX(centerX);
         ellipse.setCenterY(centerY);
-        ellipse.setRadiusX(Math.abs(newRadiusX));
-        ellipse.setRadiusY(Math.abs(newRadiusY));
+        ellipse.setRadiusX(Math.abs(dimensions[0]));
+        ellipse.setRadiusY(Math.abs(dimensions[1]));
     }
 
-    // Creates a copy of the shape, useful for the copy and paste command
+    /**
+     * Creates a copy of the shape, useful for the copy and paste command
+     * @return cloned shape
+     */
     @Override
     public MyShape cloneShape() {
         return new MyEllipse(startX, startY, ellipse.getRadiusX(), ellipse.getRadiusY());
@@ -55,13 +63,19 @@ public class MyEllipse extends MyShape {
         ellipse.setCenterY(y);
     }
 
-    // Gets the width of the ellipse, defined as the horizontal radius
+    /**
+     * Returns the radius X value
+     * @return getRadiusX()
+     */
     @Override
     public double getWidth() {
         return ellipse.getRadiusX();
     }
 
-    // Gets the height of the ellipse, defined as the vertical radius
+    /**
+     * Returns the radius Y value
+     * @return getRadiusY()
+     */
     @Override
     public double getHeight() {
         return ellipse.getRadiusY();

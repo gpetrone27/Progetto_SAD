@@ -23,16 +23,6 @@ public class FillColorDecorator extends ShapeDecorator {
         return new FillColorDecorator(decoratedShape.cloneShape(), (Color) decoratedShape.getFxShape().getFill());
     }
     
-    @Override
-    public double getWidth() {
-        return decoratedShape.getWidth();
-    }
-    
-    @Override
-    public double getHeight() {
-        return decoratedShape.getHeight();
-    }
-    
     private void setFillColor() {
         decoratedShape.getFxShape().setFill(fillColor);
     }
@@ -41,8 +31,4 @@ public class FillColorDecorator extends ShapeDecorator {
         return fillColor;
     }
 
-    @Override
-    public String toCSV() {
-        return decoratedShape.toCSV();
-    }
 }

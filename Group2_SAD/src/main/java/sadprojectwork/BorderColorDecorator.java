@@ -23,27 +23,12 @@ public class BorderColorDecorator extends ShapeDecorator {
         return new BorderColorDecorator(decoratedShape.cloneShape(), (Color) decoratedShape.getFxShape().getStroke());
     }
     
-    @Override
-    public double getWidth() {
-        return decoratedShape.getWidth();
-    }
-    
-    @Override
-    public double getHeight() {
-        return decoratedShape.getHeight();
-    }
-    
     private void setBorderColor() {
         decoratedShape.getFxShape().setStroke(borderColor);
     }
     
     public Color getBorderColor() {
         return borderColor;
-    }
-
-    @Override
-    public String toCSV() {
-        return decoratedShape.toCSV();
     }
     
 }
