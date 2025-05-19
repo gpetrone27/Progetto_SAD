@@ -492,7 +492,7 @@ public class PaintController implements Initializable {
      * @param event
      */
     @FXML
-    private void cutShape(ActionEvent event) {
+    public void cutShape(ActionEvent event) {
         if (selectedShape.get() != null) {
             Command cutCmd = new CutCommand(model, selectedShape.get());
             model.execute(cutCmd);

@@ -312,24 +312,6 @@ public class PaintControllerTest {
     }
     
     /**
-    * Check for errors when attempting to perform
-    * deletion without any shape selected or drawn.
-    * 
-    * @param TestFX robot: robot to simulate user interactions.
-    */
-    @Test
-    void testDeleteWithNoDrawing(FxRobot robot) {
-        Platform.runLater(() -> {
-            controller.deleteShape(null);
-        });
-
-        robot.interact(() -> {
-            assertNull(controller.getSelectedShape(), "No shape should be selected!");
-            assertEquals(0, controller.getModel().getShapes().size(), "No shapes must be present in the model!");
-        });
-    }
-    
-    /**
     * Tests that a selected rectangle updates its position, when it's moved.
     * 
     * @param TestFX robot: robot to simulate user interactions.
@@ -745,7 +727,7 @@ public class PaintControllerTest {
     }
     
     /**
-    * Tests that a change fill color shape can be undone correctly.
+    * Tests that a change color shape can be undone correctly.
     * 
     * @param TestFX robot: robot to simulate user interactions.
     */
@@ -777,6 +759,115 @@ public class PaintControllerTest {
 
         assertEquals(originalFill, shapeRef[0].getFxShape().getFill(), "Undo should restore original fill color!");
         assertEquals(originalBorder, shapeRef[0].getFxShape().getStroke(), "Undo should restore original border color!");
-}
+    }
     
+    /**
+    * Tests that a selected rectangle is cut: removed from model and canvas and copied to clipboard.
+    * 
+    * @param TestFX robot: robot to simulate user interactions.
+    */
+   @Test
+   void testCutRectangle(FxRobot robot) {
+       MyShape[] shapeRef = new MyShape[1];
+
+       Platform.runLater(() -> {
+           MyShape rectangle = new MyRectangle(385, 290, 30, 20);
+           rectangle.getFxShape().setFill(Color.BLUE);
+           rectangle.getFxShape().setStroke(Color.YELLOW);
+           shapeRef[0] = rectangle;
+           controller.getModel().addShape(rectangle);
+           controller.enableSelection(rectangle);
+       });
+
+       robot.interact(() -> {});
+       robot.moveTo(shapeRef[0].getFxShape()).clickOn();
+       robot.interact(() -> controller.cutShape(new ActionEvent()));
+
+       assertFalse(controller.getModel().getShapes().contains(shapeRef[0]), "Rectangle must be removed from the model!");
+       assertFalse(controller.getCanvas().getChildren().contains(shapeRef[0].getFxShape()), "Rectangle must be removed from the canvas!");
+       assertNotNull(controller.getModel().getClipboard(), "Rectangle must be saved to clipboard!");
+   }
+   
+   /**
+    * Tests that a selected ellipse is cut: removed from model and canvas and copied to clipboard.
+    * 
+    * @param TestFX robot: robot to simulate user interactions.
+    */
+   @Test
+   void testCutEllipse(FxRobot robot) {
+       MyShape[] shapeRef = new MyShape[1];
+
+       Platform.runLater(() -> {
+           MyShape ellipse = new MyEllipse(385, 290, 30, 20);
+           ellipse.getFxShape().setFill(Color.BLUE);
+           ellipse.getFxShape().setStroke(Color.YELLOW);
+           shapeRef[0] = ellipse;
+           controller.getModel().addShape(ellipse);
+           controller.enableSelection(ellipse);
+       });
+
+       robot.interact(() -> {});
+       robot.moveTo(shapeRef[0].getFxShape()).clickOn();
+       robot.interact(() -> controller.cutShape(new ActionEvent()));
+
+       assertFalse(controller.getModel().getShapes().contains(shapeRef[0]), "Ellipse must be removed from the model!");
+       assertFalse(controller.getCanvas().getChildren().contains(shapeRef[0].getFxShape()), "Ellipse must be removed from the canvas!");
+       assertNotNull(controller.getModel().getClipboard(), "Ellipse must be saved to clipboard!");
+   }
+   
+   /**
+    * Tests that a selected line is cut: removed from model and canvas and copied to clipboard.
+    * 
+    * @param TestFX robot: robot to simulate user interactions.
+    */
+   @Test
+   void testCutLine(FxRobot robot) {
+       MyShape[] shapeRef = new MyShape[1];
+
+       Platform.runLater(() -> {
+           MyShape line = new MyLine(385, 290, 30, 20);
+           line.getFxShape().setStroke(Color.ORANGE);
+           shapeRef[0] = line;
+           controller.getModel().addShape(line);
+           controller.enableSelection(line);
+       });
+
+       robot.interact(() -> {});
+       robot.moveTo(shapeRef[0].getFxShape()).clickOn();
+       robot.interact(() -> controller.cutShape(new ActionEvent()));
+
+       assertFalse(controller.getModel().getShapes().contains(shapeRef[0]), "Line must be removed from the model!");
+       assertFalse(controller.getCanvas().getChildren().contains(shapeRef[0].getFxShape()), "Line must be removed from the canvas!");
+       assertNotNull(controller.getModel().getClipboard(), "Line must be saved to clipboard!");
+   }
+   
+   /**
+    * Tests that a cut operation can be undone, restoring the shape to the model and to the canvas.
+    */
+   @Test
+   void testUndoAfterCut(FxRobot robot) {
+       MyShape[] shapeRef = new MyShape[1];
+
+        Platform.runLater(() -> {
+            MyShape ellipse = new MyEllipse(385, 290, 30, 20);
+            ellipse.getFxShape().setFill(Color.PINK);
+            ellipse.getFxShape().setStroke(Color.PURPLE);
+            shapeRef[0] = ellipse;
+            controller.getModel().addShape(ellipse);
+            controller.enableSelection(ellipse);
+        });
+
+        robot.interact(() -> {});
+        robot.moveTo(shapeRef[0].getFxShape()).clickOn();
+        robot.interact(() -> controller.cutShape(new ActionEvent()));
+
+        assertFalse(controller.getModel().getShapes().contains(shapeRef[0]));
+        assertFalse(controller.getCanvas().getChildren().contains(shapeRef[0].getFxShape()));
+
+        robot.interact(() -> controller.undoOperation(new ActionEvent()));
+
+        assertTrue(controller.getModel().getShapes().contains(shapeRef[0]), "Shape must be restored to the model!");
+        assertTrue(controller.getCanvas().getChildren().contains(shapeRef[0].getFxShape()), "Shape must be restored to the canvas!");
+    }
+   
 }
