@@ -267,7 +267,7 @@ public class PaintController implements Initializable {
             // Moves the shape while the user is dragging it
             if (currentShape.get() == null) {
                 
-                if (selectedShape.get() != null) {
+                if (selectedShape.get() != null && e.getButton() == MouseButton.PRIMARY) {
                     
                     double dx = e.getX() - dragStartX;
                     double dy = e.getY() - dragStartY;
