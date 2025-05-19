@@ -504,7 +504,7 @@ public class PaintController implements Initializable {
      * @param event
      */
     @FXML
-    private void copyShape(ActionEvent event) {
+    public void copyShape(ActionEvent event) {
         if (selectedShape.get() != null) {
             Command copyCmd = new CopyCommand(model, selectedShape.get());
             model.execute(copyCmd);

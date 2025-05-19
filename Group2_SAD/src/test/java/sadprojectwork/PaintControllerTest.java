@@ -843,6 +843,8 @@ public class PaintControllerTest {
    
    /**
     * Tests that a cut operation can be undone, restoring the shape to the model and to the canvas.
+    * 
+    * @param TestFX robot: robot to simulate user interactions.
     */
    @Test
    void testUndoAfterCut(FxRobot robot) {
@@ -868,6 +870,117 @@ public class PaintControllerTest {
 
         assertTrue(controller.getModel().getShapes().contains(shapeRef[0]), "Shape must be restored to the model!");
         assertTrue(controller.getCanvas().getChildren().contains(shapeRef[0].getFxShape()), "Shape must be restored to the canvas!");
+    }
+   
+   /**
+    * Tests that a selected rectangle is copy to clipboard.
+    * 
+    * @param TestFX robot: robot to simulate user interactions.
+    */
+   @Test
+    void testCopyRectangle(FxRobot robot) {
+        MyShape[] shapeRef = new MyShape[1];
+
+        Platform.runLater(() -> {
+            MyShape rectangle = new MyRectangle(385, 290, 30, 20);
+            rectangle.getFxShape().setFill(Color.BLUE);
+            rectangle.getFxShape().setStroke(Color.BROWN);
+            shapeRef[0] = rectangle;
+            controller.getModel().addShape(rectangle);
+            controller.enableSelection(rectangle);
+        });
+
+        robot.interact(() -> {});
+        robot.moveTo(shapeRef[0].getFxShape()).clickOn();
+
+        robot.interact(() -> controller.copyShape(new ActionEvent()));
+
+        assertNotNull(controller.getModel().getClipboard(), "Clipboard should contain the copied rectangle!");
+        assertNotSame(shapeRef[0], controller.getModel().getClipboard(), "The copied rectangle must be a new object!");
+    }
+    
+    /**
+    * Tests that a selected ellipse is copy to clipboard.
+    * 
+    * @param TestFX robot: robot to simulate user interactions.
+    */
+   @Test
+    void testCopyEllipse(FxRobot robot) {
+        MyShape[] shapeRef = new MyShape[1];
+
+        Platform.runLater(() -> {
+            MyShape ellipse = new MyEllipse(385, 290, 30, 20);
+            ellipse.getFxShape().setFill(Color.BLUE);
+            ellipse.getFxShape().setStroke(Color.BROWN);
+            shapeRef[0] = ellipse;
+            controller.getModel().addShape(ellipse);
+            controller.enableSelection(ellipse);
+        });
+
+        robot.interact(() -> {});
+        robot.moveTo(shapeRef[0].getFxShape()).clickOn();
+
+        robot.interact(() -> controller.copyShape(new ActionEvent()));
+
+        assertNotNull(controller.getModel().getClipboard(), "Clipboard should contain the copied ellipse!");
+        assertNotSame(shapeRef[0], controller.getModel().getClipboard(), "The copied ellipse must be a new object!");
+    }
+    
+    /**
+    * Tests that a selected line is copy to clipboard.
+    * 
+    * @param TestFX robot: robot to simulate user interactions.
+    */
+   @Test
+    void testCopyLine(FxRobot robot) {
+        MyShape[] shapeRef = new MyShape[1];
+
+        Platform.runLater(() -> {
+            MyShape line = new MyLine(385, 290, 30, 20);
+            line.getFxShape().setStroke(Color.YELLOW);
+            shapeRef[0] = line;
+            controller.getModel().addShape(line);
+            controller.enableSelection(line);
+        });
+
+        robot.interact(() -> {});
+        robot.moveTo(shapeRef[0].getFxShape()).clickOn();
+
+        robot.interact(() -> controller.copyShape(new ActionEvent()));
+
+        assertNotNull(controller.getModel().getClipboard(), "Clipboard should contain the copied line!");
+        assertNotSame(shapeRef[0], controller.getModel().getClipboard(), "The copied line must be a new object!");
+    }
+    
+    /**
+    * Tests that a copy operation can be undone, emptying the clipboard.
+    * 
+    * @param TestFX robot: robot to simulate user interactions.
+    */
+    @Test
+    void testUndoAfterCopy(FxRobot robot) {
+        MyShape[] shapeRef = new MyShape[1];
+
+        Platform.runLater(() -> {
+            MyShape ellipse = new MyEllipse(385, 290, 30, 20);
+            ellipse.getFxShape().setFill(Color.PINK);
+            ellipse.getFxShape().setStroke(Color.GREY);
+            shapeRef[0] = ellipse;
+            controller.getModel().addShape(ellipse);
+            controller.enableSelection(ellipse);
+        });
+
+        robot.interact(() -> {});
+        robot.moveTo(shapeRef[0].getFxShape()).clickOn();
+
+        robot.interact(() -> controller.copyShape(new ActionEvent()));
+
+        assertNotNull(controller.getModel().getClipboard(), "Clipboard should contain a copied shape before undo!");
+
+        robot.interact(() -> controller.undoOperation(new ActionEvent()));
+
+        assertNull(controller.getModel().getClipboard(), "Undo should remove the copied shape from clipboard.");
+        assertTrue(controller.getModel().getShapes().contains(shapeRef[0]), "Original shape must be on the canvas!");
     }
    
 }
