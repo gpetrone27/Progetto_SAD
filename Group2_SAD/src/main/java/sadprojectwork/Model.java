@@ -40,6 +40,14 @@ public class Model {
             last.execute();
         }
     }
+    
+    public Deque<Command> getCommandHistory() {
+        return commandHistory;
+    }
+    
+    public Deque<Command> getDeletedCommands() {
+        return deletedCommands;
+    }
 
     public void addShape(MyShape s) {
         shapes.add(s);
