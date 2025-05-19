@@ -3,6 +3,8 @@ package testsadprojectwork;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.event.ActionEvent;
+import javafx.scene.layout.Pane;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,6 +32,8 @@ public class PaintControllerTest {
     @BeforeEach
     public void setUp() {
         controller = new PaintController();
+        controller.setModel(new Model());
+        controller.setCanvas(new Pane());
     }
     
     @AfterEach
@@ -39,7 +43,7 @@ public class PaintControllerTest {
     /**
      * Test of initialize method, of class PaintController.
      */
-    @Test
+    /*@Test
     public void testInitialize() {
         System.out.println("initialize");
         URL url = null;
@@ -48,12 +52,12 @@ public class PaintControllerTest {
         instance.initialize(url, rb);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
-    }
+    }*/
 
     /**
      * Test of getSelectedShape method, of class PaintController.
      */
-    @Test
+    /*@Test
     public void testGetSelectedShape() {
         System.out.println("getSelectedShape");
         PaintController instance = new PaintController();
@@ -62,7 +66,7 @@ public class PaintControllerTest {
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
-    }
+    }*/
     
     /**
      * Test of enableSelection method, of class PaintController.
@@ -74,7 +78,7 @@ public class PaintControllerTest {
                                     new MyEllipse(100, 100, 60, 80), Color.GREEN),Color.YELLOW);
         
         controller.enableSelection(ellipse);
-        assertEquals(ellipse, controller.getSelectedShape(), "The ellipse must be selected!");
+        assertTrue(controller.isShapeSelected(ellipse), "The ellipse must be selected!");
         assertNotNull(ellipse.getFxShape().getEffect(), "The ellipse must have a selection effect");
     }
     
@@ -88,7 +92,7 @@ public class PaintControllerTest {
                                     new MyRectangle(100, 100, 60, 80), Color.RED),Color.GREEN);
         
         controller.enableSelection(rectangle);
-        assertEquals(rectangle, controller.getSelectedShape(), "The rectangle must be selected!");
+        assertTrue(controller.isShapeSelected(rectangle), "The rectangle must be selected!");
         assertNotNull(rectangle.getFxShape().getEffect(), "The rectangle must have a selection effect");
     }
     
@@ -101,7 +105,7 @@ public class PaintControllerTest {
                             new MyLine(0, 0, 30, 20),Color.BLACK);
         
         controller.enableSelection(line);
-        assertEquals(line, controller.getSelectedShape(), "The line must be selected!");
+        assertTrue(controller.isShapeSelected(line), "The line must be selected!");
         assertNotNull(line.getFxShape().getEffect(), "The line must have a selection effect");
     }
     
@@ -139,4 +143,22 @@ public class PaintControllerTest {
         assertNotNull(rectangle.getFxShape().getEffect(), "The secondo shape must be highlighted");
         assertNull(ellipse.getFxShape().getEffect(), "The first shape should no longer be highlighted");
     }
+    
+    /*@Test
+    public void testDeleteRectangle() {
+       MyShape rectangle = new FillColorDecorator(
+                                 new BorderColorDecorator(
+                                     new MyRectangle(100, 100, 60, 80), Color.BLUE),Color.PURPLE);
+       
+       controller.getModel().addShape(rectangle);
+       controller.getCanvas().getChildren().add(rectangle.getFxShape());
+       
+       controller.enableSelection(rectangle);
+       controller.deleteShape(new ActionEvent());
+       
+       assertFalse(controller.getModel().getShapes().contains(rectangle), "The shape must be deleted from the model!");
+       assertFalse(controller.getCanvas().getChildren().contains(rectangle), "The shape must be deleted from the canvas!");
+       
+    }*/
+            
 }
