@@ -30,6 +30,7 @@ public class ResizeCommand implements Command {
     @Override
     public void execute() {
         shape.resize(newWidth, newHeight);
+        System.out.println("OldWidth: " + oldWidth + "\nOldHeight: " + oldHeight + "\nNewWidth: " + newWidth + "\nNewHeight: " + newHeight);
     }
 
     // Undoes the resize by restoring the previous dimensions
