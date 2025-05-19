@@ -1,4 +1,3 @@
-
 package sadprojectwork;
 
 import java.io.BufferedReader;
@@ -131,12 +130,12 @@ public class PaintController implements Initializable {
             lastMouseX = event.getX();
             lastMouseY = event.getY();
         });
-        
+
         // Adds a listener to update the canvas every time the model changes
         model.getShapes().addListener((ListChangeListener<MyShape>) change -> {
             redrawCanvas();
         });
-        
+
         // Binds the disable property of the right click menu items to shapeSelected
         cutMenuItem.disableProperty().bind(Bindings.createBooleanBinding(() -> selectedShape.get() == null, selectedShape));
         copyMenuItem.disableProperty().bind(Bindings.createBooleanBinding(() -> selectedShape.get() == null, selectedShape));
@@ -176,13 +175,12 @@ public class PaintController implements Initializable {
         shapes.selectedToggleProperty().addListener((obs, oldToggle, newToggle) -> {
             if (newToggle == null) {
                 shapes.selectToggle(oldToggle);
-            }
-            else {
+            } else {
                 modeProperty.set((Shapes) newToggle.getUserData());
             }
             clearSelection();
         });
-        
+
         // Updates toggle buttons when the selected mode changes
         modeProperty.addListener((obs, oldMode, newMode) -> {
             for (Toggle toggle : shapes.getToggles()) {
@@ -201,7 +199,7 @@ public class PaintController implements Initializable {
                 drawingPane.setPannable(false); // Disable panning
             }
         });
-        
+
         // Prevents panning with right click
         drawingPane.addEventFilter(MouseEvent.MOUSE_DRAGGED, event -> {
             if (event.isSecondaryButtonDown()) {
@@ -230,9 +228,9 @@ public class PaintController implements Initializable {
     private void initCanvasEvents() {
 
         canvas.setOnMousePressed(e -> {
-            
+
             if (e.getButton() == MouseButton.PRIMARY) {
-            
+
                 startX = e.getX();
                 startY = e.getY();
 
@@ -271,12 +269,12 @@ public class PaintController implements Initializable {
         });
 
         canvas.setOnMouseDragged(e -> {
-            
+
             // Moves the shape while the user is dragging it
             if (currentShape.get() == null) {
-                
+
                 if (selectedShape.get() != null && e.getButton() == MouseButton.PRIMARY) {
-                    
+
                     double dx = e.getX() - dragStartX;
                     double dy = e.getY() - dragStartY;
 
@@ -287,15 +285,13 @@ public class PaintController implements Initializable {
 
                     e.consume();
                 }
-            }
-            
-            // Preview of the shape while the user is creating it
+            } // Preview of the shape while the user is creating it
             else {
-                
+
                 double endX = e.getX();
                 double endY = e.getY();
 
-                switch(modeProperty.get()) {
+                switch (modeProperty.get()) {
                     case LINE -> {
                         ((MyLine) ((BorderColorDecorator) currentShape.get()).decoratedShape).resizeTo(endX, endY);
                     }
@@ -341,7 +337,7 @@ public class PaintController implements Initializable {
             canvas.getChildren().add(shapeToAdd.getFxShape());
         }
     }
-    
+
     /**
      * Enables the selection of the given shape
      * @param shape
@@ -383,7 +379,7 @@ public class PaintController implements Initializable {
         ds.setColor(Color.DODGERBLUE);
         ds.setRadius(10);
         shape.getFxShape().setEffect(ds);
-        
+
         // Reads shape's parameters and sets them in the parameters panel
         Color shapeBorderColor = (Color) shape.getFxShape().getStroke();
         Color shapeFillColor = (Color) shape.getFxShape().getFill();
@@ -407,49 +403,53 @@ public class PaintController implements Initializable {
 
     /**
      * Cleares the current drawing and opens a new "untitled" temporary file
+     *
      * @param event
      */
     @FXML
     private void newDrawing(ActionEvent event) {
-        model.clear();                
+        model.clear();
         selectedShape.set(null);
         currentShape.set(null);
     }
 
     /**
      * Saves the current drawing in a file
+     *
      * @param event
      */
     @FXML
     private void saveDrawing(ActionEvent event) {
-        
+
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save drawing as CSV");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
         File file = fileChooser.showSaveDialog(rootPane.getScene().getWindow());
-        
+
         if (file != null) {
             try (PrintWriter writer = new PrintWriter(file)) {
                 writer.println("SHAPE;STARTX;STARTY;WIDTH;HEIGHT;FILL;BORDER");
                 for (MyShape shape : model.getShapes()) {
                     writer.println(shape.toCSV());
                 }
-            } catch (IOException e) {}
+            } catch (IOException e) {
+            }
         }
     }
-    
+
     /**
      * Loads a drawing from a file
+     *
      * @param event
      */
     @FXML
     private void loadDrawing(ActionEvent event) {
-        
+
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Load drawing from CSV");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
         File file = fileChooser.showOpenDialog(rootPane.getScene().getWindow());
-        
+
         if (file != null) {
             model.clear();
             try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
@@ -464,7 +464,7 @@ public class PaintController implements Initializable {
                     double loadedHeight = Double.parseDouble(parts[4]);
                     Color loadedFill = Color.valueOf(parts[5]);
                     Color loadedBorder = Color.valueOf(parts[6]);
-                    switch(loadedMode) {
+                    switch (loadedMode) {
                         case LINE -> {
                             BorderColorDecorator myLine = new BorderColorDecorator(new MyLine(loadedStartX, loadedStartY, loadedWidth, loadedHeight), loadedBorder);
                             addShape(myLine);
@@ -482,12 +482,14 @@ public class PaintController implements Initializable {
                         }
                     }
                 }
-            } catch (IOException ex) { }
+            } catch (IOException ex) {
+            }
         }
     }
 
     /**
      * Undoes the last operation
+     *
      * @param event
      */
     @FXML
@@ -497,6 +499,7 @@ public class PaintController implements Initializable {
 
     /**
      * Redoes the last undone operation
+     *
      * @param event
      */
     @FXML
@@ -506,6 +509,7 @@ public class PaintController implements Initializable {
 
     /**
      * Updates the variable borderHex to match the user selection
+     *
      * @param event
      */
     @FXML
@@ -517,6 +521,7 @@ public class PaintController implements Initializable {
 
     /**
      * Updates the variable fillHex to match the user selection
+     *
      * @param event
      */
     @FXML
@@ -528,6 +533,7 @@ public class PaintController implements Initializable {
 
     /**
      * Copies the selected shape into the clipboard and deletes it
+     *
      * @param event
      */
     @FXML
@@ -540,6 +546,7 @@ public class PaintController implements Initializable {
 
     /**
      * Copies the selected shape into the clipboard
+     *
      * @param event
      */
     @FXML
@@ -552,6 +559,7 @@ public class PaintController implements Initializable {
 
     /**
      * Pastes a shape from the clipboard
+     *
      * @param event
      */
     @FXML
@@ -563,6 +571,7 @@ public class PaintController implements Initializable {
 
     /**
      * Deletes the selected shape
+     *
      * @param event
      */
     @FXML
@@ -575,6 +584,7 @@ public class PaintController implements Initializable {
 
     /**
      * Resizes the selected shape according to the new dimensions
+     *
      * @param shape
      * @param newWidth
      * @param newHeight
@@ -585,10 +595,11 @@ public class PaintController implements Initializable {
             model.execute(resizeCmd);
         }
     }
-    
+
     /**
      * Adds a shape to the model
-     * @param shape 
+     *
+     * @param shape
      */
     private void addShape(MyShape shape) {
         AddShapeCommand addCmd = new AddShapeCommand(model, shape);
@@ -598,6 +609,7 @@ public class PaintController implements Initializable {
     /**
      * Shows a popup window when the user clicks "Resize" in the right click
      * menu
+     *
      * @param event
      */
     @FXML
@@ -607,12 +619,12 @@ public class PaintController implements Initializable {
         Stage popupWindow = new Stage();
         popupWindow.setTitle("Resize");
         popupWindow.initModality(Modality.APPLICATION_MODAL); // Blocks inputs to other windows
-        
+
         // Layout
         VBox layout;
 
         if (selectedShape.get().getFxShape().getClass() != Line.class) {
-            
+
             // UI Elements
             TextField widthField = new TextField();
             TextField heightField = new TextField();
@@ -623,48 +635,49 @@ public class PaintController implements Initializable {
 
             // Functions that is run when the user clicks the Submit button
             submitButton.setOnAction(e -> {
-                
+
                 try {
                     double width = Double.parseDouble(widthField.getText().trim());
                     double height = Double.parseDouble(heightField.getText().trim());
                     resizeShape(selectedShape.get(), width, height);
                     popupWindow.close();
-                    
-                } catch (NumberFormatException ex) { }
+
+                } catch (NumberFormatException ex) {
+                }
             });
 
             layout = new VBox(
-                10,
-                new Label("Enter new dimensions"),
-                new HBox(5, widthField, new Label("x"), heightField),
-                submitButton
-            );   
-        }
-        else {
+                    10,
+                    new Label("Enter new dimensions"),
+                    new HBox(5, widthField, new Label("x"), heightField),
+                    submitButton
+            );
+        } else {
             // UI Elements
             TextField lengthField = new TextField();
             Button submitButton = new Button("Submit");
 
             lengthField.setPromptText("Length");
-            
+
             // Functions that is run when the user clicks the Submit button
             submitButton.setOnAction(e -> {
                 try {
                     resizeShape(selectedShape.get(), Double.parseDouble(lengthField.getText().trim()), 0);
-                    popupWindow.close();     
-                } catch (NumberFormatException ex) { }
+                    popupWindow.close();
+                } catch (NumberFormatException ex) {
+                }
             });
 
             layout = new VBox(
-                10,
-                new Label("Enter new dimensions"),
-                lengthField,
-                submitButton
-            );  
+                    10,
+                    new Label("Enter new dimensions"),
+                    lengthField,
+                    submitButton
+            );
         }
         layout.setPadding(new Insets(15));
         layout.setAlignment(Pos.CENTER);
-        
+
         // Shows the window
         popupWindow.setScene(new Scene(layout, 240, 160));
         popupWindow.showAndWait();
@@ -672,7 +685,8 @@ public class PaintController implements Initializable {
 
     /**
      * Updates the border color of the selected shape
-     * @param event 
+     *
+     * @param event
      */
     @FXML
     private void changeBorderColor(ActionEvent event) {
@@ -682,9 +696,9 @@ public class PaintController implements Initializable {
         model.execute(changeColor);
     }
 
-    
     /**
      * Updates the fill color of the selected shape
+     *
      * @param event
      */
     @FXML
@@ -694,7 +708,7 @@ public class PaintController implements Initializable {
         Command changeColor = new ChangeColorCommand(selectedShape.get(), (Color) selectedColor, null);
         model.execute(changeColor);
     }
-    
+
     public MyShape getSelectedShape() {
         return selectedShape.get();
     }
@@ -702,7 +716,7 @@ public class PaintController implements Initializable {
     public void setModel(Model model) {
         this.model = model;
     }
-    
+
     public Model getModel() {
         return model;
     }
@@ -714,7 +728,7 @@ public class PaintController implements Initializable {
     public Pane getCanvas() {
         return canvas;
     }
-    
+
     public boolean isShapeSelected(MyShape shape) {
         return selectedShape.get() != null && selectedShape.get().getFxShape() == shape.getFxShape();
     }

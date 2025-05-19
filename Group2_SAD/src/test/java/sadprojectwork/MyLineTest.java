@@ -12,92 +12,102 @@ class MyLineTest {
 
     private MyLine line;
 
-    // this method runs before each test, initializing a MyLine instance
     @BeforeEach
     void setUp() {
-        line = new MyLine(10, 20, 30, 40);
+        // Initialize a line from (0,0) to (3,4) – length should be 5
+        line = new MyLine(0, 0, 3, 4);
     }
 
-    // tests that the Line is correctly created and returned by getFxShape()
     @Test
-    void testConstructorAndGetFxShape() {
-        Shape shape = line.getFxShape();
-        assertInstanceOf(Line.class, shape);
-
-        Line fxLine = (Line) shape;
-        assertEquals(10, fxLine.getStartX());
-        assertEquals(20, fxLine.getStartY());
-        assertEquals(30, fxLine.getEndX());
-        assertEquals(40, fxLine.getEndY());
-        assertEquals(3.0, fxLine.getStrokeWidth());
-        assertTrue(fxLine.isPickOnBounds());
+    void testGetFxShape() {
+        // Checks that getFxShape() returns the correct Line object
+        Shape fx = line.getFxShape();
+        assertInstanceOf(Line.class, fx);
+        Line fxLine = (Line) fx;
+        assertEquals(0, fxLine.getStartX()); 
+        assertEquals(0, fxLine.getStartY());
+        assertEquals(3, fxLine.getEndX());
+        assertEquals(4, fxLine.getEndY());
     }
 
-    // tests the resize() method to ensure it sets the new length
     @Test
-    void testResize() {
-        MyLine secondaryLine = new MyLine(10, 20, 50, 60);
-        double lengthToMatch = secondaryLine.getWidth();
-        line.resize(lengthToMatch);
-        assertEquals(lengthToMatch, line.getWidth());
+    void testResize_correctLengthChange() {
+        // Resizing the line to length 10 should keep direction and update end point
+        line.resize(10);
+        assertEquals(10, line.getWidth());
+        Line fx = (Line) line.getFxShape();
+        assertEquals(6.0, fx.getEndX());
+        assertEquals(8.0, fx.getEndY());
     }
 
-    // tests resizing to the same point as the start (zero-length line)
     @Test
-    void testResizeToSamePoint() {
-        line.resizeTo(10, 20);
-        Line fxLine = (Line) line.getFxShape();
-        assertEquals(10, fxLine.getEndX());
-        assertEquals(20, fxLine.getEndY());
-        assertEquals(0, line.getWidth());
-        assertEquals(0, line.getHeight());
+    void testResize_fromZeroLength() {
+        // If the original line has zero length, it should extend horizontally to the right
+        MyLine zeroLine = new MyLine(1, 1, 1, 1);
+        zeroLine.resize(5);
+        Line fx = (Line) zeroLine.getFxShape();
+        assertEquals(6.0, fx.getEndX());
+        assertEquals(1.0, fx.getEndY());
     }
 
-    // tests that setPosition moves both the start and end points correctly
     @Test
-    void testSetPositionMovesBothPoints() {
-        line.resizeTo(30, 40); // ensure the line has an end point different from the start
-        line.setPosition(20, 30);
-
-        Line fxLine = (Line) line.getFxShape();
-        assertEquals(20, fxLine.getStartX());
-        assertEquals(30, fxLine.getStartY());
-        assertEquals(40, fxLine.getEndX()); // previous endX (30) + deltaX (10)
-        assertEquals(50, fxLine.getEndY()); // previous endY (40) + deltaY (10)
+    void testResize_invalidArguments() {
+        // Resizing with wrong number of arguments should throw IllegalArgumentException
+        assertThrows(IllegalArgumentException.class, () -> line.resize());
+        assertThrows(IllegalArgumentException.class, () -> line.resize(1, 2));
     }
 
-    // tests that cloneShape returns a new independent object with the same coordinates
     @Test
-    void testCloneShapeCreatesIndependentCopy() {
-        MyLine clone = (MyLine) line.cloneShape();
-        assertNotSame(clone, line); // different instances
-        assertNotSame(clone.getFxShape(), line.getFxShape()); // different Line objects
-
-        Line original = (Line) line.getFxShape();
-        Line copied = (Line) clone.getFxShape();
-
-        // check that coordinates are the same
-        assertEquals(original.getStartX(), copied.getStartX());
-        assertEquals(original.getStartY(), copied.getStartY());
-        assertEquals(original.getEndX(), copied.getEndX());
-        assertEquals(original.getEndY(), copied.getEndY());
+    void testResizeTo() {
+        // resizeTo() should set the new end coordinates directly
+        line.resizeTo(7, 2);
+        Line fx = (Line) line.getFxShape();
+        assertEquals(7.0, fx.getEndX());
+        assertEquals(2.0, fx.getEndY());
     }
 
-    // tests that toCSV() generates the expected format, and checks color values
     @Test
-    void testToCSVFormat() {
-        line.getFxShape().setStroke(Color.BLACK); // set stroke color explicitly
+    void testCloneShape() {
+        // cloneShape() should return a new object with the same properties
+        MyShape clone = line.cloneShape();
+        assertTrue(clone instanceof MyLine);
+        Line fx1 = (Line) line.getFxShape();
+        Line fx2 = (Line) clone.getFxShape();
+        assertEquals(fx1.getStartX(), fx2.getStartX());
+        assertEquals(fx1.getStartY(), fx2.getStartY());
+        assertEquals(fx1.getEndX(), fx2.getEndX());
+        assertEquals(fx1.getEndY(), fx2.getEndY());
+    }
+
+    @Test
+    void testSetPosition() {
+        // setPosition() should move the entire line by translating both endpoints
+        line.setPosition(2, 2); // from (0,0)-(3,4) to (2,2)-(5,6)
+        Line fx = (Line) line.getFxShape();
+        assertEquals(2.0, fx.getStartX());
+        assertEquals(2.0, fx.getStartY());
+        assertEquals(5.0, fx.getEndX());
+        assertEquals(6.0, fx.getEndY());
+    }
+
+    @Test
+    void testGetWidth() {
+        // getWidth() should return the Euclidean distance between start and end points
+        assertEquals(5.0, line.getWidth()); // √(3² + 4²)
+    }
+
+    @Test
+    void testGetHeight() {
+        // getHeight() always returns 0 for a line (by design)
+        assertEquals(0.0, line.getHeight());
+    }
+
+    @Test
+    void testToCSV() {
+        // toCSV() should return a semicolon-separated string with coordinates and color
+        line.getFxShape().setStroke(Color.BLUE);
         String csv = line.toCSV();
-
-        // check the CSV format starts as expected
-        assertTrue(csv.startsWith("LINE;10.0;20.0;30.0;40.0;"));
-
-        // ensure the number of fields is correct
-        String[] parts = csv.split(";");
-        assertEquals(7, parts.length);
-
-        // for lines, stroke color is used both as fill and stroke
-        assertEquals(parts[5], parts[6]);
+        assertTrue(csv.startsWith("LINE;0.0;0.0;3.0;4.0;"));
+        assertTrue(csv.contains("0x0000ffff")); // Default JavaFX format for Color.BLUE
     }
-
 }
