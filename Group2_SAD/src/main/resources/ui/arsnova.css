@@ -1,9 +1,13 @@
 
+#canvas {
+    -fx-background-color: #fefefe;
+}
+
 .color-button {
-    -fx-min-width: 20px;
-    -fx-max-width: 20px;
-    -fx-min-height: 20px;
-    -fx-min-height: 20px;
+    -fx-min-width: 15px;
+    -fx-max-width: 15px;
+    -fx-min-height: 15px;
+    -fx-min-height: 15px;
     -fx-background-radius: 50%;
     -fx-border-radius: 50%;
     -fx-padding: 0;
@@ -18,15 +22,96 @@
 
 .color-button:hover {
     -fx-border-color: transparent;
-    -fx-scale-x: 1.25;
-    -fx-scale-y: 1.25;
+    -fx-scale-x: 1.2;
+    -fx-scale-y: 1.2;
 }
 
 .color-button:selected {
-    -fx-scale-x: 1.5;
-    -fx-scale-y: 1.5;
+    -fx-scale-x: 1.4;
+    -fx-scale-y: 1.4;
 }
 
-#canvas {
-    -fx-background-color: #fefefe;
+.grey-shade-0 {
+    -fx-background-color: black;
+}
+
+.grey-shade-1 {
+    -fx-background-color: grey;
+}
+
+.grey-shade-2 {
+    -fx-background-color: white;
+}
+
+.red-shade-0 {
+    -fx-background-color: darkred;
+}
+
+.red-shade-1 {
+    -fx-background-color: red;
+}
+
+.red-shade-2 {
+    -fx-background-color: lightcoral;
+}
+
+
+.orange-shade-0 {
+    -fx-background-color: chocolate;
+}
+
+.orange-shade-1 {
+    -fx-background-color: orange;
+}
+
+.orange-shade-2 {
+    -fx-background-color: moccasin;
+}
+
+.yellow-shade-0 {
+    -fx-background-color: goldenrod;
+}
+
+.yellow-shade-1 {
+    -fx-background-color: yellow;
+}
+
+.yellow-shade-2 {
+    -fx-background-color: lightyellow;
+}
+
+.green-shade-0 {
+    -fx-background-color: darkgreen;
+}
+
+.green-shade-1 {
+    -fx-background-color: green;
+}
+
+.green-shade-2 {
+    -fx-background-color: palegreen;
+}
+
+.blue-shade-0 {
+    -fx-background-color: navy;
+}
+
+.blue-shade-1 {
+    -fx-background-color: blue;
+}
+
+.blue-shade-2 {
+    -fx-background-color: lightblue;
+}
+
+.purple-shade-0 {
+    -fx-background-color: indigo;
+}
+
+.purple-shade-1 {
+    -fx-background-color: purple;
+}
+
+.purple-shade-2 {
+    -fx-background-color: plum;
 }

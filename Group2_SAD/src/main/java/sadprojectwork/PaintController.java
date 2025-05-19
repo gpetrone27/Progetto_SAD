@@ -79,9 +79,9 @@ public class PaintController implements Initializable {
     @FXML
     private ToggleGroup fillColor;
     @FXML
-    private ToggleGroup borderColor1;
+    private ToggleGroup borderColorPanel;
     @FXML
-    private ToggleGroup fillColor1;
+    private ToggleGroup fillColorPanel;
     @FXML
     private ToggleButton cursorButton;
     @FXML
@@ -156,9 +156,9 @@ public class PaintController implements Initializable {
                 borderColor.selectToggle(oldToggle);
             }
         });
-        borderColor1.selectedToggleProperty().addListener((obs, oldToggle, newToggle) -> {
+        borderColorPanel.selectedToggleProperty().addListener((obs, oldToggle, newToggle) -> {
             if (newToggle == null) {
-                borderColor1.selectToggle(oldToggle);
+                borderColorPanel.selectToggle(oldToggle);
             }
         });
         fillColor.selectedToggleProperty().addListener((obs, oldToggle, newToggle) -> {
@@ -166,9 +166,9 @@ public class PaintController implements Initializable {
                 fillColor.selectToggle(oldToggle);
             }
         });
-        fillColor1.selectedToggleProperty().addListener((obs, oldToggle, newToggle) -> {
+        fillColorPanel.selectedToggleProperty().addListener((obs, oldToggle, newToggle) -> {
             if (newToggle == null) {
-                fillColor1.selectToggle(oldToggle);
+                fillColorPanel.selectToggle(oldToggle);
             }
         });
 
@@ -387,19 +387,19 @@ public class PaintController implements Initializable {
         // Reads shape's parameters and sets them in the parameters panel
         Color shapeBorderColor = (Color) shape.getFxShape().getStroke();
         Color shapeFillColor = (Color) shape.getFxShape().getFill();
-        for (Toggle toggle : borderColor1.getToggles()) {
+        for (Toggle toggle : borderColorPanel.getToggles()) {
             ToggleButton btn = (ToggleButton) toggle;
             Color btnColor = (Color) btn.getBackground().getFills().get(0).getFill();
             if (btnColor.equals(shapeBorderColor)) {
-                borderColor1.selectToggle(btn);
+                borderColorPanel.selectToggle(btn);
                 break;
             }
         }
-        for (Toggle toggle : fillColor1.getToggles()) {
+        for (Toggle toggle : fillColorPanel.getToggles()) {
             ToggleButton btn = (ToggleButton) toggle;
             Color btnColor = (Color) btn.getBackground().getFills().get(0).getFill();
             if (btnColor.equals(shapeFillColor)) {
-                fillColor1.selectToggle(btn);
+                fillColorPanel.selectToggle(btn);
                 break;
             }
         }
