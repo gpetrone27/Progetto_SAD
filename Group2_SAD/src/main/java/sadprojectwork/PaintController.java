@@ -28,6 +28,7 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -198,6 +199,13 @@ public class PaintController implements Initializable {
                 drawingPane.setPannable(true); // Enable panning
             } else {
                 drawingPane.setPannable(false); // Disable panning
+            }
+        });
+        
+        // Prevents panning with right click
+        drawingPane.addEventFilter(MouseEvent.MOUSE_DRAGGED, event -> {
+            if (event.isSecondaryButtonDown()) {
+                event.consume();
             }
         });
 
