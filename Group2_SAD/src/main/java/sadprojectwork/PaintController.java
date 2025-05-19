@@ -9,9 +9,7 @@ import java.io.PrintWriter;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
@@ -36,6 +34,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Shape;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
@@ -290,7 +289,7 @@ public class PaintController implements Initializable {
 
                 switch(modeProperty.get()) {
                     case LINE -> {
-                        currentShape.get().resize(endX, endY);
+                        ((MyLine) ((BorderColorDecorator) currentShape.get()).decoratedShape).resizeTo(endX, endY);
                     }
                     default -> {
                         currentShape.get().resize(endX - startX, endY - startY);
@@ -575,7 +574,7 @@ public class PaintController implements Initializable {
      * @param newWidth
      * @param newHeight
      */
-    private void resizeShape(MyShape shape, int newWidth, int newHeight) {
+    private void resizeShape(MyShape shape, double newWidth, double newHeight) {
         if (shape != null) {
             Command resizeCmd = new ResizeCommand(shape, newWidth, newHeight);
             model.execute(resizeCmd);
@@ -603,36 +602,66 @@ public class PaintController implements Initializable {
         Stage popupWindow = new Stage();
         popupWindow.setTitle("Resize");
         popupWindow.initModality(Modality.APPLICATION_MODAL); // Blocks inputs to other windows
-
-        // UI Elements
-        TextField widthField = new TextField();
-        TextField heightField = new TextField();
-        Button submitButton = new Button("Submit");
-
-        widthField.setPromptText("Width");
-        heightField.setPromptText("Height");
-
-        // Functions that is run when the user clicks the Submit button
-        submitButton.setOnAction(e -> {
-            try {
-                int width = Integer.parseInt(widthField.getText().trim());
-                int height = Integer.parseInt(heightField.getText().trim());
-                resizeShape(selectedShape.get(), width, height);
-                popupWindow.close();
-            } catch (NumberFormatException ex) {
-            }
-        });
-
+        
         // Layout
-        VBox layout = new VBox(
+        VBox layout;
+
+        if (selectedShape.get().getFxShape().getClass() != Line.class) {
+            
+            // UI Elements
+            TextField widthField = new TextField();
+            TextField heightField = new TextField();
+            Button submitButton = new Button("Submit");
+
+            widthField.setPromptText("Width");
+            heightField.setPromptText("Height");
+
+            // Functions that is run when the user clicks the Submit button
+            submitButton.setOnAction(e -> {
+                
+                try {
+                    
+                    double width = Double.parseDouble(widthField.getText().trim());
+                    double height = Double.parseDouble(heightField.getText().trim());
+                    
+                    resizeShape(selectedShape.get(), width, height);
+                    popupWindow.close();
+                    
+                } catch (NumberFormatException ex) { }
+            });
+
+            layout = new VBox(
                 10,
                 new Label("Enter new dimensions"),
                 new HBox(5, widthField, new Label("x"), heightField),
                 submitButton
-        );
+            );   
+        }
+        else {
+            // UI Elements
+            TextField lengthField = new TextField();
+            Button submitButton = new Button("Submit");
+
+            lengthField.setPromptText("Length");
+            
+            // Functions that is run when the user clicks the Submit button
+            submitButton.setOnAction(e -> {
+                try {
+                    resizeShape(selectedShape.get(), Double.parseDouble(lengthField.getText().trim()), 0);
+                    popupWindow.close();     
+                } catch (NumberFormatException ex) { }
+            });
+
+            layout = new VBox(
+                10,
+                new Label("Enter new dimensions"),
+                lengthField,
+                submitButton
+            );  
+        }
         layout.setPadding(new Insets(15));
         layout.setAlignment(Pos.CENTER);
-
+        
         // Shows the window
         popupWindow.setScene(new Scene(layout, 240, 160));
         popupWindow.showAndWait();

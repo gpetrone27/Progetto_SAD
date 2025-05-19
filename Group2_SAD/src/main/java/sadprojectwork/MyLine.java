@@ -26,9 +26,37 @@ public class MyLine extends MyShape {
         return line;
     }
 
-    // Resizes the line by setting new absolute end coordinates
+    // Resizes the line by setting new length
     @Override
-    public void resize(double endX, double endY) {
+    public void resize(double length, double dummy) {
+        
+        // Calculate current length
+        double dx = line.getEndX() - startX;
+        double dy = line.getEndY() - startY;
+        double currentLength = Math.sqrt(dx * dx + dy * dy);
+
+        if (currentLength == 0) {
+            // No direction; default to horizontal right
+            line.setEndX(startX + length);
+            line.setEndY(startY);
+            return;
+        }
+
+        // Normalize the direction vectors
+        double ux = dx / currentLength;
+        double uy = dy / currentLength;
+
+        // Calculate new end points
+        double newEndX = startX + ux * length;
+        double newEndY = startY + uy * length;
+
+        // Update end points of the line
+        line.setEndX(newEndX);
+        line.setEndY(newEndY);
+    }
+    
+    // Resizes the line to the new absolute end coordinates
+    public void resizeTo(double endX, double endY) {
         line.setEndX(endX);
         line.setEndY(endY);
     }
@@ -53,16 +81,18 @@ public class MyLine extends MyShape {
         line.setEndY(line.getEndY() + dy);
     }
 
-    // Gets the horizontal component of the line's length
+    // Returns the length of the line
     @Override
     public double getWidth() {
-        return line.getEndX() - startX;
+        double dx = line.getEndX() - startX;
+        double dy = line.getEndY() - startY;
+        return Math.sqrt(dx * dx + dy * dy);
     }
 
-    // Gets the vertical component of the line's length
+    // Dummy: only used to maintain compatibility
     @Override
     public double getHeight() {
-        return line.getEndY() - startY;
+        return 0;
     }
 
     @Override
