@@ -139,7 +139,7 @@ public class PaintControllerTest {
      * Verifies that after a click outside the selected form,
      * the selection is removed.
      *
-     * @param robot: from TestFX to simulate user interactions.
+     * @param TestFX robot: robot to simulate user interactions.
      */
     @Test
     void testDisableSelection(FxRobot robot){
@@ -324,8 +324,136 @@ public class PaintControllerTest {
         });
 
         robot.interact(() -> {
-            assertNull(controller.getSelectedShape(), "No shape shpuld be selected.");
+            assertNull(controller.getSelectedShape(), "No shape should be selected.");
             assertEquals(0, controller.getModel().getShapes().size(), "No shapes must be present in the model.");
         });
     }
+    
+    /**
+    * Tests that a selected rectangle updates its position, when it's moved.
+    * 
+    * @param TestFX robot: robot to simulate user interactions.
+    */
+    @Test
+    void testMoveRectangle(FxRobot robot){
+        MyShape[] shapeRef = new MyShape[1];
+        double oldX = 50, oldY = 60;
+        double newX = 120, newY = 130;
+
+        Platform.runLater(() -> {
+            MyShape rectangle = new MyRectangle(oldX, oldY, 60, 40);
+            rectangle.getFxShape().setFill(Color.BLUE);
+            rectangle.getFxShape().setStroke(Color.ORANGE);
+            shapeRef[0] = rectangle;
+            controller.getModel().addShape(rectangle);
+            controller.enableSelection(rectangle);
+        });
+
+        robot.interact(() -> {});
+        robot.moveTo(shapeRef[0].getFxShape()).clickOn();
+
+        Platform.runLater(() -> shapeRef[0].moveTo(newX, newY));
+        robot.interact(() -> {});
+
+        assertEquals(newX, shapeRef[0].getStartX(), "Shape X should be updated.");
+        assertEquals(newY, shapeRef[0].getStartY(), "Shape Y should be updated.");
+    }
+    
+    /**
+    * Tests that a selected ellipse updates its position, when it's moved.
+    * 
+    * @param TestFX robot: robot to simulate user interactions.
+    */
+    @Test
+    void testMoveEllipse(FxRobot robot){
+        MyShape[] shapeRef = new MyShape[1];
+        double oldX = 50, oldY = 60;
+        double newX = 120, newY = 130;
+
+        Platform.runLater(() -> {
+            MyShape ellipse = new MyEllipse(oldX, oldY, 60, 40);
+            ellipse.getFxShape().setFill(Color.ORANGE);
+            ellipse.getFxShape().setStroke(Color.YELLOW);
+            shapeRef[0] = ellipse;
+            controller.getModel().addShape(ellipse);
+            controller.enableSelection(ellipse);
+        });
+
+        robot.interact(() -> {});
+        robot.moveTo(shapeRef[0].getFxShape()).clickOn();
+
+        Platform.runLater(() -> shapeRef[0].moveTo(newX, newY));
+        robot.interact(() -> {});
+
+        assertEquals(newX, shapeRef[0].getStartX(), "Shape X should be updated.");
+        assertEquals(newY, shapeRef[0].getStartY(), "Shape Y should be updated.");
+    }
+    
+    /**
+    * Tests that a selected line updates its position, when it's moved.
+    * 
+    * @param TestFX robot: robot to simulate user interactions.
+    */
+    @Test
+    void testMoveLine(FxRobot robot){
+        MyShape[] shapeRef = new MyShape[1];
+        double oldX = 50, oldY = 60;
+        double newX = 120, newY = 130;
+
+        Platform.runLater(() -> {
+            MyShape line = new MyLine(oldX, oldY, 60, 40);
+            line.getFxShape().setStroke(Color.PINK);
+            shapeRef[0] = line;
+            controller.getModel().addShape(line);
+            controller.enableSelection(line);
+        });
+
+        robot.interact(() -> {});
+        robot.moveTo(shapeRef[0].getFxShape()).clickOn();
+
+        Platform.runLater(() -> shapeRef[0].moveTo(newX, newY));
+        robot.interact(() -> {});
+
+        assertEquals(newX, shapeRef[0].getStartX(), "Shape X should be updated.");
+        assertEquals(newY, shapeRef[0].getStartY(), "Shape Y should be updated.");
+    }
+   
+    /**
+    * Tests that moving a shape updates its position and can be undone correctly.
+    * 
+    * @param TestFX robot: robot to simulate user interactions.
+    */
+   @Test
+   void testUndoAfterMove(FxRobot robot) {
+       MyShape[] shapeRef = new MyShape[1];
+       double oldX = 30, oldY = 70;
+       double newX = 180, newY = 220;
+
+       Platform.runLater(() -> {
+           MyShape rectangle = new MyRectangle(oldX, oldY, 40, 30);
+           rectangle.getFxShape().setFill(Color.PINK);
+           rectangle.getFxShape().setStroke(Color.BLACK);
+           shapeRef[0] = rectangle;
+           controller.getModel().addShape(rectangle);
+           controller.enableSelection(rectangle);
+       });
+
+       robot.interact(() -> {});
+       robot.moveTo(shapeRef[0].getFxShape()).clickOn();
+
+       Platform.runLater(() -> {
+           Command moveCmd = new MoveCommand(shapeRef[0], oldX, oldY, newX, newY);
+           controller.getModel().execute(moveCmd);
+       });
+       robot.interact(() -> {});
+
+       assertEquals(newX, shapeRef[0].getStartX(), "X should be updated after move.");
+       assertEquals(newY, shapeRef[0].getStartY(), "Y should be updated after move.");
+
+       robot.interact(() -> controller.undoOperation(new ActionEvent()));
+
+       assertEquals(oldX, shapeRef[0].getStartX(), "X should return to original after undo.");
+       assertEquals(oldY, shapeRef[0].getStartY(), "Y should return to original after undo.");
+   }
+
 }

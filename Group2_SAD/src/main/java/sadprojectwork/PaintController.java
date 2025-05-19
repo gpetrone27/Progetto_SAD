@@ -677,17 +677,4 @@ public class PaintController implements Initializable {
         return canvas;
     }
     
-    
-
-    public boolean isShapeSelected(MyShape shape) {
-        return selectedShape.get() != null && selectedShape.get().equals(shape);
-    }
-    
-    public void setBorderColorGroup(ToggleGroup group) {
-        this.borderColorPanel = group;
-    }
-
-    public void setFillColorGroup(ToggleGroup group) {
-        this.fillColorPanel = group;
-    }
 }
