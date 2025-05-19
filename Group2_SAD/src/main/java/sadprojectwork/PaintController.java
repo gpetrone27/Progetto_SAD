@@ -1,11 +1,9 @@
+
 package sadprojectwork;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
@@ -427,13 +425,7 @@ public class PaintController implements Initializable {
         File file = fileChooser.showSaveDialog(rootPane.getScene().getWindow());
 
         if (file != null) {
-            try (PrintWriter writer = new PrintWriter(file)) {
-                writer.println("SHAPE;STARTX;STARTY;WIDTH;HEIGHT;FILL;BORDER");
-                for (MyShape shape : model.getShapes()) {
-                    writer.println(shape.toCSV());
-                }
-            } catch (IOException e) {
-            }
+            model.saveDrawing(file);
         }
     }
 
@@ -451,38 +443,10 @@ public class PaintController implements Initializable {
         File file = fileChooser.showOpenDialog(rootPane.getScene().getWindow());
 
         if (file != null) {
-            model.clear();
-            try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-                reader.readLine();
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    String[] parts = line.split(";");
-                    Shapes loadedMode = Shapes.valueOf(parts[0]);
-                    double loadedStartX = Double.parseDouble(parts[1]);
-                    double loadedStartY = Double.parseDouble(parts[2]);
-                    double loadedWidth = Double.parseDouble(parts[3]);
-                    double loadedHeight = Double.parseDouble(parts[4]);
-                    Color loadedFill = Color.valueOf(parts[5]);
-                    Color loadedBorder = Color.valueOf(parts[6]);
-                    switch (loadedMode) {
-                        case LINE -> {
-                            BorderColorDecorator myLine = new BorderColorDecorator(new MyLine(loadedStartX, loadedStartY, loadedWidth, loadedHeight), loadedBorder);
-                            addShape(myLine);
-                            enableSelection(myLine);
-                        }
-                        case RECTANGLE -> {
-                            BorderColorDecorator myRectangle = new BorderColorDecorator(new FillColorDecorator(new MyRectangle(loadedStartX, loadedStartY, loadedWidth, loadedHeight), loadedFill), loadedBorder);
-                            addShape(myRectangle);
-                            enableSelection(myRectangle);
-                        }
-                        case ELLIPSE -> {
-                            BorderColorDecorator myEllipse = new BorderColorDecorator(new FillColorDecorator(new MyEllipse(loadedStartX, loadedStartY, loadedWidth, loadedHeight), loadedFill), loadedBorder);
-                            addShape(myEllipse);
-                            enableSelection(myEllipse);
-                        }
-                    }
-                }
-            } catch (IOException ex) {
+            List<MyShape> loadedShapes = model.loadDrawing(file);
+            for(MyShape s : loadedShapes) {
+                addShape(s);
+                enableSelection(s);
             }
         }
     }

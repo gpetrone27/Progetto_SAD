@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/UnitTests/JUnit5TestClass.java to edit this template
- */
+
 package sadprojectwork;
 
 import javafx.scene.control.ToggleButton;
@@ -19,11 +16,8 @@ import javafx.scene.layout.Pane;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 
-/**
- *
- * @author noemi
- */
 public class SelectionTest {
+    
     private PaintController controller;
     private static boolean initialized = false;
     
@@ -57,9 +51,9 @@ public class SelectionTest {
 
     public static void launchJavaFX() {
         if (!initialized) {
-                new JFXPanel();
-                Platform.setImplicitExit(false);
-                initialized = true;
+            new JFXPanel();
+            Platform.setImplicitExit(false);
+            initialized = true;
         }
     }
 

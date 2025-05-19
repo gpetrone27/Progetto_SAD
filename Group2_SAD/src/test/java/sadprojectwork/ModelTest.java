@@ -71,4 +71,20 @@ public class ModelTest {
         assertTrue(model.getDeletedCommands().isEmpty());
     }
     
+    /**
+     * Test of save functionality
+     */
+    @Test
+    public void testSaveDrawing() {
+        // TO DO
+    }
+    
+    /**
+     * Test of load functionality
+     */
+    @Test
+    public void testLoadDrawing() {
+        // TO DO
+    }
+    
 }
