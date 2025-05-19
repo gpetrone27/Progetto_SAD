@@ -516,7 +516,7 @@ public class PaintController implements Initializable {
      * @param event
      */
     @FXML
-    private void pasteShape(ActionEvent event) {
+    public void pasteShape(ActionEvent event) {
         PasteCommand pasteCmd = new PasteCommand(model, lastMouseX, lastMouseY);
         model.execute(pasteCmd);
         enableSelection(pasteCmd.getPastedShape());

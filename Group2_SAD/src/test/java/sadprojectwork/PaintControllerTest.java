@@ -982,5 +982,150 @@ public class PaintControllerTest {
         assertNull(controller.getModel().getClipboard(), "Undo should remove the copied shape from clipboard.");
         assertTrue(controller.getModel().getShapes().contains(shapeRef[0]), "Original shape must be on the canvas!");
     }
-   
+    
+    /**
+    * Tests the paste operation after copying a rectangl, adding it to the model and canvas.
+    * 
+    * @param TestFX robot: robot to simulate user interactions.
+    */
+   @Test
+   void testPasteRectangleAfterCopy(FxRobot robot) {
+       MyShape[] original = new MyShape[1];
+
+       Platform.runLater(() -> {
+           MyShape rect = new MyRectangle(385, 290, 30, 20);
+           rect.getFxShape().setFill(Color.RED);
+           rect.getFxShape().setStroke(Color.ORANGE);
+           original[0] = rect;
+           controller.getModel().addShape(rect);
+           controller.enableSelection(rect);
+       });
+
+       robot.interact(() -> {});
+       robot.moveTo(original[0].getFxShape()).clickOn();
+
+       robot.interact(() -> {
+           controller.copyShape(new ActionEvent());
+           controller.pasteShape(new ActionEvent());
+       });
+
+       assertEquals(2, controller.getModel().getShapes().size(), "A new rectangle should be added to the model!");
+   }
+
+   /**
+    * Tests the paste operation after copying a ellipse, adding it to the model and canvas.
+    * 
+    * @param TestFX robot: robot to simulate user interactions.
+    */
+   @Test
+   void testPasteEllipseAfterCopy(FxRobot robot) {
+       MyShape[] shapeRef = new MyShape[1];
+
+       Platform.runLater(() -> {
+           MyShape ellipse = new MyEllipse(385, 290, 30, 20);
+           ellipse.getFxShape().setFill(Color.ORANGE);
+           ellipse.getFxShape().setStroke(Color.RED);
+           shapeRef[0] = ellipse;
+           controller.getModel().addShape(ellipse);
+           controller.enableSelection(ellipse);
+       });
+
+       robot.interact(() -> {});
+       robot.moveTo(shapeRef[0].getFxShape()).clickOn();
+
+       robot.interact(() -> {
+           controller.copyShape(new ActionEvent());
+           controller.pasteShape(new ActionEvent());
+       });
+
+       assertEquals(2, controller.getModel().getShapes().size(), "A new ellipse should be added to the model!");
+   }
+
+   /**
+    * Tests the paste operation after copying a line, adding it to the model and canvas.
+    * 
+    * @param TestFX robot: robot to simulate user interactions.
+    */
+   @Test
+   void testPasteLineAfterCopy(FxRobot robot) {
+       MyShape[] lineRef = new MyShape[1];
+
+       Platform.runLater(() -> {
+           MyShape line = new MyLine(385, 290, 30, 20);
+           line.getFxShape().setStroke(Color.GREEN);
+           lineRef[0] = line;
+           controller.getModel().addShape(line);
+           controller.enableSelection(line);
+       });
+
+       robot.interact(() -> {});
+       robot.moveTo(lineRef[0].getFxShape()).clickOn();
+
+       robot.interact(() -> {
+           controller.copyShape(new ActionEvent());
+           controller.pasteShape(new ActionEvent());
+       });
+
+       assertEquals(2, controller.getModel().getShapes().size(), "A new line should be added to the model!");
+   }
+
+   /**
+    * Tests multiple paste operations from the clipboard.
+    */
+   @Test
+   void testMultiplePaste(FxRobot robot) {
+       MyShape[] shapeRef = new MyShape[1];
+
+       Platform.runLater(() -> {
+           MyShape rectangle = new MyRectangle(385, 290, 30, 20);
+           rectangle.getFxShape().setFill(Color.GREY);
+           rectangle.getFxShape().setStroke(Color.PURPLE);
+           shapeRef[0] = rectangle;
+           controller.getModel().addShape(rectangle);
+           controller.enableSelection(rectangle);
+       });
+
+       robot.interact(() -> {});
+       robot.moveTo(shapeRef[0].getFxShape()).clickOn();
+
+       robot.interact(() -> {
+           controller.copyShape(new ActionEvent());
+           controller.pasteShape(new ActionEvent());
+           controller.pasteShape(new ActionEvent());
+       });
+
+       assertEquals(3, controller.getModel().getShapes().size(), "Two new shapes should be added to the model!");
+   }
+
+   /**
+    * Tests the undo operation after pasting a copied shape.
+    */
+   @Test
+   void testUndoAfterPaste(FxRobot robot) {
+       MyShape[] shapeRef = new MyShape[1];
+
+       Platform.runLater(() -> {
+           MyShape ellipse = new MyEllipse(385, 290, 30, 20);
+           ellipse.getFxShape().setFill(Color.BLUE);
+           ellipse.getFxShape().setStroke(Color.BLACK);
+           shapeRef[0] = ellipse;
+           controller.getModel().addShape(ellipse);
+           controller.enableSelection(ellipse);
+       });
+
+       robot.interact(() -> {});
+       robot.moveTo(shapeRef[0].getFxShape()).clickOn();
+
+       robot.interact(() -> {
+           controller.copyShape(new ActionEvent());
+           controller.pasteShape(new ActionEvent());
+       });
+
+       int countAfterPaste = controller.getModel().getShapes().size();
+
+       robot.interact(() -> controller.undoOperation(new ActionEvent()));
+
+       assertEquals(countAfterPaste - 1, controller.getModel().getShapes().size(), "Undo should remove the pasted shape!");
+   }
+
 }
