@@ -50,11 +50,11 @@ public class PaintControllerTest {
     @Test
     void testRectangleSelected(FxRobot robot) {
         Platform.runLater(() -> {
-            MyShape shape = new MyRectangle(50, 50, 80, 60);
-            shape.getFxShape().setFill(Color.GREEN);
-            shape.getFxShape().setStroke(Color.YELLOW);
-            controller.getModel().addShape(shape);
-            controller.enableSelection(shape);
+            MyShape rectangle = new MyRectangle(50, 50, 80, 60);
+            rectangle.getFxShape().setFill(Color.GREEN);
+            rectangle.getFxShape().setStroke(Color.YELLOW);
+            controller.getModel().addShape(rectangle);
+            controller.enableSelection(rectangle);
         });
 
         robot.interact(() -> {});
@@ -64,6 +64,25 @@ public class PaintControllerTest {
         MyShape selected = controller.getSelectedShape();
         assertNotNull(selected, "The rectangle must be selected!");
         assertTrue(selected.getFxShape().getEffect() instanceof DropShadow, "If the rectangle is selected, there must be a selection effect!");
+    }
+    
+    @Test
+    void testEllipseSelected(FxRobot robot) {
+        Platform.runLater(() -> {
+            MyShape ellipse = new MyEllipse(50, 50, 80, 60);
+            ellipse.getFxShape().setFill(Color.GREEN);
+            ellipse.getFxShape().setStroke(Color.YELLOW);
+            controller.getModel().addShape(ellipse);
+            controller.enableSelection(ellipse);
+        });
+
+        robot.interact(() -> {});
+
+        robot.moveTo(controller.getCanvas().getChildren().get(0)).clickOn();
+
+        MyShape selected = controller.getSelectedShape();
+        assertNotNull(selected, "The ellipse must be selected!");
+        assertTrue(selected.getFxShape().getEffect() instanceof DropShadow, "If the ellipse is selected, there must be a selection effect!");
     }
     
 }
