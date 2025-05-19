@@ -33,19 +33,19 @@ class MyLineTest {
         assertTrue(fxLine.isPickOnBounds());
     }
 
-    // tests the resize() method to ensure it sets the new end coordinates
+    // tests the resize() method to ensure it sets the new length
     @Test
     void testResize() {
-        line.resize(50, 60);
-        Line fxLine = (Line) line.getFxShape();
-        assertEquals(50, fxLine.getEndX());
-        assertEquals(60, fxLine.getEndY());
+        MyLine secondaryLine = new MyLine(10, 20, 50, 60);
+        double lengthToMatch = secondaryLine.getWidth();
+        line.resize(lengthToMatch);
+        assertEquals(lengthToMatch, line.getWidth());
     }
 
     // tests resizing to the same point as the start (zero-length line)
     @Test
     void testResizeToSamePoint() {
-        line.resize(10, 20);
+        line.resizeTo(10, 20);
         Line fxLine = (Line) line.getFxShape();
         assertEquals(10, fxLine.getEndX());
         assertEquals(20, fxLine.getEndY());
@@ -56,7 +56,7 @@ class MyLineTest {
     // tests that setPosition moves both the start and end points correctly
     @Test
     void testSetPositionMovesBothPoints() {
-        line.resize(30, 40); // ensure the line has an end point different from the start
+        line.resizeTo(30, 40); // ensure the line has an end point different from the start
         line.setPosition(20, 30);
 
         Line fxLine = (Line) line.getFxShape();
@@ -81,18 +81,6 @@ class MyLineTest {
         assertEquals(original.getStartY(), copied.getStartY());
         assertEquals(original.getEndX(), copied.getEndX());
         assertEquals(original.getEndY(), copied.getEndY());
-    }
-
-    // tests getWidth() returns the horizontal distance between start and end
-    @Test
-    void testGetWidth() {
-        assertEquals(20, line.getWidth()); // endX - startX = 30 - 10
-    }
-
-    // tests getHeight() returns the vertical distance between start and end
-    @Test
-    void testGetHeight() {
-        assertEquals(20, line.getHeight()); // endY - startY = 40 - 20
     }
 
     // tests that toCSV() generates the expected format, and checks color values
