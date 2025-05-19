@@ -31,11 +31,19 @@ public class Model {
         deletedCommands = new ArrayDeque<>();
     }
 
+    /**
+     * Executes the command and adds it to the command history.
+     * @param command 
+     */
     public void execute(Command command) {
         commandHistory.addLast(command);
         command.execute();
     }
 
+    /**
+     * Undoes the last command, removes it from the command history and adds
+     * it to the deleted commands history.
+     */
     public void undoLast() {
         if(!commandHistory.isEmpty()) {
             Command last = commandHistory.removeLast();
@@ -44,6 +52,10 @@ public class Model {
         }
     }
 
+    /**
+     * Redoes the last deleted commands, removes it from the deleted commands
+     * history and adds it to the commands history.
+     */
     public void redoLast() {
         if(!deletedCommands.isEmpty()) {
             Command last = deletedCommands.removeLast();
@@ -85,7 +97,7 @@ public class Model {
     }
 
     /**
-     * Clears the entire model: shapes, command history, redo stack, and
+     * Clears the entire model: shapes, command history, deleted commands and
      * clipboard.
      */
     public void clear() {
@@ -96,7 +108,7 @@ public class Model {
     }
     
     /**
-     * Saves the shapes in a CSV file
+     * Saves the shapes in a CSV file.
      * @param file 
      */
     public void saveDrawing(File file) {
@@ -111,44 +123,44 @@ public class Model {
     }
     
     /**
-     * Loads and returns the shapes from a CSV file
+     * Loads and returns the shapes from a CSV file.
      * @param file
      * @return list of loaded shapes
      */
     public List<MyShape> loadDrawing(File file) {
         
-            clear();
-            List<MyShape> loadedShapes = new ArrayList<>();
-            
-            try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-                reader.readLine();
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    String[] parts = line.split(";");
-                    Shapes loadedMode = Shapes.valueOf(parts[0]);
-                    double loadedStartX = Double.parseDouble(parts[1]);
-                    double loadedStartY = Double.parseDouble(parts[2]);
-                    double loadedWidth = Double.parseDouble(parts[3]);
-                    double loadedHeight = Double.parseDouble(parts[4]);
-                    Color loadedFill = Color.valueOf(parts[5]);
-                    Color loadedBorder = Color.valueOf(parts[6]);
-                    switch (loadedMode) {
-                        case LINE -> {
-                            BorderColorDecorator myLine = new BorderColorDecorator(new MyLine(loadedStartX, loadedStartY, loadedWidth, loadedHeight), loadedBorder);
-                            loadedShapes.add(myLine);
-                        }
-                        case RECTANGLE -> {
-                            BorderColorDecorator myRectangle = new BorderColorDecorator(new FillColorDecorator(new MyRectangle(loadedStartX, loadedStartY, loadedWidth, loadedHeight), loadedFill), loadedBorder);
-                            loadedShapes.add(myRectangle);
-                        }
-                        case ELLIPSE -> {
-                            BorderColorDecorator myEllipse = new BorderColorDecorator(new FillColorDecorator(new MyEllipse(loadedStartX, loadedStartY, loadedWidth, loadedHeight), loadedFill), loadedBorder);
-                            loadedShapes.add(myEllipse);
-                        }
+        clear();
+        List<MyShape> loadedShapes = new ArrayList<>();
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            reader.readLine();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(";");
+                Shapes loadedMode = Shapes.valueOf(parts[0]);
+                double loadedStartX = Double.parseDouble(parts[1]);
+                double loadedStartY = Double.parseDouble(parts[2]);
+                double loadedWidth = Double.parseDouble(parts[3]);
+                double loadedHeight = Double.parseDouble(parts[4]);
+                Color loadedFill = Color.valueOf(parts[5]);
+                Color loadedBorder = Color.valueOf(parts[6]);
+                switch (loadedMode) {
+                    case LINE -> {
+                        BorderColorDecorator myLine = new BorderColorDecorator(new MyLine(loadedStartX, loadedStartY, loadedWidth, loadedHeight), loadedBorder);
+                        loadedShapes.add(myLine);
+                    }
+                    case RECTANGLE -> {
+                        BorderColorDecorator myRectangle = new BorderColorDecorator(new FillColorDecorator(new MyRectangle(loadedStartX, loadedStartY, loadedWidth, loadedHeight), loadedFill), loadedBorder);
+                        loadedShapes.add(myRectangle);
+                    }
+                    case ELLIPSE -> {
+                        BorderColorDecorator myEllipse = new BorderColorDecorator(new FillColorDecorator(new MyEllipse(loadedStartX, loadedStartY, loadedWidth, loadedHeight), loadedFill), loadedBorder);
+                        loadedShapes.add(myEllipse);
                     }
                 }
-            } catch (IOException ex) { }
-            
-            return loadedShapes;
+            }
+        } catch (IOException ex) { }
+
+        return loadedShapes;
     }
 }
