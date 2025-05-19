@@ -458,20 +458,17 @@ public class PaintController implements Initializable {
                     Color loadedBorder = Color.valueOf(parts[6]);
                     switch(loadedMode) {
                         case LINE -> {
-                            BorderColorDecorator myLine = new BorderColorDecorator(new MyLine(loadedStartX, loadedStartY, loadedStartX, loadedStartY), loadedBorder);
-                            myLine.resize(loadedWidth, loadedHeight);
+                            BorderColorDecorator myLine = new BorderColorDecorator(new MyLine(loadedStartX, loadedStartY, loadedWidth, loadedHeight), loadedBorder);
                             addShape(myLine);
                             enableSelection(myLine);
                         }
                         case RECTANGLE -> {
-                            BorderColorDecorator myRectangle = new BorderColorDecorator(new FillColorDecorator(new MyRectangle(loadedStartX, loadedStartY, 0, 0), loadedFill), loadedBorder);
-                            myRectangle.resize(loadedWidth, loadedHeight);
+                            BorderColorDecorator myRectangle = new BorderColorDecorator(new FillColorDecorator(new MyRectangle(loadedStartX, loadedStartY, loadedWidth, loadedHeight), loadedFill), loadedBorder);
                             addShape(myRectangle);
                             enableSelection(myRectangle);
                         }
                         case ELLIPSE -> {
-                            BorderColorDecorator myEllipse = new BorderColorDecorator(new FillColorDecorator(new MyEllipse(loadedStartX, loadedStartY, 0, 0), loadedFill), loadedBorder);
-                            myEllipse.resize(loadedWidth, loadedHeight);
+                            BorderColorDecorator myEllipse = new BorderColorDecorator(new FillColorDecorator(new MyEllipse(loadedStartX, loadedStartY, loadedWidth, loadedHeight), loadedFill), loadedBorder);
                             addShape(myEllipse);
                             enableSelection(myEllipse);
                         }
@@ -620,10 +617,8 @@ public class PaintController implements Initializable {
             submitButton.setOnAction(e -> {
                 
                 try {
-                    
                     double width = Double.parseDouble(widthField.getText().trim());
                     double height = Double.parseDouble(heightField.getText().trim());
-                    
                     resizeShape(selectedShape.get(), width, height);
                     popupWindow.close();
                     
