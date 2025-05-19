@@ -527,7 +527,7 @@ public class PaintController implements Initializable {
      * @param event
      */
     @FXML
-    private void deleteShape(ActionEvent event) {
+    public void deleteShape(ActionEvent event) {
         if (selectedShape.get() != null) {
             Command deleteCmd = new DeleteCommand(model, selectedShape.get());
             model.execute(deleteCmd);

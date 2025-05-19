@@ -7,6 +7,7 @@ package sadprojectwork;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -186,5 +187,76 @@ public class PaintControllerTest {
 
         assertNotEquals(rect, ell, "The second shape must be selected and highlighted!");
         assertNull(rect.getFxShape().getEffect(), "The first shape should no longer be selected and highlighted!");
+    }
+    
+    @Test
+    void testDeleteRectangle(FxRobot robot) {
+        MyShape[] shapeRef = new MyShape[1];
+
+        Platform.runLater(() -> {
+            MyShape rectangle = new MyRectangle(70, 70, 50, 40);
+            rectangle.getFxShape().setFill(Color.GREEN);
+            rectangle.getFxShape().setStroke(Color.YELLOW);
+            shapeRef[0] = rectangle;
+            controller.getModel().addShape(rectangle);
+            controller.enableSelection(rectangle);
+        });
+
+        robot.interact(() -> {});
+        robot.moveTo(shapeRef[0].getFxShape()).clickOn();
+
+        robot.interact(() -> controller.deleteShape(new ActionEvent()));
+        controller.clearSelection();
+
+        assertFalse(controller.getModel().getShapes().contains(shapeRef[0]), "The shape must be removed from the model!");
+        assertFalse(controller.getCanvas().getChildren().contains(shapeRef[0].getFxShape()), "The shape must be removed from the canvas!");
+        assertNull(controller.getSelectedShape(), "After deletion, the selection must not be present!");
+    }
+    
+    @Test
+    void testDeleteEllipse(FxRobot robot) {
+        MyShape[] shapeRef = new MyShape[1];
+
+        Platform.runLater(() -> {
+            MyShape ellipse = new MyEllipse(150, 200, 50, 30);
+            ellipse.getFxShape().setFill(Color.GREEN);
+            ellipse.getFxShape().setStroke(Color.YELLOW);
+            shapeRef[0] = ellipse;
+            controller.getModel().addShape(ellipse);
+            controller.enableSelection(ellipse);
+        });
+
+        robot.interact(() -> {});
+        robot.moveTo(shapeRef[0].getFxShape()).clickOn();
+
+        robot.interact(() -> controller.deleteShape(new ActionEvent()));
+        controller.clearSelection();
+
+        assertFalse(controller.getModel().getShapes().contains(shapeRef[0]), "The shape must be removed from the model!");
+        assertFalse(controller.getCanvas().getChildren().contains(shapeRef[0].getFxShape()), "The shape must be removed from the canvas!");
+        assertNull(controller.getSelectedShape(), "After deletion, the selection must not be present!");
+    }
+    
+    @Test
+    void testDeleteLine(FxRobot robot) {
+        MyShape[] shapeRef = new MyShape[1];
+
+        Platform.runLater(() -> {
+            MyShape line = new MyLine(0, 0, 24, 50);
+            line.getFxShape().setStroke(Color.PURPLE);
+            shapeRef[0] = line;
+            controller.getModel().addShape(line);
+            controller.enableSelection(line);
+        });
+
+        robot.interact(() -> {});
+        robot.moveTo(shapeRef[0].getFxShape()).clickOn();
+
+        robot.interact(() -> controller.deleteShape(new ActionEvent()));
+        controller.clearSelection();
+
+        assertFalse(controller.getModel().getShapes().contains(shapeRef[0]), "The shape must be removed from the model!");
+        assertFalse(controller.getCanvas().getChildren().contains(shapeRef[0].getFxShape()), "The shape must be removed from the canvas!");
+        assertNull(controller.getSelectedShape(), "After deletion, the selection must not be present!");
     }
 }
