@@ -29,6 +29,11 @@ import org.testfx.api.FxRobot;
 
 
 /**
+ * Test class for the method in the controller, that uses 
+ * TestFX to test user interaction with the canvas.
+ * 
+ * N.B. Requires that the FXML file “arsnova.fxml” be accessible from 
+ * the path `/ui/arsnova.fxml`.
  *
  * @author noemi
  */
@@ -39,6 +44,13 @@ public class PaintControllerTest {
     public PaintControllerTest() {
     }
     
+    /**
+     * Initializes the JavaFX application by loading the interface from FXML.
+     * Is automatically called by TestFX before each test.
+     *
+     * @param stage: the main stage on which to load the interface.
+     * @throws Exception if the FXML file is not found or cannot be loaded.
+     */
    @Start
     private void start(Stage stage) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/arsnova.fxml"));
@@ -48,6 +60,12 @@ public class PaintControllerTest {
         stage.show();
     }
     
+    /**
+     * Checks that a rectangle added to the canvas can be selected.
+     * Checks that the selection is active and that the graphic effect is applied.
+     *
+     * @param TestFX robot: robot to simulate user interactions.
+     */
     @Test
     void testRectangleSelected(FxRobot robot) {
         Platform.runLater(() -> {
@@ -67,6 +85,12 @@ public class PaintControllerTest {
         assertTrue(selected.getFxShape().getEffect() instanceof DropShadow, "If the rectangle is selected, there must be a selection effect!");
     }
     
+    /**
+     * Checks that an ellipse added to the canvas can be selected.
+     * Checks that the selection is active and that the graphic effect is applied.
+     *
+     * @param TestFX robot: robot to simulate user interactions.
+     */
     @Test
     void testEllipseSelected(FxRobot robot) {
         Platform.runLater(() -> {
@@ -86,6 +110,12 @@ public class PaintControllerTest {
         assertTrue(selected.getFxShape().getEffect() instanceof DropShadow, "If the ellipse is selected, there must be a selection effect!");
     }
     
+    /**
+     * Checks that a line added to the canvas can be selected.
+     * Checks that the selection is active and that the graphic effect is applied.
+     *
+     * @param TestFX robot: robot to simulate user interactions.
+     */
     @Test
     void testLineSelected(FxRobot robot) {
         Platform.runLater(() -> {
@@ -104,6 +134,12 @@ public class PaintControllerTest {
         assertTrue(selected.getFxShape().getEffect() instanceof DropShadow, "If the line is selected, there must be a selection effect!");
     }
     
+    /**
+     * Verifies that after a click outside the selected form,
+     * the selection is removed.
+     *
+     * @param robot: from TestFX to simulate user interactions.
+     */
     @Test
     void testDisableSelection(FxRobot robot){
        Platform.runLater(() -> {
@@ -121,6 +157,11 @@ public class PaintControllerTest {
         assertNull(controller.getSelectedShape(), "After the click, the shape should no longer be selected!");
     }
     
+    /**
+     * Verifies that in the presence of a shape already selected, clicking on another must deselect the first one.
+     *
+     * @param TestFX robot: robot to simulate user interactions.
+     */
     @Test
     public void testNewSelectionWithShapeSelected(FxRobot robot){
         Platform.runLater(() -> {
