@@ -669,6 +669,16 @@ public class PaintController implements Initializable {
         this.canvas = canvas;
     }
 
+    public Model getModel() {
+        return model;
+    }
+
+    public Pane getCanvas() {
+        return canvas;
+    }
+    
+    
+
     public boolean isShapeSelected(MyShape shape) {
         return selectedShape.get() != null && selectedShape.get().equals(shape);
     }
