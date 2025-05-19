@@ -113,4 +113,21 @@ public class PaintControllerTest {
         assertNull(controller.getSelectedShape(), "No shape must be selected!");
         assertNull(ellipse.getFxShape().getEffect(), "The effect must be removed");
     }
+    
+    @Test
+    public void testNewSelectionWithShapeSelected(){
+        MyShape ellipse = new FillColorDecorator(
+                                new BorderColorDecorator(
+                                    new MyEllipse(100, 100, 60, 80), Color.GREEN),Color.YELLOW);
+        MyShape rectangle = new FillColorDecorator(
+                                 new BorderColorDecorator(
+                                     new MyRectangle(100, 100, 60, 80), Color.RED),Color.GREEN);
+        
+        controller.enableSelection(ellipse);
+        controller.enableSelection(rectangle);
+        
+        assertEquals(rectangle, controller.getSelectedShape(), "The second shape must be selected");
+        assertNotNull(rectangle.getFxShape().getEffect(), "The secondo shape must be highlighted");
+        assertNull(ellipse.getFxShape().getEffect(), "The first shape should no longer be highlighted");
+    }
 }
