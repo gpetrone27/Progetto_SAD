@@ -338,7 +338,7 @@ public class PaintController implements Initializable {
      * Enables the selection of the given shape
      * @param shape
      */
-    private void enableSelection(MyShape shape) {
+    public void enableSelection(MyShape shape) {
         shape.getFxShape().setOnMouseClicked(event -> {
             selectedShape.set(shape);
             highlightSelected(shape);
@@ -349,7 +349,7 @@ public class PaintController implements Initializable {
     /**
      * Deactivates the current selection and clears all effects
      */
-    private void clearSelection() {
+    public void clearSelection() {
         selectedShape.set(null);
         for (javafx.scene.Node node : canvas.getChildren()) {
             if (node instanceof Shape resetShape) {
@@ -685,6 +685,10 @@ public class PaintController implements Initializable {
         Paint selectedColor = colorButton.getBackground().getFills().get(0).getFill();
         Command changeColor = new ChangeColorCommand(selectedShape.get(), (Color) selectedColor, null);
         model.execute(changeColor);
+    }
+    
+    public MyShape getSelectedShape() {
+        return selectedShape.get();
     }
 
 }
