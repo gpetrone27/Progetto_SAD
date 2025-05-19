@@ -62,6 +62,7 @@ public class SelectionTest {
      */
     @Test
     public void testRectangleSelection() {
+        
         SelectionTest.launchJavaFX();
   
         ToggleGroup borderGroup = new ToggleGroup();
@@ -81,20 +82,19 @@ public class SelectionTest {
         rectangle.getFxShape().setFill(Color.GREEN);
         rectangle.getFxShape().setStroke(Color.YELLOW);
 
-        controller.getModel().addShape(rectangle);
-        controller.getCanvas().getChildren().add(rectangle.getFxShape());
-
+        controller.addShape(rectangle);
         controller.selectShape(rectangle);
 
         assertTrue(controller.isShapeSelected(rectangle), "Rectangle should be selected!");
         assertNotNull(rectangle.getFxShape().getEffect(), "If the rectangle is selected, there must be a selection effect!");
-        }
+    }
     
     /**
      * Test of enableSelection method.
      */
     @Test
     public void testEllipseSelection() {
+        
         SelectionTest.launchJavaFX();
   
         ToggleGroup borderGroup = new ToggleGroup();
@@ -114,20 +114,19 @@ public class SelectionTest {
         ellipse.getFxShape().setFill(Color.BLUE);
         ellipse.getFxShape().setStroke(Color.PURPLE);
 
-        controller.getModel().addShape(ellipse);
-        controller.getCanvas().getChildren().add(ellipse.getFxShape());
-
+        controller.addShape(ellipse);
         controller.selectShape(ellipse);
 
         assertTrue(controller.isShapeSelected(ellipse), "Ellipse should be selected!");
         assertNotNull(ellipse.getFxShape().getEffect(), "If the ellipse is selected, there must be a selection effect!");
-        }
+    }
     
     /**
      * Test of enableSelection method.
      */
     @Test
     public void testLineSelection() {
+        
         SelectionTest.launchJavaFX();
 
         ToggleGroup borderGroup = new ToggleGroup();
@@ -147,9 +146,7 @@ public class SelectionTest {
         MyShape line = new MyLine(0, 0, 30, 10);
         line.getFxShape().setStroke(Color.BLACK);
 
-        controller.getModel().addShape(line);
-        controller.getCanvas().getChildren().add(line.getFxShape());
-
+        controller.addShape(line);
         controller.selectShape(line);
 
         assertTrue(controller.isShapeSelected(line), "Line should be selected");
@@ -162,6 +159,7 @@ public class SelectionTest {
      */
     @Test
     public void testDisableSelection(){
+        
         SelectionTest.launchJavaFX();
   
         ToggleGroup borderGroup = new ToggleGroup();
@@ -181,15 +179,12 @@ public class SelectionTest {
         ellipse.getFxShape().setFill(Color.BLUE);
         ellipse.getFxShape().setStroke(Color.PURPLE);
 
-        controller.getModel().addShape(ellipse);
-        controller.getCanvas().getChildren().add(ellipse.getFxShape());
-
+        controller.addShape(ellipse);
         controller.selectShape(ellipse);
         controller.clearSelection();
         
         assertFalse(controller.isShapeSelected(ellipse), "Ellipse should be deselected after clearSelection!");
         assertNull(ellipse.getFxShape().getEffect(), "The selection effect should no longer be present after clearSelection!");
-
     }
 }
 

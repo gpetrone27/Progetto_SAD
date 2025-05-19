@@ -109,7 +109,7 @@ public class PaintController implements Initializable {
     }
 
     /**
-     * Initializes the actions of the buttons of the application
+     * Initializes the actions of the buttons of the application.
      */
     private void initButtonActions() {
         cursorButton.setUserData(Shapes.CURSOR);
@@ -119,7 +119,7 @@ public class PaintController implements Initializable {
     }
 
     /**
-     * Initializes the bindings of the application
+     * Initializes the bindings of the application.
      */
     private void initBindings() {
 
@@ -208,7 +208,7 @@ public class PaintController implements Initializable {
     }
 
     /**
-     * Initializes the icons displayed on the buttons of the application
+     * Initializes the icons displayed on the buttons of the application.
      */
     private void initButtonIcons() {
 
@@ -221,7 +221,7 @@ public class PaintController implements Initializable {
     }
 
     /**
-     * Initializes all the events related to the canvas
+     * Initializes all the events related to the canvas.
      */
     private void initCanvasEvents() {
 
@@ -327,7 +327,7 @@ public class PaintController implements Initializable {
     }
 
     /**
-     * Redraws the canvas based on the model list of shapes
+     * Redraws the canvas based on the model list of shapes.
      */
     private void redrawCanvas() {
         canvas.getChildren().clear();
@@ -337,7 +337,7 @@ public class PaintController implements Initializable {
     }
 
     /**
-     * Enables the selection of the given shape
+     * Enables the selection of the given shape.
      * @param shape
      */
     public void enableSelection(MyShape shape) {
@@ -349,27 +349,26 @@ public class PaintController implements Initializable {
     }
 
     /**
-     * Deactivates the current selection and clears all effects
+     * Deactivates the current selection and clears all effects.
      */
     public void clearSelection() {
         selectedShape.set(null);
-        for (javafx.scene.Node node : canvas.getChildren()) {
-            if (node instanceof Shape resetShape) {
-                resetShape.setEffect(null); // Reset effects
-            }
+        for (MyShape s : model.getShapes()) {
+            s.getFxShape().setEffect(null); // Reset effects
         }
     }
 
     /**
+     * Creates the effect shown when a shape is selected.
+     * Reads the parameters of the shapes to set them in the parameters panel
+     * on the right side of the screen.
      * @param shape
      */
     private void highlightSelected(MyShape shape) {
 
         // Removes the effect from all shapes
-        for (javafx.scene.Node node : canvas.getChildren()) {
-            if (node instanceof Shape resetShape) {
-                resetShape.setEffect(null); // Reset effects
-            }
+        for (MyShape s : model.getShapes()) {
+            s.getFxShape().setEffect(null); // Reset effects
         }
 
         // Adds the effect to the selected shape
@@ -400,8 +399,7 @@ public class PaintController implements Initializable {
     }
 
     /**
-     * Cleares the current drawing and opens a new "untitled" temporary file
-     *
+     * Cleares the current drawing.
      * @param event
      */
     @FXML
@@ -412,8 +410,7 @@ public class PaintController implements Initializable {
     }
 
     /**
-     * Saves the current drawing in a file
-     *
+     * Saves the current drawing in a file.
      * @param event
      */
     @FXML
@@ -430,8 +427,7 @@ public class PaintController implements Initializable {
     }
 
     /**
-     * Loads a drawing from a file
-     *
+     * Loads a drawing from a file.
      * @param event
      */
     @FXML
@@ -452,8 +448,7 @@ public class PaintController implements Initializable {
     }
 
     /**
-     * Undoes the last operation
-     *
+     * Undoes the last operation.
      * @param event
      */
     @FXML
@@ -462,8 +457,7 @@ public class PaintController implements Initializable {
     }
 
     /**
-     * Redoes the last undone operation
-     *
+     * Redoes the last undone operation.
      * @param event
      */
     @FXML
@@ -472,8 +466,7 @@ public class PaintController implements Initializable {
     }
 
     /**
-     * Updates the variable borderHex to match the user selection
-     *
+     * Updates the variable borderHex to match the user selection.
      * @param event
      */
     @FXML
@@ -484,8 +477,7 @@ public class PaintController implements Initializable {
     }
 
     /**
-     * Updates the variable fillHex to match the user selection
-     *
+     * Updates the variable fillHex to match the user selection.
      * @param event
      */
     @FXML
@@ -496,8 +488,7 @@ public class PaintController implements Initializable {
     }
 
     /**
-     * Copies the selected shape into the clipboard and deletes it
-     *
+     * Copies the selected shape into the clipboard and deletes it.
      * @param event
      */
     @FXML
@@ -509,8 +500,7 @@ public class PaintController implements Initializable {
     }
 
     /**
-     * Copies the selected shape into the clipboard
-     *
+     * Copies the selected shape into the clipboard.
      * @param event
      */
     @FXML
@@ -522,8 +512,7 @@ public class PaintController implements Initializable {
     }
 
     /**
-     * Pastes a shape from the clipboard
-     *
+     * Pastes a shape from the clipboard.
      * @param event
      */
     @FXML
@@ -534,8 +523,7 @@ public class PaintController implements Initializable {
     }
 
     /**
-     * Deletes the selected shape
-     *
+     * Deletes the selected shape.
      * @param event
      */
     @FXML
@@ -547,8 +535,7 @@ public class PaintController implements Initializable {
     }
 
     /**
-     * Resizes the selected shape according to the new dimensions
-     *
+     * Resizes the selected shape according to the new dimensions.
      * @param shape
      * @param newWidth
      * @param newHeight
@@ -561,19 +548,17 @@ public class PaintController implements Initializable {
     }
 
     /**
-     * Adds a shape to the model
-     *
+     * Adds a shape to the model.
      * @param shape
      */
-    private void addShape(MyShape shape) {
+    public void addShape(MyShape shape) {
         AddShapeCommand addCmd = new AddShapeCommand(model, shape);
         model.execute(addCmd);
     }
 
     /**
      * Shows a popup window when the user clicks "Resize" in the right click
-     * menu
-     *
+     * menu.
      * @param event
      */
     @FXML
@@ -648,8 +633,7 @@ public class PaintController implements Initializable {
     }
 
     /**
-     * Updates the border color of the selected shape
-     *
+     * Updates the border color of the selected shape.
      * @param event
      */
     @FXML
@@ -661,8 +645,7 @@ public class PaintController implements Initializable {
     }
 
     /**
-     * Updates the fill color of the selected shape
-     *
+     * Updates the fill color of the selected shape.
      * @param event
      */
     @FXML
@@ -682,20 +665,8 @@ public class PaintController implements Initializable {
         highlightSelected(shape);
     }
 
-    public void setModel(Model model) {
-        this.model = model;
-    }
-
-    public Model getModel() {
-        return model;
-    }
-
     public void setCanvas(Pane canvas) {
         this.canvas = canvas;
-    }
-
-    public Pane getCanvas() {
-        return canvas;
     }
 
     public boolean isShapeSelected(MyShape shape) {

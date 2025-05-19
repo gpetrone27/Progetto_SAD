@@ -38,18 +38,16 @@ public class ModelTest {
      */
     @Test
     public void testExecute() {
-        System.out.println("execute");
         model.execute(addCmd);
         assertEquals(1, model.getCommandHistory().size());
         assertEquals(0, model.getDeletedCommands().size());
     }
 
     /**
-     * Test of undoLast method and redoLast method
+     * Test of undoLast method and redoLast method.
      */
     @Test
     public void testUndoAndRedo() {
-        System.out.println("non-empty stack");
         model.execute(addCmd);
         model.undoLast();
         assertEquals(0, model.getCommandHistory().size());
@@ -60,11 +58,10 @@ public class ModelTest {
     }
 
     /**
-     * Test of undoLast method and redoLast method with empty stacks
+     * Test of undoLast method and redoLast method with empty stacks.
      */
     @Test
     public void testUndoAndRedoWithEmptyStacks() {
-        System.out.println("empty stack");
         model.undoLast();
         model.redoLast();
         assertTrue(model.getCommandHistory().isEmpty());
@@ -72,7 +69,7 @@ public class ModelTest {
     }
     
     /**
-     * Test of save functionality
+     * Test of save functionality.
      */
     @Test
     public void testSaveDrawing() {
@@ -80,7 +77,7 @@ public class ModelTest {
     }
     
     /**
-     * Test of load functionality
+     * Test of load functionality.
      */
     @Test
     public void testLoadDrawing() {
