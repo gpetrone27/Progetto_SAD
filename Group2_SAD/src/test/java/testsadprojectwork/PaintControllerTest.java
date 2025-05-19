@@ -70,6 +70,9 @@ public class PaintControllerTest {
         fail("The test case is a prototype.");
     }
     
+    /**
+     * Test of enableSelection method, of class PaintController.
+     */
     @Test
     public void testEllipseSelection(){
         MyShape ellipse = new FillColorDecorator(
@@ -81,6 +84,9 @@ public class PaintControllerTest {
         assertNotNull(ellipse.getFxShape().getEffect(), "The ellipse must have a selection effect");
     }
     
+    /**
+     * Test of enableSelection method, of class PaintController.
+     */
     @Test
     public void testRectangleSelection(){
         MyShape rectangle = new FillColorDecorator(
@@ -92,6 +98,9 @@ public class PaintControllerTest {
         assertNotNull(rectangle.getFxShape().getEffect(), "The rectangle must have a selection effect");
     }
     
+    /**
+     * Test of enableSelection method, of class PaintController.
+     */
     @Test
     public void testLineSelection(){
         MyShape line =new BorderColorDecorator(
@@ -102,6 +111,9 @@ public class PaintControllerTest {
         assertNotNull(line.getFxShape().getEffect(), "The line must have a selection effect");
     }
     
+    /**
+     * Test of clearSelection method, of class PaintController.
+     */
     @Test
     public void testDisableSelection(){
         MyShape ellipse = new FillColorDecorator(
@@ -114,6 +126,9 @@ public class PaintControllerTest {
         assertNull(ellipse.getFxShape().getEffect(), "The effect must be removed");
     }
     
+    /**
+     * Test of enableSelection method, of class PaintController.
+     */
     @Test
     public void testNewSelectionWithShapeSelected(){
         MyShape ellipse = new FillColorDecorator(
