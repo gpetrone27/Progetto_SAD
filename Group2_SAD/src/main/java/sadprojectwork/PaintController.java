@@ -241,10 +241,28 @@ public class PaintController implements Initializable {
     private void initButtonIcons() {
 
         // Cursor button
-        FontIcon cursorIcon = new FontIcon("fa-mouse-pointer");
-        cursorIcon.setIconSize(24);
+        FontIcon cursorIcon = new FontIcon("fas-mouse-pointer");
+        cursorIcon.setIconSize(30);
         cursorIcon.setIconColor(Color.BLACK);
         cursorButton.setGraphic(cursorIcon);
+        
+        // Line button
+        FontIcon lineIcon = new FontIcon("fas-slash");
+        lineIcon.setIconSize(20);
+        lineIcon.setIconColor(Color.BLACK);
+        lineButton.setGraphic(lineIcon);
+        
+        // Rectangle button
+        FontIcon rectangleIcon = new FontIcon("far-square");
+        rectangleIcon.setIconSize(20);
+        rectangleIcon.setIconColor(Color.BLACK);
+        rectangleButton.setGraphic(rectangleIcon);
+        
+        // Ellipse button
+        FontIcon ellipseIcon = new FontIcon("far-circle");
+        ellipseIcon.setIconSize(20);
+        ellipseIcon.setIconColor(Color.BLACK);
+        ellipseButton.setGraphic(ellipseIcon);
 
     }
 

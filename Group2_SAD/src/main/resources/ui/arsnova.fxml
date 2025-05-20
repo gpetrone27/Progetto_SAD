@@ -23,7 +23,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" fx:id="rootPane" prefHeight="720.0" prefWidth="1280.0" stylesheets="@arsnova.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sadprojectwork.PaintController">
+<AnchorPane id="AnchorPane" fx:id="rootPane" prefHeight="720.0" prefWidth="1280.0" stylesheets="@arsnova.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sadprojectwork.PaintController">
    <children>
       <BorderPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <top>
@@ -70,22 +70,23 @@
                         </ToggleButton>
                         <VBox alignment="BOTTOM_CENTER" spacing="10.0">
                            <children>
-                              <ScrollPane focusTraversable="false" maxHeight="80.0" prefWidth="225.0">
+                              <ScrollPane fitToWidth="true" focusTraversable="false">
                                  <content>
                                     <GridPane alignment="CENTER">
                                       <columnConstraints>
-                                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" prefWidth="100.0" />
-                                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" prefWidth="100.0" />
+                                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" />
+                                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" />
+                                          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" />
                                       </columnConstraints>
                                       <rowConstraints>
-                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                        <RowConstraints vgrow="SOMETIMES" />
+                                          <RowConstraints vgrow="SOMETIMES" />
+                                          <RowConstraints vgrow="SOMETIMES" />
                                       </rowConstraints>
                                        <children>
-                                          <ToggleButton fx:id="ellipseButton" mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" text="Ellipse" textAlignment="CENTER" toggleGroup="$shapes" GridPane.rowIndex="1" />
-                                          <ToggleButton fx:id="rectangleButton" mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" text="Rectangle" textAlignment="CENTER" toggleGroup="$shapes" GridPane.columnIndex="1" />
-                                          <ToggleButton fx:id="lineButton" mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" text="Line" textAlignment="CENTER" toggleGroup="$shapes" />
+                                          <ToggleButton fx:id="ellipseButton" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" textAlignment="CENTER" toggleGroup="$shapes" GridPane.columnIndex="2" />
+                                          <ToggleButton fx:id="rectangleButton" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" textAlignment="CENTER" toggleGroup="$shapes" GridPane.columnIndex="1" />
+                                          <ToggleButton fx:id="lineButton" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" textAlignment="CENTER" toggleGroup="$shapes" />
                                        </children>
                                        <padding>
                                           <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
