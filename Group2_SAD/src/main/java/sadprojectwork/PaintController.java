@@ -20,6 +20,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TitledPane;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
@@ -33,7 +34,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Line;
-import javafx.scene.shape.Shape;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -99,6 +99,10 @@ public class PaintController implements Initializable {
     private MenuItem pasteMenuItem;
     @FXML
     private VBox propertiesPanel;
+    @FXML
+    private TitledPane borderPanel;
+    @FXML
+    private TitledPane fillPanel;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -204,7 +208,15 @@ public class PaintController implements Initializable {
                 event.consume();
             }
         });
-
+        
+        // Hides the fill color section in the properties panel if line is selected
+        fillPanel.visibleProperty().bind(Bindings.createBooleanBinding(
+            () -> {
+                return selectedShape.get() != null && selectedShape.get().getFxShape().getClass() != Line.class;
+            },
+            selectedShape
+        ));
+        
     }
 
     /**
