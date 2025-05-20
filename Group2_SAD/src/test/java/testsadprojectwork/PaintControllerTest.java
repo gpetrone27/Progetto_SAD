@@ -1,5 +1,5 @@
 
-package sadprojectwork;
+package testsadprojectwork;
 
 import command.ChangeColorCommand;
 import command.MoveCommand;
@@ -25,6 +25,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 import org.testfx.api.FxRobot;
+import sadprojectwork.PaintController;
 
 /**
  * Test class for the method in the controller, that uses 

@@ -1,4 +1,4 @@
-package sadprojectwork;
+package testsadprojectwork;
 
 import decorator.BorderColorDecorator;
 import shapes.MyRectangle;

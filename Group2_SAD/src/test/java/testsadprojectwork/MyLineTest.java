@@ -1,4 +1,4 @@
-package sadprojectwork;
+package testsadprojectwork;
 
 import shapes.MyLine;
 import shapes.MyShape;

@@ -1,4 +1,4 @@
-package sadprojectwork;
+package testsadprojectwork;
 
 import shapes.MyRectangle;
 import javafx.scene.paint.Color;

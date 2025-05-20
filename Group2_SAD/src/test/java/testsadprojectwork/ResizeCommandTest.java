@@ -1,4 +1,4 @@
-package sadprojectwork;
+package testsadprojectwork;
 
 import command.ResizeCommand;
 import shapes.MyRectangle;
