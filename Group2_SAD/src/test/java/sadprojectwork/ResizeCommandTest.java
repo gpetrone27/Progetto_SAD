@@ -1,5 +1,7 @@
 package sadprojectwork;
 
+import shapes.MyRectangle;
+import command.ResizeCommand;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

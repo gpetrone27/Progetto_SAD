@@ -1,6 +1,15 @@
 
 package sadprojectwork;
 
+import decorator.BorderColorDecorator;
+import decorator.FillColorDecorator;
+import shapes.MyRectangle;
+import shapes.MyEllipse;
+import shapes.MyLine;
+import shapes.MyShape;
+import command.MoveCommand;
+import command.ChangeColorCommand;
+import command.Command;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;

@@ -1,5 +1,7 @@
 package sadprojectwork;
 
+import shapes.MyLine;
+import shapes.MyShape;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Shape;

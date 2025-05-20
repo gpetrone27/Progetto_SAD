@@ -1,8 +1,9 @@
 
-package sadprojectwork;
+package command;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Shape;
+import shapes.MyShape;
 
 public class ChangeColorCommand implements Command {
 

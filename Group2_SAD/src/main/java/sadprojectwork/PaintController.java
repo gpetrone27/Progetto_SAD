@@ -1,6 +1,22 @@
 
 package sadprojectwork;
 
+import decorator.FillColorDecorator;
+import decorator.BorderColorDecorator;
+import shapes.Shapes;
+import shapes.MyLine;
+import shapes.MyRectangle;
+import shapes.MyEllipse;
+import shapes.MyShape;
+import command.ResizeCommand;
+import command.PasteCommand;
+import command.MoveCommand;
+import command.DeleteCommand;
+import command.CutCommand;
+import command.CopyCommand;
+import command.ChangeColorCommand;
+import command.AddShapeCommand;
+import command.Command;
 import java.io.File;
 import java.net.URL;
 import java.util.List;

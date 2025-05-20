@@ -1,5 +1,9 @@
 package sadprojectwork;
 
+import decorator.FillColorDecorator;
+import shapes.MyRectangle;
+import shapes.MyEllipse;
+import shapes.MyShape;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Shape;
 import org.junit.jupiter.api.BeforeEach;

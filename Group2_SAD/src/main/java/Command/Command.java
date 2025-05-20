@@ -1,5 +1,5 @@
 
-package sadprojectwork;
+package command;
 
 public interface Command {
     

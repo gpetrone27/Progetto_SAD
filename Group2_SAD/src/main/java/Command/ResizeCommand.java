@@ -1,5 +1,7 @@
 
-package sadprojectwork;
+package command;
+
+import shapes.MyShape;
 
 /**
  * A command that resizes a shape to new dimensions,

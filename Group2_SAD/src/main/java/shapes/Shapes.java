@@ -1,5 +1,5 @@
 
-package sadprojectwork;
+package shapes;
 
 public enum Shapes {
     

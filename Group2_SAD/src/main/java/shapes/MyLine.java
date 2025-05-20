@@ -1,6 +1,7 @@
 
-package sadprojectwork;
+package shapes;
 
+import shapes.MyShape;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Shape;
 

@@ -1,5 +1,7 @@
 
-package sadprojectwork;
+package command;
+
+import shapes.MyShape;
 
 /**
 * Implements the Command interface to move a shape.

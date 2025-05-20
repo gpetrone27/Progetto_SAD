@@ -1,5 +1,10 @@
 package sadprojectwork;
 
+import decorator.BorderColorDecorator;
+import shapes.MyRectangle;
+import shapes.MyEllipse;
+import shapes.MyLine;
+import shapes.MyShape;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Ellipse;
 import javafx.scene.shape.Line;

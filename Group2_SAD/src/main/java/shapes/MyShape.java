@@ -1,5 +1,5 @@
 
-package sadprojectwork;
+package shapes;
 
 import javafx.scene.shape.Shape;
 

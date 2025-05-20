@@ -1,5 +1,8 @@
 
-package sadprojectwork;
+package command;
+
+import sadprojectwork.Model;
+import shapes.MyShape;
 
 /**
 * Implements the Command interface to cut a shape.

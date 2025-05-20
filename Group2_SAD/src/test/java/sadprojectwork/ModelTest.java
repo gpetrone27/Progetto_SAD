@@ -1,5 +1,11 @@
 package sadprojectwork;
 
+import decorator.BorderColorDecorator;
+import decorator.FillColorDecorator;
+import shapes.MyRectangle;
+import shapes.MyLine;
+import shapes.MyShape;
+import command.AddShapeCommand;
 import java.io.File;
 import java.io.PrintWriter;
 import java.util.List;

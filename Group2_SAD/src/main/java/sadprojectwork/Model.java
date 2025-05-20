@@ -1,6 +1,14 @@
 
 package sadprojectwork;
 
+import decorator.FillColorDecorator;
+import decorator.BorderColorDecorator;
+import shapes.Shapes;
+import shapes.MyLine;
+import shapes.MyRectangle;
+import shapes.MyEllipse;
+import shapes.MyShape;
+import command.Command;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -15,9 +23,9 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.paint.Color;
-import static sadprojectwork.Shapes.ELLIPSE;
-import static sadprojectwork.Shapes.LINE;
-import static sadprojectwork.Shapes.RECTANGLE;
+import static shapes.Shapes.ELLIPSE;
+import static shapes.Shapes.LINE;
+import static shapes.Shapes.RECTANGLE;
 
 public class Model {
 
