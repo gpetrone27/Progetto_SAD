@@ -1,7 +1,8 @@
 
 package command;
 
-import sadprojectwork.Model;
+import sadprojectwork.PaintModel;
+import sadprojectwork.PaintModel;
 import shapes.MyShape;
 
 /**
@@ -12,7 +13,7 @@ import shapes.MyShape;
  */
 public class PasteCommand implements Command {
     
-    private Model model;
+    private PaintModel model;
     private MyShape shapeToPaste;
     
     /**
@@ -21,7 +22,7 @@ public class PasteCommand implements Command {
     * @param xPos: X coordinate where paste the shape
     * @param yPos: Y coordinate where paste the shape
     */
-    public PasteCommand(Model model, double xPos, double yPos) {
+    public PasteCommand(PaintModel model, double xPos, double yPos) {
         
         this.model = model;
 

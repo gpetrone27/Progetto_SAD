@@ -1,6 +1,7 @@
 
 package sadprojectwork;
 
+import command.Command;
 import decorator.FillColorDecorator;
 import decorator.BorderColorDecorator;
 import shapes.Shapes;
@@ -8,7 +9,6 @@ import shapes.MyLine;
 import shapes.MyRectangle;
 import shapes.MyEllipse;
 import shapes.MyShape;
-import command.Command;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -27,14 +27,14 @@ import static shapes.Shapes.ELLIPSE;
 import static shapes.Shapes.LINE;
 import static shapes.Shapes.RECTANGLE;
 
-public class Model {
+public class PaintModel {
 
     private Deque<Command> commandHistory;
     private Deque<Command> deletedCommands;
     private ObservableList<MyShape> shapes = FXCollections.observableArrayList();
     private ObjectProperty<MyShape> clipboard = new SimpleObjectProperty<>();
 
-    public Model() {
+    public PaintModel() {
         commandHistory = new ArrayDeque<>();
         deletedCommands = new ArrayDeque<>();
     }

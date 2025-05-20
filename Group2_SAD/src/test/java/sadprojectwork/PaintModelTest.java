@@ -1,11 +1,11 @@
 package sadprojectwork;
 
+import command.AddShapeCommand;
 import decorator.BorderColorDecorator;
 import decorator.FillColorDecorator;
 import shapes.MyRectangle;
 import shapes.MyLine;
 import shapes.MyShape;
-import command.AddShapeCommand;
 import java.io.File;
 import java.io.PrintWriter;
 import java.util.List;
@@ -18,12 +18,12 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import java.io.IOException;
 
-public class ModelTest {
+public class PaintModelTest {
 
-    private Model model = new Model();
+    private PaintModel model = new PaintModel();
     private AddShapeCommand addCmd = new AddShapeCommand(model, new MyLine(10, 20, 30, 40));
 
-    public ModelTest() {
+    public PaintModelTest() {
     }
 
     @BeforeAll
@@ -36,7 +36,7 @@ public class ModelTest {
 
     @BeforeEach
     public void setUp() {
-        model = new Model();
+        model = new PaintModel();
     }
 
     @AfterEach
@@ -44,7 +44,7 @@ public class ModelTest {
     }
 
     /**
-     * Test of execute method, of class Model.
+     * Test of execute method, of class PaintModel.
      */
     @Test
     public void testExecute() {

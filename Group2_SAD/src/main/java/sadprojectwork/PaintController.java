@@ -1,6 +1,15 @@
 
 package sadprojectwork;
 
+import command.CutCommand;
+import command.DeleteCommand;
+import command.PasteCommand;
+import command.AddShapeCommand;
+import command.MoveCommand;
+import command.ChangeColorCommand;
+import command.CopyCommand;
+import command.Command;
+import command.ResizeCommand;
 import decorator.FillColorDecorator;
 import decorator.BorderColorDecorator;
 import shapes.Shapes;
@@ -8,15 +17,6 @@ import shapes.MyLine;
 import shapes.MyRectangle;
 import shapes.MyEllipse;
 import shapes.MyShape;
-import command.ResizeCommand;
-import command.PasteCommand;
-import command.MoveCommand;
-import command.DeleteCommand;
-import command.CutCommand;
-import command.CopyCommand;
-import command.ChangeColorCommand;
-import command.AddShapeCommand;
-import command.Command;
 import java.io.File;
 import java.net.URL;
 import java.util.List;
@@ -57,8 +57,8 @@ import org.kordamp.ikonli.javafx.FontIcon;
 
 public class PaintController implements Initializable {
 
-    // Model reference
-    private Model model = new Model();
+    // PaintModel reference
+    private PaintModel model = new PaintModel();
 
     // Colors variables
     private Color borderHex = Color.BLACK;
@@ -697,7 +697,7 @@ public class PaintController implements Initializable {
         this.canvas = canvas;
     }
 
-    public Model getModel() {
+    public PaintModel getModel() {
         return model;
     }
 

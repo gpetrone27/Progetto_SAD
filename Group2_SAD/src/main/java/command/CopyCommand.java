@@ -1,7 +1,8 @@
 
 package command;
 
-import sadprojectwork.Model;
+import sadprojectwork.PaintModel;
+import sadprojectwork.PaintModel;
 import shapes.MyShape;
 
 /**
@@ -12,7 +13,7 @@ import shapes.MyShape;
 */
 public class CopyCommand implements Command {
     
-    private Model model;
+    private PaintModel model;
     private MyShape shapeToCopy;
     
     /**
@@ -20,7 +21,7 @@ public class CopyCommand implements Command {
     * @param shapeToCopy: shape to copy
     * @param model: data model that contains the clipboard
     */
-    public CopyCommand(Model model, MyShape shapeToCopy) {
+    public CopyCommand(PaintModel model, MyShape shapeToCopy) {
         this.model = model;
         this.shapeToCopy = shapeToCopy;
     }

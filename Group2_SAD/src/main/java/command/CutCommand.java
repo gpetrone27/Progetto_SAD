@@ -1,7 +1,8 @@
 
 package command;
 
-import sadprojectwork.Model;
+import sadprojectwork.PaintModel;
+import sadprojectwork.PaintModel;
 import shapes.MyShape;
 
 /**
@@ -12,7 +13,7 @@ import shapes.MyShape;
 */
 public class CutCommand implements Command {
     
-    private Model model;
+    private PaintModel model;
     private MyShape shapeToCut;
     
     /**
@@ -20,7 +21,7 @@ public class CutCommand implements Command {
     * @param model: data model that contains the clipboard
     * @param shapeToCut: shape to cut
     */
-    public CutCommand(Model model, MyShape shapeToCut){
+    public CutCommand(PaintModel model, MyShape shapeToCut){
         this.model = model;
         this.shapeToCut = shapeToCut;
     } 

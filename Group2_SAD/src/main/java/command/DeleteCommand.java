@@ -1,7 +1,8 @@
 
 package command;
 
-import sadprojectwork.Model;
+import sadprojectwork.PaintModel;
+import sadprojectwork.PaintModel;
 import shapes.MyShape;
 
 /**
@@ -11,7 +12,7 @@ import shapes.MyShape;
  */
 public class DeleteCommand implements Command {
     
-    private Model model;
+    private PaintModel model;
     private MyShape shapeToDelete;
 
     /**
@@ -19,7 +20,7 @@ public class DeleteCommand implements Command {
     * @param model: data model
     * @param shapeToDelete: shape to delete
     */
-    public DeleteCommand(Model model, MyShape shapeToDelete) {
+    public DeleteCommand(PaintModel model, MyShape shapeToDelete) {
         this.model = model;
         this.shapeToDelete = shapeToDelete;
     }

@@ -1,12 +1,13 @@
 
 package command;
 
-import sadprojectwork.Model;
+import sadprojectwork.PaintModel;
+import sadprojectwork.PaintModel;
 import shapes.MyShape;
 
 public class AddShapeCommand implements Command {
 
-    private Model model;
+    private PaintModel model;
     private MyShape shapeToAdd;
     
     /**
@@ -14,7 +15,7 @@ public class AddShapeCommand implements Command {
     * @param model: data model
     * @param shapeToAdd: shape to add
     */
-    public AddShapeCommand(Model model, MyShape shapeToAdd) {
+    public AddShapeCommand(PaintModel model, MyShape shapeToAdd) {
         this.model = model;
         this.shapeToAdd = shapeToAdd;
     }
