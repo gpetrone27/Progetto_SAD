@@ -1,26 +1,15 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/UnitTests/JUnit5TestClass.java to edit this template
- */
+
 package sadprojectwork;
 
-import java.net.URL;
-import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.ToggleGroup;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.input.MouseButton;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,22 +17,19 @@ import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 import org.testfx.api.FxRobot;
 
-
 /**
  * Test class for the method in the controller, that uses 
  * TestFX to test user interaction with the canvas.
- * 
+ *
  * N.B. Requires that the FXML file “arsnova.fxml” be accessible from 
  * the path `/ui/arsnova.fxml`.
- *
- * @author noemi
- */
+*/
 @ExtendWith(ApplicationExtension.class)
 public class PaintControllerTest {
+    
     private PaintController controller;
     
-    public PaintControllerTest() {
-    }
+    public PaintControllerTest() { }
     
     /**
      * Initializes the JavaFX application by loading the interface from FXML.
@@ -154,7 +140,7 @@ public class PaintControllerTest {
         robot.interact(() -> {});
         robot.moveTo(controller.getCanvas().getChildren().get(0)).clickOn();
 
-        robot.clickOn(300, 300, MouseButton.PRIMARY); 
+        robot.clickOn(350, 350, MouseButton.PRIMARY); 
         assertNull(controller.getSelectedShape(), "After the click, the shape should no longer be selected!");
     }
     
@@ -164,7 +150,7 @@ public class PaintControllerTest {
      * @param TestFX robot: robot to simulate user interactions.
      */
     @Test
-    public void testNewSelectionWithShapeSelected(FxRobot robot){
+    void testNewSelectionWithShapeSelected(FxRobot robot){
         Platform.runLater(() -> {
             MyShape rectangle = new MyRectangle(385, 290, 30, 20);
             rectangle.getFxShape().setFill(Color.GREEN);
@@ -296,7 +282,6 @@ public class PaintControllerTest {
             line.getFxShape().setStroke(Color.ORANGE);
             shapeRef[0] = line;
             controller.getModel().addShape(line);
-            controller.getCanvas().getChildren().add(line.getFxShape());
             controller.enableSelection(line);
         });
 
