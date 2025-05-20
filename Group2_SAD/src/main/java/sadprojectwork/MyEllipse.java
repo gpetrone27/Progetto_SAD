@@ -26,23 +26,22 @@ public class MyEllipse extends MyShape {
         this.fxShape = ellipse;
     }
 
-    // Resizes the ellipse by adjusting its radii and center position
-    // based on the specified deltas
+    /**
+     * Resizes the ellipse by adjusting its radii and center position based on
+     * the specified deltas
+     * @param newRadiusX
+     * @param newRadiusY
+     */
     @Override
-    public void resize(double... dimensions) {
-        
-        // Checks if two parameters were given
-        if (dimensions.length != 2) {
-            throw new IllegalArgumentException("Ellipse needs radiusX and radiusY");
-        }
+    public void resize(double newRadiusX, double newRadiusY) {
         
         // Resizes the ellipse
-        double centerX = startX + dimensions[0];
-        double centerY = startY + dimensions[1];
+        double centerX = startX + newRadiusX;
+        double centerY = startY + newRadiusY;
         ellipse.setCenterX(centerX);
         ellipse.setCenterY(centerY);
-        ellipse.setRadiusX(Math.abs(dimensions[0]));
-        ellipse.setRadiusY(Math.abs(dimensions[1]));
+        ellipse.setRadiusX(Math.abs(newRadiusX));
+        ellipse.setRadiusY(Math.abs(newRadiusY));
     }
 
     /**
@@ -68,7 +67,7 @@ public class MyEllipse extends MyShape {
      * @return getRadiusX()
      */
     @Override
-    public double getWidth() {
+    public double getFirstDim() {
         return ellipse.getRadiusX();
     }
 
@@ -77,13 +76,13 @@ public class MyEllipse extends MyShape {
      * @return getRadiusY()
      */
     @Override
-    public double getHeight() {
+    public double getSecondDim() {
         return ellipse.getRadiusY();
     }
 
     @Override
     public String toCSV() {
-        return Shapes.ELLIPSE + ";" + ellipse.getCenterX() + ";" + ellipse.getCenterY() + ";" + getWidth() + ";" + getHeight() + ";" + ellipse.getFill() + ";" + ellipse.getStroke();
+        return Shapes.ELLIPSE + ";" + ellipse.getCenterX() + ";" + ellipse.getCenterY() + ";" + getFirstDim() + ";" + getSecondDim() + ";" + ellipse.getFill() + ";" + ellipse.getStroke();
     }
     
 }

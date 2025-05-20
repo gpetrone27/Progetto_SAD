@@ -11,30 +11,30 @@ public class ResizeCommand implements Command {
     private final MyShape shape;
     
     // Dimensions before the resize
-    private final double oldWidth;
-    private final double oldHeight;
+    private final double oldFirstDim;
+    private final double oldSecondDim;
     
     // Dimensions after the resize
-    private final double newWidth;
-    private final double newHeight;
+    private final double newFirstDim;
+    private final double newSecondDim;
 
-    public ResizeCommand(MyShape shape, double newWidth, double newHeight) {
+    public ResizeCommand(MyShape shape, double newFirstDim, double newSecondDim) {
         this.shape = shape;
-        this.oldWidth = shape.getWidth();
-        this.oldHeight = shape.getHeight();
-        this.newWidth = newWidth;
-        this.newHeight = newHeight;
+        this.oldFirstDim = shape.getFirstDim();
+        this.oldSecondDim = shape.getSecondDim();
+        this.newFirstDim = newFirstDim;
+        this.newSecondDim = newSecondDim;
     }
 
     // Executes the resize by applying the new dimensions to the shape
     @Override
     public void execute() {
-        shape.resize(newWidth, newHeight);
+        shape.resize(newFirstDim, newSecondDim);
     }
 
     // Undoes the resize by restoring the previous dimensions
     @Override
     public void undo() {
-        shape.resize(oldWidth, oldHeight);
+        shape.resize(oldFirstDim, oldSecondDim);
     }
 }

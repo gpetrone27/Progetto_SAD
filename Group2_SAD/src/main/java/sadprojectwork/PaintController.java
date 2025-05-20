@@ -537,12 +537,12 @@ public class PaintController implements Initializable {
     /**
      * Resizes the selected shape according to the new dimensions.
      * @param shape
-     * @param newWidth
-     * @param newHeight
+     * @param firstDim
+     * @param secondDim
      */
-    private void resizeShape(MyShape shape, double newWidth, double newHeight) {
+    private void resizeShape(MyShape shape, double firstDim, double secondDim) {
         if (shape != null) {
-            Command resizeCmd = new ResizeCommand(shape, newWidth, newHeight);
+            Command resizeCmd = new ResizeCommand(shape, firstDim, secondDim);
             model.execute(resizeCmd);
         }
     }

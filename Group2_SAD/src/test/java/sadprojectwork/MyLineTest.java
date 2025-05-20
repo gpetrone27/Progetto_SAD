@@ -33,8 +33,8 @@ class MyLineTest {
     @Test
     void testResize_correctLengthChange() {
         // Resizing the line to length 10 should keep direction and update end point
-        line.resize(10);
-        assertEquals(10, line.getWidth());
+        line.resize(10, 0);
+        assertEquals(10, line.getFirstDim());
         Line fx = (Line) line.getFxShape();
         assertEquals(6.0, fx.getEndX());
         assertEquals(8.0, fx.getEndY());
@@ -44,17 +44,10 @@ class MyLineTest {
     void testResize_fromZeroLength() {
         // If the original line has zero length, it should extend horizontally to the right
         MyLine zeroLine = new MyLine(1, 1, 1, 1);
-        zeroLine.resize(5);
+        zeroLine.resize(5, 0);
         Line fx = (Line) zeroLine.getFxShape();
         assertEquals(6.0, fx.getEndX());
         assertEquals(1.0, fx.getEndY());
-    }
-
-    @Test
-    void testResize_invalidArguments() {
-        // Resizing with wrong number of arguments should throw IllegalArgumentException
-        assertThrows(IllegalArgumentException.class, () -> line.resize());
-        assertThrows(IllegalArgumentException.class, () -> line.resize(1, 2));
     }
 
     @Test
@@ -93,13 +86,13 @@ class MyLineTest {
     @Test
     void testGetWidth() {
         // getWidth() should return the Euclidean distance between start and end points
-        assertEquals(5.0, line.getWidth()); // √(3² + 4²)
+        assertEquals(5.0, line.getFirstDim()); // √(3² + 4²)
     }
 
     @Test
     void testGetHeight() {
         // getHeight() always returns 0 for a line (by design)
-        assertEquals(0.0, line.getHeight());
+        assertEquals(0.0, line.getSecondDim());
     }
 
     @Test

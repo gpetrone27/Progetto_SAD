@@ -17,8 +17,8 @@ public abstract class MyShape {
     protected double startY;
     
     // Dimensions of the shape
-    protected double width;
-    protected double height;
+    protected double firstDim;
+    protected double secondDim;
     
     public MyShape(double startX, double startY) {
         this.startX = startX;
@@ -50,12 +50,11 @@ public abstract class MyShape {
     }
 
     /**
-     * Resizes the shape based on the new dimensions.
-     * Lines only use length.
-     * Rectangles and ellipses use width and height.
-     * @param dimensions
+     * Resizes the shape based on the new dimensions.Lines only use length.Rectangles and ellipses use width and height.
+     * @param newFirstDim
+     * @param newSecondDim
      */
-    public abstract void resize(double... dimensions);
+    public abstract void resize(double newFirstDim, double newSecondDim);
 
     // Creates and returns a copy of the shape
     public abstract MyShape cloneShape();
@@ -72,7 +71,7 @@ public abstract class MyShape {
      * Rectangles and ellipses return their width.
      * @return 
      */
-    public abstract double getWidth();
+    public abstract double getFirstDim();
     
     /**
      * Returns the second dimension of the shape.
@@ -80,7 +79,7 @@ public abstract class MyShape {
      * Rectangles and ellipses return their height.
      * @return 
      */
-    public abstract double getHeight();
+    public abstract double getSecondDim();
     
     public void moveOf(double dx, double dy) {
         setPosition(getStartX() + dx, getStartY() + dy);

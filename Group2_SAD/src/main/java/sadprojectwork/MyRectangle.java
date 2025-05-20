@@ -29,33 +29,30 @@ public class MyRectangle extends MyShape {
     /**
      * Resizes the rectangle based on the given width and height.
      * Supports resizing in all directions by adjusting X and Y when width or height is negative
+     * @param newWidth
+     * @param newHeight
      */
     @Override
-    public void resize(double... dimensions) {
-        
-        // Checks if two parameters were given
-        if (dimensions.length != 2) {
-            throw new IllegalArgumentException("Rectangle needs width and height");
-        }
+    public void resize(double newWidth, double newHeight) {
         
         // Checks if width is negative
-        if (dimensions[0] < 0) {
-            rectangle.setX(startX + dimensions[0]);
-            rectangle.setWidth(-dimensions[0]);
+        if (newWidth < 0) {
+            rectangle.setX(startX + newWidth);
+            rectangle.setWidth(-newWidth);
         }
         else {
             rectangle.setX(startX);
-            rectangle.setWidth(dimensions[0]);
+            rectangle.setWidth(newWidth);
         }
         
         // Checks if height is negative
-        if (dimensions[1] < 0) {
-            rectangle.setY(startY + dimensions[1]);
-            rectangle.setHeight(-dimensions[1]);
+        if (newHeight < 0) {
+            rectangle.setY(startY + newHeight);
+            rectangle.setHeight(-newHeight);
         }
         else {
             rectangle.setY(startY);
-            rectangle.setHeight(dimensions[1]);
+            rectangle.setHeight(newHeight);
         }
     }
 
@@ -83,7 +80,7 @@ public class MyRectangle extends MyShape {
      * @return getWidth()
      */
     @Override
-    public double getWidth() {
+    public double getFirstDim() {
         return rectangle.getWidth();
     }
 
@@ -92,13 +89,13 @@ public class MyRectangle extends MyShape {
      * @return getHeight()
      */
     @Override
-    public double getHeight() {
+    public double getSecondDim() {
         return rectangle.getHeight();
     }
 
     @Override
     public String toCSV() {
-        return Shapes.RECTANGLE + ";" + rectangle.getX() + ";" + rectangle.getY() + ";" + rectangle.getWidth() + ";" + rectangle.getHeight() + ";" + rectangle.getFill() + ";" + rectangle.getStroke();
+        return Shapes.RECTANGLE + ";" + rectangle.getX() + ";" + rectangle.getY() + ";" + getFirstDim() + ";" + getSecondDim() + ";" + rectangle.getFill() + ";" + rectangle.getStroke();
     }
 
 }

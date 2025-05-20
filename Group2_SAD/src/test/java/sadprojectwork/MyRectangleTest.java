@@ -106,13 +106,13 @@ class MyRectangleTest {
     // Tests getWidth returns current rectangle width
     @Test
     void testGetWidth() {
-        assertEquals(100, rect.getWidth());
+        assertEquals(100, rect.getFirstDim());
     }
 
     // Tests getHeight returns current rectangle height
     @Test
     void testGetHeight() {
-        assertEquals(50, rect.getHeight());
+        assertEquals(50, rect.getSecondDim());
     }
 
     // Tests toCSV returns expected string format

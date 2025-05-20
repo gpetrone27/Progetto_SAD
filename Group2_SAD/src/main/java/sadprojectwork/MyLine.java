@@ -30,15 +30,11 @@ public class MyLine extends MyShape {
 
     /**
      * Resizes the line with the given length value
-     * @param dimensions 
+     * @param newLength
+     * @param dummy
      */
     @Override
-    public void resize(double... dimensions) {
-        
-        // Checks if one parameter was given
-        if (dimensions.length != 1) {
-            throw new IllegalArgumentException("Line only needs length");
-        }
+    public void resize(double newLength, double dummy) {
         
         // Calculate current length
         double dx = line.getEndX() - startX;
@@ -47,7 +43,7 @@ public class MyLine extends MyShape {
 
         if (currentLength == 0) {
             // No direction; default to horizontal right
-            line.setEndX(startX + dimensions[0]);
+            line.setEndX(startX + newLength);
             line.setEndY(startY);
             return;
         }
@@ -57,8 +53,8 @@ public class MyLine extends MyShape {
         double uy = dy / currentLength;
 
         // Update end points of the line
-        line.setEndX(startX + ux * dimensions[0]);
-        line.setEndY(startY + uy * dimensions[0]);
+        line.setEndX(startX + ux * newLength);
+        line.setEndY(startY + uy * newLength);
     }
     
     /**
@@ -99,7 +95,7 @@ public class MyLine extends MyShape {
      * @return length
      */
     @Override
-    public double getWidth() {
+    public double getFirstDim() {
         double dx = line.getEndX() - startX;
         double dy = line.getEndY() - startY;
         return Math.sqrt(dx * dx + dy * dy);
@@ -110,7 +106,7 @@ public class MyLine extends MyShape {
      * @return 0
      */
     @Override
-    public double getHeight() {
+    public double getSecondDim() {
         return 0;
     }
 
