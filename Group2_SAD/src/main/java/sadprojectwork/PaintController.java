@@ -62,7 +62,7 @@ public class PaintController implements Initializable {
 
     // Colors variables
     private Color borderHex = Color.BLACK;
-    private Color fillHex = Color.BLACK;
+    private Color fillHex = Color.WHITE;
 
     private ObjectProperty<Shapes> modeProperty = new SimpleObjectProperty<>(Shapes.CURSOR);
     private ObjectProperty<MyShape> currentShape = new SimpleObjectProperty<>(null);
@@ -388,8 +388,10 @@ public class PaintController implements Initializable {
      */
     public void enableSelection(MyShape shape) {
         shape.getFxShape().setOnMouseClicked(event -> {
-            selectedShape.set(shape);
-            highlightSelected(shape);
+            if (modeProperty.get() == Shapes.CURSOR) {
+                selectedShape.set(shape);
+                highlightSelected(shape);  
+            }
             event.consume();
         });
     }

@@ -1,7 +1,6 @@
 
 package shapes;
 
-import shapes.MyShape;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Shape;
 
@@ -19,7 +18,6 @@ public class MyLine extends MyShape {
         super(startX, startY);
         line = new Line(startX, startY, endX, endY);
         line.setStrokeWidth(3);
-        line.setPickOnBounds(true);
         this.fxShape = line;
     }
 

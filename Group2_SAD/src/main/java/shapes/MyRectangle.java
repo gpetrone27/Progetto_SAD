@@ -1,7 +1,6 @@
 
 package shapes;
 
-import shapes.MyShape;
 import javafx.scene.shape.Rectangle;
 
 /**

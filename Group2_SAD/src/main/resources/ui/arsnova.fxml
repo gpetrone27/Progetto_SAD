@@ -253,7 +253,7 @@
                                           <Label text="Fill" />
                                           <HBox alignment="CENTER_LEFT" spacing="10.0">
                                              <children>
-                                                <ToggleButton mnemonicParsing="false" onAction="#selectFillColor" selected="true" textAlignment="CENTER">
+                                                <ToggleButton mnemonicParsing="false" onAction="#selectFillColor" textAlignment="CENTER">
                                                    <styleClass>
                                                       <String fx:value="color-button" />
                                                       <String fx:value="grey-shade-0" />
@@ -348,7 +348,7 @@
                                           </HBox>
                                           <HBox alignment="CENTER_LEFT" spacing="10.0">
                                              <children>
-                                                <ToggleButton mnemonicParsing="false" onAction="#selectFillColor" textAlignment="CENTER" toggleGroup="$fillColor">
+                                                <ToggleButton mnemonicParsing="false" onAction="#selectFillColor" selected="true" textAlignment="CENTER" toggleGroup="$fillColor">
                                                    <styleClass>
                                                       <String fx:value="color-button" />
                                                       <String fx:value="grey-shade-2" />
@@ -452,7 +452,7 @@
                            <children>
                               <HBox alignment="CENTER_LEFT" spacing="10.0">
                                  <children>
-                                    <ToggleButton mnemonicParsing="false" onAction="#changeBorderColor" selected="true" textAlignment="CENTER">
+                                    <ToggleButton mnemonicParsing="false" onAction="#changeBorderColor" textAlignment="CENTER">
                                        <toggleGroup>
                                           <ToggleGroup fx:id="borderColorPanel" />
                                        </toggleGroup>
@@ -604,7 +604,7 @@
                            <children>
                               <HBox alignment="CENTER_LEFT" spacing="10.0">
                                  <children>
-                                    <ToggleButton mnemonicParsing="false" onAction="#changeFillColor" selected="true" textAlignment="CENTER">
+                                    <ToggleButton mnemonicParsing="false" onAction="#changeFillColor" textAlignment="CENTER">
                                        <styleClass>
                                           <String fx:value="color-button" />
                                           <String fx:value="grey-shade-0" />
