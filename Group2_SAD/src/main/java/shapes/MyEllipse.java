@@ -103,7 +103,7 @@ public class MyEllipse extends MyShape {
 
     @Override
     public String toCSV() {
-        return Shapes.ELLIPSE + ";" + startX + ";" + startY + ";" + getWidth() + ";" + getHeight() + ";" + ellipse.getFill() + ";" + ellipse.getStroke();
+        return Shapes.ELLIPSE + super.toCSV();
     }
     
 }

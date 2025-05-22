@@ -138,6 +138,6 @@ public class MyLine extends MyShape {
 
     @Override
     public String toCSV() {
-        return Shapes.LINE + ";" + startX + ";" + startY + ";" + getWidth() + ";" + getHeight() + ";" + line.getStroke() + ";" + line.getStroke();
+        return Shapes.LINE + ";" + startX + ";" + startY + ";" + getWidth() + ";" + getHeight() + ";" + fxShape.getStroke() + ";" + fxShape.getStroke() + ";null";
     }
 }

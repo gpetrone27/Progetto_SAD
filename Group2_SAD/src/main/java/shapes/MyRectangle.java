@@ -99,7 +99,7 @@ public class MyRectangle extends MyShape {
 
     @Override
     public String toCSV() {
-        return Shapes.RECTANGLE + ";" + startX + ";" + startY + ";" + getWidth() + ";" + getHeight() + ";" + rectangle.getFill() + ";" + rectangle.getStroke();
+        return Shapes.RECTANGLE + super.toCSV();
     }
 
 }

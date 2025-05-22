@@ -83,6 +83,8 @@ public abstract class MyShape {
      * Returns a String in CSV format containing all the shapes fields
      * @return 
      */
-    public abstract String toCSV();
+    public String toCSV() {
+        return ";" + startX + ";" + startY + ";" + getWidth() + ";" + getHeight() + ";" + fxShape.getFill() + ";" + fxShape.getStroke() + ";null";
+    }
 
 }

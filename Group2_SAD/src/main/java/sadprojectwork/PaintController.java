@@ -54,15 +54,10 @@ public class PaintController implements Initializable {
     private Double startX = null;
     private Double startY = null;
 
-    private double dragStartX;
-    private double dragStartY;
-    private double originalX;
-    private double originalY;
+    private double dragStartX, dragStartY;
+    private double originalX, originalY;
 
-    private double lastMouseX;
-    private double lastMouseY;
-    
-    private boolean firstPoint = true;
+    private double lastMouseX, lastMouseY; // Last registered mouse coordinates
 
     @FXML
     private AnchorPane rootPane;
@@ -341,19 +336,17 @@ public class PaintController implements Initializable {
                         currentShape.set(myEllipse);
                     }
                     case POLYGON -> {
-                        if (firstPoint) {
-                            BorderColorDecorator myPolygon = new BorderColorDecorator(new FillColorDecorator(new MyPolygon(startX, startY), fillHex), borderHex);
+                        if (currentShape.get() == null) {
+                            BorderColorDecorator myPolygon = new BorderColorDecorator(new FillColorDecorator(new MyPolygon(startX, startY, null), fillHex), borderHex);
                             addShape(myPolygon);
                             enableSelection(myPolygon);
                             currentShape.set(myPolygon);
-                            firstPoint = false;
                         }
                         else {
                             MyPolygon myPolygon = (MyPolygon) ((FillColorDecorator) ((BorderColorDecorator) currentShape.get()).getDecoratedShape()).getDecoratedShape();
                             boolean isPolygonClosed = myPolygon.addLineTo(startX, startY);
                             if (isPolygonClosed) {
                                 currentShape.set(null);
-                                firstPoint = true;
                             }
                         }
                     }

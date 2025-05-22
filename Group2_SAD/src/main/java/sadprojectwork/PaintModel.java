@@ -2,13 +2,8 @@
 package sadprojectwork;
 
 import command.Command;
-import decorator.FillColorDecorator;
-import decorator.BorderColorDecorator;
-import shapes.Shapes;
-import shapes.MyLine;
-import shapes.MyRectangle;
-import shapes.MyEllipse;
-import shapes.MyShape;
+import decorator.*;
+import shapes.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -22,10 +17,8 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
-import static shapes.Shapes.ELLIPSE;
-import static shapes.Shapes.LINE;
-import static shapes.Shapes.RECTANGLE;
 
 public class PaintModel {
 
@@ -122,7 +115,7 @@ public class PaintModel {
     public void saveDrawing(File file) {
         
         try (PrintWriter writer = new PrintWriter(file)) {
-            writer.println("SHAPE;STARTX;STARTY;WIDTH;HEIGHT;FILL;BORDER");
+            writer.println("SHAPE;STARTX;STARTY;WIDTH;HEIGHT;FILL;BORDER;POINTS");
             for (MyShape shape : shapes) {
                 writer.println(shape.toCSV());
             }
@@ -152,6 +145,7 @@ public class PaintModel {
                 double loadedHeight = Double.parseDouble(parts[4]);
                 Color loadedFill = Color.valueOf(parts[5]);
                 Color loadedBorder = Color.valueOf(parts[6]);
+                String listOfPoints = parts[7]; // n:x1,y1/x2,y2/.../xn,yn
                 switch (loadedMode) {
                     case LINE -> {
                         BorderColorDecorator myLine = new BorderColorDecorator(new MyLine(loadedStartX, loadedStartY, loadedWidth, loadedHeight), loadedBorder);
@@ -164,6 +158,27 @@ public class PaintModel {
                     case ELLIPSE -> {
                         BorderColorDecorator myEllipse = new BorderColorDecorator(new FillColorDecorator(new MyEllipse(loadedStartX, loadedStartY, loadedWidth, loadedHeight), loadedFill), loadedBorder);
                         loadedShapes.add(myEllipse);
+                    }
+                    case POLYGON -> {
+                        List<Point2D> points = new ArrayList<>();
+                        // Parse listOfPoints: format "n:x1,y1/x2,y2/.../xn,yn"
+                        if (listOfPoints != null && !listOfPoints.isEmpty()) {
+                            String[] splitParts = listOfPoints.split(":");
+                            if (splitParts.length == 2) {
+                                String pointsString = splitParts[1];
+                                String[] pointPairs = pointsString.split("/");
+                                for (String pair : pointPairs) {
+                                    String[] coords = pair.split(",");
+                                    if (coords.length == 2) {
+                                        double x = Double.parseDouble(coords[0]);
+                                        double y = Double.parseDouble(coords[1]);
+                                        points.add(new Point2D(x, y));
+                                    }
+                                }
+                            }
+                        }
+                        BorderColorDecorator myPolygon = new BorderColorDecorator(new FillColorDecorator(new MyPolygon(loadedStartX, loadedStartY, points), loadedFill), loadedBorder);
+                        loadedShapes.add(myPolygon);
                     }
                 }
             }
