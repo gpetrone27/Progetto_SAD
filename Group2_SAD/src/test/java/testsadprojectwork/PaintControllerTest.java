@@ -19,7 +19,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.input.MouseButton;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -1276,4 +1278,45 @@ public class PaintControllerTest {
         assertTrue(canvasChildren.indexOf(lineRef[0].getFxShape()) > canvasChildren.indexOf(rectRef[0].getFxShape()),
                 "The line should be back in front of the rectangle after undo!");
     }
+    
+    /**
+    * Tests the zoom in and zoom out in the canvas.
+    * 
+    * @param TestFX robot: robot to simulate user interactions. 
+    */
+    @Test
+    void testZoom(FxRobot robot) {
+        Pane canvas = robot.lookup("#canvas").queryAs(Pane.class);
+
+        MyShape rectangle = new BorderColorDecorator(
+                new FillColorDecorator(
+                        new MyRectangle(385, 290, 30, 20), Color.PINK), Color.LIGHTPINK);
+
+        robot.interact(() -> {
+            Shape shape = rectangle.getFxShape();
+            canvas.getChildren().add(shape);
+        });
+
+        Shape fxShape = (Shape) canvas.getChildren().get(canvas.getChildren().size() - 1);
+
+        double beforein = fxShape.localToScene(fxShape.getBoundsInLocal()).getWidth();
+
+        robot.clickOn("#zoomInButton");
+        robot.clickOn("#zoomInButton");
+        robot.clickOn("#zoomInButton");
+        robot.clickOn("#zoomInButton");
+
+        double afterin = fxShape.localToScene(fxShape.getBoundsInLocal()).getWidth();
+        assertTrue(afterin > beforein, "The zoom is not increased!");
+
+        robot.clickOn("#zoomOutButton");
+        robot.clickOn("#zoomOutButton");
+        robot.clickOn("#zoomOutButton");
+        robot.clickOn("#zoomOutButton");
+
+        double afterout = fxShape.localToScene(fxShape.getBoundsInLocal()).getWidth();
+        assertEquals(beforein, afterout, "The zoom is not decremented!");
+    }
+
+
 }
