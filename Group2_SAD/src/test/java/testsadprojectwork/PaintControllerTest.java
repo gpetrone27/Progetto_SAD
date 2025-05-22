@@ -6,6 +6,7 @@ import command.MoveCommand;
 import command.Command;
 import decorator.BorderColorDecorator;
 import decorator.FillColorDecorator;
+import java.util.List;
 import shapes.MyRectangle;
 import shapes.MyEllipse;
 import shapes.MyLine;
@@ -13,6 +14,7 @@ import shapes.MyShape;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.effect.DropShadow;
@@ -1122,5 +1124,73 @@ public class PaintControllerTest {
 
        assertEquals(countAfterPaste - 1, controller.getModel().getShapes().size(), "Undo should remove the pasted shape!");
    }
+   
+   @Test
+    void testBringToFront(FxRobot robot) {
+        MyShape[] rectRef = new MyShape[1];
+        MyShape[] lineRef = new MyShape[1];
+
+        robot.interact(() -> {
+            MyShape rectangle = new BorderColorDecorator(
+                    new FillColorDecorator(
+                            new MyRectangle(385, 290, 30, 20), Color.BLUE), Color.LIGHTBLUE);
+
+            MyShape line = new MyLine(385, 296, 30, 20);
+            line.getFxShape().setStroke(Color.RED);
+           
+            rectRef[0] = rectangle;
+            lineRef[0] = line;
+
+            controller.getModel().addShape(rectangle);
+            controller.getModel().addShape(line);
+            controller.enableSelection(rectangle);
+        });
+
+        robot.moveTo(rectRef[0].getFxShape()).clickOn();
+        
+        robot.interact(() -> controller.bringToFront(new ActionEvent()));
+
+        List<Node> canvasChildren = controller.getCanvas().getChildren();
+        assertEquals(rectRef[0].getFxShape(), canvasChildren.get(canvasChildren.size() - 1),
+                "The rectangle must be in front of the line in the canvas!");
+
+        List<MyShape> modelShapes = controller.getModel().getShapes();
+        assertEquals(rectRef[0], modelShapes.get(modelShapes.size() - 1),
+                "The rectangle must be last in the model!");
+    }
+
+    @Test
+    void testBringToBack(FxRobot robot){
+        MyShape[] rectRef = new MyShape[1];
+        MyShape[] lineRef = new MyShape[1];
+
+        robot.interact(() -> {
+            MyShape rectangle = new BorderColorDecorator(
+                    new FillColorDecorator(
+                            new MyRectangle(385, 290, 30, 20), Color.PINK), Color.LIGHTPINK);
+
+            MyShape line = new MyLine(385, 296, 30, 20);
+            line.getFxShape().setStroke(Color.PURPLE);
+           
+            rectRef[0] = rectangle;
+            lineRef[0] = line;
+
+            controller.getModel().addShape(rectangle);
+            controller.getModel().addShape(line);
+            controller.enableSelection(line);
+        });
+
+        robot.moveTo(lineRef[0].getFxShape()).clickOn();
+        
+        robot.interact(() -> controller.bringToBack(new ActionEvent()));
+
+        List<Node> canvasChildren = controller.getCanvas().getChildren();
+        assertEquals(lineRef[0].getFxShape(), canvasChildren.get(0),
+                "The rectangle must be in front of the line in the canvas!");
+
+        List<MyShape> modelShapes = controller.getModel().getShapes();
+        assertEquals(lineRef[0], modelShapes.get(0),
+                "The line must be first in the model!");        
+    }
 
 }
