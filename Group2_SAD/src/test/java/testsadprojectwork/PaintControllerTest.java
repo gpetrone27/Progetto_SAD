@@ -1206,5 +1206,74 @@ public class PaintControllerTest {
         assertEquals(lineRef[0], modelShapes.get(0),
                 "The line must be first in the model!");        
     }
+    
+    /**
+    * Tests the undo operation after bringing to front a shape.
+    * 
+    * @param TestFX robot: robot to simulate user interactions.
+    */
+    @Test
+    void testUndoBringToFront(FxRobot robot) {
+        MyShape[] rectRef = new MyShape[1];
+        MyShape[] lineRef = new MyShape[1];
 
+        robot.interact(() -> {
+            MyShape rectangle = new BorderColorDecorator(
+                    new FillColorDecorator(
+                            new MyRectangle(385, 290, 30, 20), Color.BLUE), Color.LIGHTBLUE);
+            MyShape line = new MyLine(385, 296, 30, 20);
+            line.getFxShape().setStroke(Color.RED);
+
+            rectRef[0] = rectangle;
+            lineRef[0] = line;
+
+            controller.getModel().addShape(rectangle);
+            controller.getModel().addShape(line);
+            controller.enableSelection(rectangle);
+        });
+
+        robot.moveTo(rectRef[0].getFxShape()).clickOn();
+        robot.interact(() -> controller.bringToFront(new ActionEvent()));
+
+        robot.interact(() -> controller.undoOperation(new ActionEvent()));
+
+        List<Node> canvasChildren = controller.getCanvas().getChildren();
+        assertTrue(canvasChildren.indexOf(rectRef[0].getFxShape()) < canvasChildren.indexOf(lineRef[0].getFxShape()),
+                "The rectangle should be behind the line afted undo!");
+    }
+    
+    /**
+    * Tests the undo operation after bringing to back a shape.
+    * 
+    * @param TestFX robot: robot to simulate user interactions.
+    */
+    @Test
+    void testUndoBringToBack(FxRobot robot) {
+        MyShape[] rectRef = new MyShape[1];
+        MyShape[] lineRef = new MyShape[1];
+
+        robot.interact(() -> {
+            MyShape rectangle = new BorderColorDecorator(
+                    new FillColorDecorator(
+                            new MyRectangle(385, 290, 30, 20), Color.PINK), Color.LIGHTPINK);
+            MyShape line = new MyLine(385, 296, 30, 20);
+            line.getFxShape().setStroke(Color.PURPLE);
+
+            rectRef[0] = rectangle;
+            lineRef[0] = line;
+
+            controller.getModel().addShape(rectangle);
+            controller.getModel().addShape(line);
+            controller.enableSelection(line);
+        });
+
+        robot.moveTo(lineRef[0].getFxShape()).clickOn();
+        robot.interact(() -> controller.bringToBack(new ActionEvent()));
+
+        robot.interact(() -> controller.undoOperation(new ActionEvent()));
+
+        List<Node> canvasChildren = controller.getCanvas().getChildren();
+        assertTrue(canvasChildren.indexOf(lineRef[0].getFxShape()) > canvasChildren.indexOf(rectRef[0].getFxShape()),
+                "The line should be back in front of the rectangle after undo!");
+    }
 }
