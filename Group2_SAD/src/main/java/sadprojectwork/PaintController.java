@@ -1,22 +1,9 @@
 
 package sadprojectwork;
 
-import command.CutCommand;
-import command.DeleteCommand;
-import command.PasteCommand;
-import command.AddShapeCommand;
-import command.MoveCommand;
-import command.ChangeColorCommand;
-import command.CopyCommand;
-import command.Command;
-import command.ResizeCommand;
-import decorator.FillColorDecorator;
-import decorator.BorderColorDecorator;
-import shapes.Shapes;
-import shapes.MyLine;
-import shapes.MyRectangle;
-import shapes.MyEllipse;
-import shapes.MyShape;
+import command.*;
+import decorator.*;
+import shapes.*;
 import java.io.File;
 import java.net.URL;
 import java.util.List;
@@ -35,6 +22,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.Toggle;
@@ -54,6 +42,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.kordamp.ikonli.javafx.FontIcon;
+import shapes.MyPolygon;
 
 public class PaintController implements Initializable {
 
@@ -78,6 +67,8 @@ public class PaintController implements Initializable {
 
     private double lastMouseX;
     private double lastMouseY;
+    
+    private boolean firstPoint = true;
 
     @FXML
     private AnchorPane rootPane;
@@ -110,8 +101,6 @@ public class PaintController implements Initializable {
     @FXML
     private MenuItem deleteMenuItem;
     @FXML
-    private MenuItem resizeMenuItem;
-    @FXML
     private MenuItem pasteMenuItem;
     @FXML
     private VBox propertiesPanel;
@@ -119,6 +108,26 @@ public class PaintController implements Initializable {
     private TitledPane borderPanel;
     @FXML
     private TitledPane fillPanel;
+    @FXML
+    private ToggleButton gridButton;
+    @FXML
+    private Button zoomInButton;
+    @FXML
+    private Button zoomOutButton;
+    @FXML
+    private TitledPane positionPanel;
+    @FXML
+    private MenuItem frontMenuItem;
+    @FXML
+    private MenuItem backMenuItem;
+    @FXML
+    private TextField widthField;
+    @FXML
+    private Label heightField;
+    @FXML
+    private Slider rotationSlider;
+    @FXML
+    private ToggleButton polygonButton;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -132,10 +141,14 @@ public class PaintController implements Initializable {
      * Initializes the actions of the buttons of the application.
      */
     private void initButtonActions() {
+        
+        // Sets the user data of shapes buttons
         cursorButton.setUserData(Shapes.CURSOR);
         lineButton.setUserData(Shapes.LINE);
         rectangleButton.setUserData(Shapes.RECTANGLE);
         ellipseButton.setUserData(Shapes.ELLIPSE);
+        polygonButton.setUserData(Shapes.POLYGON);
+        
     }
 
     /**
@@ -158,7 +171,8 @@ public class PaintController implements Initializable {
         cutMenuItem.disableProperty().bind(Bindings.createBooleanBinding(() -> selectedShape.get() == null, selectedShape));
         copyMenuItem.disableProperty().bind(Bindings.createBooleanBinding(() -> selectedShape.get() == null, selectedShape));
         deleteMenuItem.disableProperty().bind(Bindings.createBooleanBinding(() -> selectedShape.get() == null, selectedShape));
-        resizeMenuItem.disableProperty().bind(Bindings.createBooleanBinding(() -> selectedShape.get() == null, selectedShape));
+        frontMenuItem.disableProperty().bind(Bindings.createBooleanBinding(() -> selectedShape.get() == null, selectedShape));
+        frontMenuItem.disableProperty().bind(Bindings.createBooleanBinding(() -> selectedShape.get() == null, selectedShape));
 
         // Binds the disable property of the paste operation to the state of clipboard and the cursor selection
         pasteMenuItem.disableProperty().bind(Bindings.or(Bindings.createBooleanBinding(() -> model.getClipboard() == null, model.clipboardProperty()), Bindings.createBooleanBinding(() -> modeProperty.get() != Shapes.CURSOR, modeProperty)));
@@ -242,7 +256,7 @@ public class PaintController implements Initializable {
 
         // Cursor button
         FontIcon cursorIcon = new FontIcon("fas-mouse-pointer");
-        cursorIcon.setIconSize(30);
+        cursorIcon.setIconSize(28);
         cursorIcon.setIconColor(Color.BLACK);
         cursorButton.setGraphic(cursorIcon);
         
@@ -263,6 +277,30 @@ public class PaintController implements Initializable {
         ellipseIcon.setIconSize(20);
         ellipseIcon.setIconColor(Color.BLACK);
         ellipseButton.setGraphic(ellipseIcon);
+        
+        // Polygon button
+        FontIcon polygonIcon = new FontIcon("fas-draw-polygon"); // or "bi-pencil-square"
+        polygonIcon.setIconSize(20);
+        polygonIcon.setIconColor(Color.BLACK);
+        polygonButton.setGraphic(polygonIcon);
+        
+        // Grid button
+        FontIcon gridIcon = new FontIcon("bi-grid-3x3");
+        gridIcon.setIconSize(24);
+        gridIcon.setIconColor(Color.BLACK);
+        gridButton.setGraphic(gridIcon);
+        
+        // Zoom in button
+        FontIcon zoomInIcon = new FontIcon("bi-zoom-in");
+        zoomInIcon.setIconSize(16);
+        zoomInIcon.setIconColor(Color.BLACK);
+        zoomInButton.setGraphic(zoomInIcon);
+        
+        // Zoom out button
+        FontIcon zoomOutIcon = new FontIcon("bi-zoom-out");
+        zoomOutIcon.setIconSize(16);
+        zoomOutIcon.setIconColor(Color.BLACK);
+        zoomOutButton.setGraphic(zoomOutIcon);
 
     }
 
@@ -308,6 +346,23 @@ public class PaintController implements Initializable {
                         enableSelection(myEllipse);
                         currentShape.set(myEllipse);
                     }
+                    case POLYGON -> {
+                        if (firstPoint) {
+                            BorderColorDecorator myPolygon = new BorderColorDecorator(new FillColorDecorator(new MyPolygon(startX, startY), fillHex), borderHex);
+                            addShape(myPolygon);
+                            enableSelection(myPolygon);
+                            currentShape.set(myPolygon);
+                            firstPoint = false;
+                        }
+                        else {
+                            MyPolygon myPolygon = (MyPolygon) ((FillColorDecorator) ((BorderColorDecorator) currentShape.get()).decoratedShape).decoratedShape;
+                            boolean isPolygonClosed = myPolygon.addLineTo(startX, startY);
+                            if (isPolygonClosed) {
+                                currentShape.set(null);
+                                firstPoint = true;
+                            }
+                        }
+                    }
                 }
             }
         });
@@ -339,6 +394,9 @@ public class PaintController implements Initializable {
                     case LINE -> {
                         ((MyLine) ((BorderColorDecorator) currentShape.get()).decoratedShape).resizeTo(endX, endY);
                     }
+                    case POLYGON -> {
+                        // ((MyPolygon) ((BorderColorDecorator) currentShape.get()).decoratedShape).addLineTo(endX, endY);
+                    }
                     default -> {
                         currentShape.get().resize(endX - startX, endY - startY);
                     }
@@ -359,7 +417,7 @@ public class PaintController implements Initializable {
             }
 
             // Creation of the shape is completed
-            if (currentShape.get() != null) {
+            if (currentShape.get() != null && modeProperty.get() != Shapes.POLYGON) {
                 currentShape.set(null);
             }
 
@@ -424,10 +482,9 @@ public class PaintController implements Initializable {
         ds.setColor(Color.DODGERBLUE);
         ds.setRadius(10);
         shape.getFxShape().setEffect(ds);
-
-        // Reads shape's parameters and sets them in the parameters panel
+        
+        // Border color
         Color shapeBorderColor = (Color) shape.getFxShape().getStroke();
-        Color shapeFillColor = (Color) shape.getFxShape().getFill();
         for (Toggle toggle : borderColorPanel.getToggles()) {
             ToggleButton btn = (ToggleButton) toggle;
             Color btnColor = (Color) btn.getBackground().getFills().get(0).getFill();
@@ -436,6 +493,9 @@ public class PaintController implements Initializable {
                 break;
             }
         }
+        
+        // Fill color
+        Color shapeFillColor = (Color) shape.getFxShape().getFill();
         for (Toggle toggle : fillColorPanel.getToggles()) {
             ToggleButton btn = (ToggleButton) toggle;
             Color btnColor = (Color) btn.getBackground().getFills().get(0).getFill();
@@ -444,6 +504,13 @@ public class PaintController implements Initializable {
                 break;
             }
         }
+        
+        // Width and height fields
+        widthField.setText(Double.toString(shape.getFirstDim()));
+        heightField.setText(Double.toString(shape.getSecondDim()));
+        
+        // Rotation
+        rotationSlider.setValue(shape.getFxShape().getRotate()); // shape.getRotation() when implemented
     }
 
     /**
@@ -609,7 +676,6 @@ public class PaintController implements Initializable {
      * menu.
      * @param event
      */
-    @FXML
     private void showResizeWindow(ActionEvent event) {
 
         // Creation of the window
@@ -723,6 +789,34 @@ public class PaintController implements Initializable {
 
     public Pane getCanvas() {
         return canvas;
+    }
+
+    @FXML
+    private void toggleGrid(ActionEvent event) {
+    }
+
+    @FXML
+    private void zoomIn(ActionEvent event) {
+    }
+
+    @FXML
+    private void zoomOut(ActionEvent event) {
+    }
+
+    @FXML
+    private void bringToFront(ActionEvent event) {
+    }
+
+    @FXML
+    private void bringToBack(ActionEvent event) {
+    }
+
+    @FXML
+    private void resizeWidth(ActionEvent event) {
+    }
+
+    @FXML
+    private void resizeHeight(ActionEvent event) {
     }
     
 }

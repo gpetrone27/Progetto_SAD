@@ -1,9 +1,11 @@
+sadprojectwork\ShapeDecorator.class
 shapes\MyShape.class
 command\CopyCommand.class
 command\MoveCommand.class
 sadprojectwork\PaintModel$1.class
 shapes\MyEllipse.class
 command\Command.class
+sadprojectwork\PaintApp.class
 shapes\MyRectangle.class
 command\ResizeCommand.class
 decorator\BorderColorDecorator.class
@@ -16,3 +18,6 @@ command\PasteCommand.class
 decorator\FillColorDecorator.class
 shapes\MyLine.class
 shapes\Shapes.class
+sadprojectwork\PaintController.class
+shapes\MyPolygon.class
+sadprojectwork\PaintController$1.class

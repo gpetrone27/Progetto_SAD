@@ -2,6 +2,7 @@
 
 <?import java.lang.String?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ContextMenu?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
@@ -9,9 +10,12 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.input.KeyCodeCombination?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
@@ -67,6 +71,9 @@
                            <toggleGroup>
                               <ToggleGroup fx:id="shapes" />
                            </toggleGroup>
+                           <tooltip>
+                              <Tooltip text="Cursor" />
+                           </tooltip>
                         </ToggleButton>
                         <VBox alignment="BOTTOM_CENTER" spacing="10.0">
                            <children>
@@ -84,9 +91,23 @@
                                           <RowConstraints vgrow="SOMETIMES" />
                                       </rowConstraints>
                                        <children>
-                                          <ToggleButton fx:id="ellipseButton" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" textAlignment="CENTER" toggleGroup="$shapes" GridPane.columnIndex="2" />
-                                          <ToggleButton fx:id="rectangleButton" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" textAlignment="CENTER" toggleGroup="$shapes" GridPane.columnIndex="1" />
-                                          <ToggleButton fx:id="lineButton" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" textAlignment="CENTER" toggleGroup="$shapes" />
+                                          <ToggleButton fx:id="lineButton" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" textAlignment="CENTER" toggleGroup="$shapes">
+                                             <tooltip>
+                                                <Tooltip text="Line" />
+                                             </tooltip></ToggleButton>
+                                          <ToggleButton fx:id="rectangleButton" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" textAlignment="CENTER" toggleGroup="$shapes" GridPane.columnIndex="1">
+                                             <tooltip>
+                                                <Tooltip text="Rectangle" />
+                                             </tooltip></ToggleButton>
+                                          <ToggleButton fx:id="ellipseButton" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" textAlignment="CENTER" toggleGroup="$shapes" GridPane.rowIndex="1">
+                                             <tooltip>
+                                                <Tooltip text="Ellipse" />
+                                             </tooltip></ToggleButton>
+                                          <ToggleButton fx:id="polygonButton" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" toggleGroup="$shapes" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                             <tooltip>
+                                                <Tooltip text="Polygon" />
+                                             </tooltip>
+                                          </ToggleButton>
                                        </children>
                                        <padding>
                                           <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -100,6 +121,7 @@
                                  </font></Label>
                            </children>
                         </VBox>
+                        <Separator layoutX="677.0" layoutY="20.0" orientation="VERTICAL" />
                         <VBox alignment="BOTTOM_CENTER" spacing="10.0">
                            <children>
                               <HBox alignment="CENTER" spacing="10.0">
@@ -405,6 +427,31 @@
                               <Insets />
                            </HBox.margin>
                         </VBox>
+                        <Separator orientation="VERTICAL" />
+                        <VBox alignment="BOTTOM_CENTER" layoutX="319.0" layoutY="20.0" spacing="10.0">
+                           <children>
+                              <ToggleButton fx:id="gridButton" mnemonicParsing="false" onAction="#toggleGrid" prefHeight="50.0" prefWidth="50.0" />
+                              <HBox spacing="10.0">
+                                 <children>
+                                    <Button fx:id="zoomInButton" mnemonicParsing="false" onAction="#zoomIn" prefHeight="30.0" prefWidth="30.0">
+                                       <tooltip>
+                                          <Tooltip text="Zoom In" />
+                                       </tooltip>
+                                    </Button>
+                                    <Button fx:id="zoomOutButton" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#zoomOut" prefHeight="30.0" prefWidth="30.0">
+                                       <tooltip>
+                                          <Tooltip text="Zoom Out" />
+                                       </tooltip>
+                                    </Button>
+                                 </children>
+                              </HBox>
+                              <Label text="Navigation">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </VBox>
                      </children>
                      <padding>
                         <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
@@ -414,7 +461,7 @@
             </VBox>
          </top>
          <center>
-            <ScrollPane fx:id="drawingPane" focusTraversable="false" pannable="true" BorderPane.alignment="CENTER">
+            <ScrollPane fx:id="drawingPane" focusTraversable="false" pannable="true">
                <contextMenu>
                   <ContextMenu>
                     <items>
@@ -434,7 +481,12 @@
                            </accelerator>
                         </MenuItem>
                       <MenuItem fx:id="deleteMenuItem" disable="true" mnemonicParsing="false" onAction="#deleteShape" text="Delete" />
-                        <MenuItem fx:id="resizeMenuItem" disable="true" mnemonicParsing="false" onAction="#showResizeWindow" text="Resize" />
+                        <MenuItem fx:id="frontMenuItem" disable="true" mnemonicParsing="false" onAction="#bringToFront" text="Bring to the front" />
+                        <MenuItem fx:id="backMenuItem" disable="true" mnemonicParsing="false" onAction="#bringToBack" text="Bring to the back">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="V" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                           </accelerator>
+                        </MenuItem>
                     </items>
                   </ContextMenu>
                </contextMenu>
@@ -446,7 +498,7 @@
          <right>
             <VBox fx:id="propertiesPanel" managed="false" spacing="20.0" visible="false" BorderPane.alignment="CENTER">
                <children>
-                  <TitledPane fx:id="borderPanel" animated="false" text="Border">
+                  <TitledPane fx:id="borderPanel" animated="false" expanded="false" text="Border">
                      <content>
                         <VBox alignment="TOP_CENTER" spacing="10.0">
                            <children>
@@ -598,7 +650,7 @@
                         </VBox>
                      </content>
                   </TitledPane>
-                  <TitledPane fx:id="fillPanel" animated="false" layoutX="10.0" layoutY="10.0" text="Fill">
+                  <TitledPane fx:id="fillPanel" animated="false" expanded="false" layoutX="10.0" layoutY="10.0" text="Fill">
                      <content>
                         <VBox alignment="TOP_CENTER" spacing="10.0">
                            <children>
@@ -743,6 +795,57 @@
                                     </ToggleButton>
                                  </children>
                               </HBox>
+                           </children>
+                        </VBox>
+                     </content>
+                  </TitledPane>
+                  <TitledPane fx:id="positionPanel" animated="false" expanded="false" layoutX="20.0" layoutY="76.0" text="Position">
+                     <content>
+                        <VBox prefHeight="200.0" prefWidth="100.0" spacing="20.0">
+                           <children>
+                              <VBox alignment="TOP_CENTER" spacing="10.0">
+                                 <children>
+                                    <Label text="Dimensions" />
+                                    <GridPane>
+                                      <columnConstraints>
+                                        <ColumnConstraints hgrow="SOMETIMES" percentWidth="50.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" percentWidth="50.0" />
+                                      </columnConstraints>
+                                      <rowConstraints>
+                                        <RowConstraints vgrow="SOMETIMES" />
+                                      </rowConstraints>
+                                       <children>
+                                          <Label text="Width" />
+                                          <TextField fx:id="widthField" onAction="#resizeWidth" GridPane.columnIndex="1" />
+                                       </children>
+                                    </GridPane>
+                                    <GridPane layoutX="10.0" layoutY="38.0">
+                                       <columnConstraints>
+                                          <ColumnConstraints hgrow="SOMETIMES" percentWidth="50.0" />
+                                          <ColumnConstraints hgrow="SOMETIMES" percentWidth="50.0" />
+                                       </columnConstraints>
+                                       <rowConstraints>
+                                          <RowConstraints vgrow="SOMETIMES" />
+                                       </rowConstraints>
+                                       <children>
+                                          <Label fx:id="heightField" text="Height" />
+                                          <TextField onAction="#resizeHeight" GridPane.columnIndex="1" />
+                                       </children>
+                                    </GridPane>
+                                 </children>
+                                 <padding>
+                                    <Insets left="5.0" right="5.0" />
+                                 </padding>
+                              </VBox>
+                              <VBox alignment="TOP_CENTER" layoutX="20.0" layoutY="20.0" spacing="10.0">
+                                 <children>
+                                    <Label text="Rotation" />
+                                    <Slider fx:id="rotationSlider" blockIncrement="1.0" majorTickUnit="45.0" max="360.0" minorTickCount="5" showTickMarks="true" snapToTicks="true" />
+                                 </children>
+                                 <padding>
+                                    <Insets left="5.0" right="5.0" />
+                                 </padding>
+                              </VBox>
                            </children>
                         </VBox>
                      </content>
