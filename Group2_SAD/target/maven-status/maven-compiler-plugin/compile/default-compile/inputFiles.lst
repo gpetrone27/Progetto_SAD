@@ -4,10 +4,12 @@
 /Users/noemi/NetBeansProjects/Progetto_SAD/Group2_SAD/src/main/java/sadprojectwork/PaintController.java
 /Users/noemi/NetBeansProjects/Progetto_SAD/Group2_SAD/src/main/java/shapes/MyShape.java
 /Users/noemi/NetBeansProjects/Progetto_SAD/Group2_SAD/src/main/java/sadprojectwork/PaintModel.java
+/Users/noemi/NetBeansProjects/Progetto_SAD/Group2_SAD/src/main/java/command/BringToBackCommand.java
 /Users/noemi/NetBeansProjects/Progetto_SAD/Group2_SAD/src/main/java/command/AddShapeCommand.java
 /Users/noemi/NetBeansProjects/Progetto_SAD/Group2_SAD/src/main/java/shapes/MyLine.java
 /Users/noemi/NetBeansProjects/Progetto_SAD/Group2_SAD/src/main/java/decorator/FillColorDecorator.java
 /Users/noemi/NetBeansProjects/Progetto_SAD/Group2_SAD/src/main/java/command/MoveCommand.java
+/Users/noemi/NetBeansProjects/Progetto_SAD/Group2_SAD/src/main/java/command/BringToFrontCommand.java
 /Users/noemi/NetBeansProjects/Progetto_SAD/Group2_SAD/src/main/java/shapes/Shapes.java
 /Users/noemi/NetBeansProjects/Progetto_SAD/Group2_SAD/src/main/java/shapes/MyPolygon.java
 /Users/noemi/NetBeansProjects/Progetto_SAD/Group2_SAD/src/main/java/decorator/ShapeDecorator.java

@@ -1068,6 +1068,8 @@ public class PaintControllerTest {
 
    /**
     * Tests multiple paste operations from the clipboard.
+    * 
+    * @param TestFX robot: robot to simulate user interactions.
     */
    @Test
    void testMultiplePaste(FxRobot robot) {
@@ -1096,6 +1098,8 @@ public class PaintControllerTest {
 
    /**
     * Tests the undo operation after pasting a copied shape.
+    * 
+    * @param TestFX robot: robot to simulate user interactions.
     */
    @Test
    void testUndoAfterPaste(FxRobot robot) {
@@ -1125,6 +1129,11 @@ public class PaintControllerTest {
        assertEquals(countAfterPaste - 1, controller.getModel().getShapes().size(), "Undo should remove the pasted shape!");
    }
    
+   /**
+    * Tests the bring to the front a selected shape.
+    * 
+    * @param TestFX robot: robot to simulate user interactions. 
+    */
    @Test
     void testBringToFront(FxRobot robot) {
         MyShape[] rectRef = new MyShape[1];
@@ -1159,6 +1168,11 @@ public class PaintControllerTest {
                 "The rectangle must be last in the model!");
     }
 
+    /**
+    * Tests the bring to the back a selected shape.
+    * 
+    * @param TestFX robot: robot to simulate user interactions. 
+    */
     @Test
     void testBringToBack(FxRobot robot){
         MyShape[] rectRef = new MyShape[1];

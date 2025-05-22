@@ -10,6 +10,7 @@ shapes/MyRectangle.class
 decorator/FillColorDecorator.class
 shapes/MyEllipse.class
 command/PasteCommand.class
+command/BringToFrontCommand.class
 decorator/ShapeDecorator.class
 shapes/Shapes.class
 command/AddShapeCommand.class
@@ -19,3 +20,4 @@ shapes/MyLine.class
 sadprojectwork/PaintController$1.class
 command/CopyCommand.class
 shapes/MyShape.class
+command/BringToBackCommand.class

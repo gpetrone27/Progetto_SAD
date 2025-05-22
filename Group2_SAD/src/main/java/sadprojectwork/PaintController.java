@@ -34,6 +34,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Line;
+import javafx.scene.transform.Scale;
 import javafx.stage.FileChooser;
 import org.kordamp.ikonli.javafx.FontIcon;
 import shapes.MyPolygon;
@@ -58,6 +59,12 @@ public class PaintController implements Initializable {
     private double originalX, originalY;
 
     private double lastMouseX, lastMouseY; // Last registered mouse coordinates
+    
+    private double zoomBase = 1.0;
+    private final double zoomStep = 0.25;
+    private final double zoomMaxValue = 4.0;
+    private final double zoomMinValue = 0.5;
+    private Scale canvasScale = new Scale(1.0, 1.0, 0, 0);
 
     @FXML
     private AnchorPane rootPane;
@@ -701,26 +708,48 @@ public class PaintController implements Initializable {
 
     @FXML
     private void zoomIn(ActionEvent event) {
+        if (zoomBase + zoomStep <= zoomMaxValue) {
+            zoomBase += zoomStep;
+
+            canvas.getTransforms().remove(canvasScale);
+
+            canvasScale = new Scale(zoomBase, zoomBase, 0, 0);
+            canvas.getTransforms().add(canvasScale);
+        }
     }
 
     @FXML
     private void zoomOut(ActionEvent event) {
+        if (zoomBase - zoomStep >= zoomMinValue) {
+            zoomBase -= zoomStep;
+
+            canvas.getTransforms().remove(canvasScale);
+
+            canvasScale = new Scale(zoomBase, zoomBase, 0, 0);
+            canvas.getTransforms().add(canvasScale);
+        }
     }
 
+    /**
+     * Brings a shape to the front.
+     * 
+     * @param event 
+     */
     @FXML
     public void bringToFront(ActionEvent event) {
-        model.getShapes().remove(selectedShape.get());
-        model.addShape(selectedShape.get());
-        canvas.getChildren().remove(selectedShape.get().getFxShape());
-        canvas.getChildren().add(selectedShape.get().getFxShape());
+        Command brngFrntCmd = new BringToFrontCommand(model, selectedShape.get(), canvas);
+        model.execute(brngFrntCmd);
     }
 
+    /**
+     * Brings a shape to the back.
+     * 
+     * @param event 
+     */
     @FXML
     public void bringToBack(ActionEvent event) {
-       model.getShapes().remove(selectedShape.get());  
-       canvas.getChildren().remove(selectedShape.get().getFxShape());
-       canvas.getChildren().add(0, selectedShape.get().getFxShape());
-       model.getShapes().add(0, selectedShape.get());
+       Command brngBckCmd = new BringToBackCommand(model, canvas, selectedShape.get()); 
+       model.execute(brngBckCmd);
     }
 
     @FXML
