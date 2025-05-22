@@ -709,10 +709,17 @@ public class PaintController implements Initializable {
 
     @FXML
     private void bringToFront(ActionEvent event) {
+         model.addShape(selectedShape.get());
+         canvas.getChildren().remove(selectedShape.get().getFxShape());
+         canvas.getChildren().add(selectedShape.get().getFxShape());
     }
 
     @FXML
     private void bringToBack(ActionEvent event) {
+        model.getShapes().remove(selectedShape.get());  
+        canvas.getChildren().remove(selectedShape.get().getFxShape());
+        canvas.getChildren().add(0, selectedShape.get().getFxShape());
+        model.getShapes().add(0, selectedShape.get());
     }
 
     @FXML
