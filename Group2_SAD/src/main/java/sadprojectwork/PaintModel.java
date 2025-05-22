@@ -145,7 +145,7 @@ public class PaintModel {
                 double loadedHeight = Double.parseDouble(parts[4]);
                 Color loadedFill = Color.valueOf(parts[5]);
                 Color loadedBorder = Color.valueOf(parts[6]);
-                String listOfPoints = parts[7]; // n:x1,y1/x2,y2/.../xn,yn
+                String listOfPoints = parts[7]; // "x1-y1/x2-y2/.../xn-yn"
                 switch (loadedMode) {
                     case LINE -> {
                         BorderColorDecorator myLine = new BorderColorDecorator(new MyLine(loadedStartX, loadedStartY, loadedWidth, loadedHeight), loadedBorder);
@@ -161,20 +161,14 @@ public class PaintModel {
                     }
                     case POLYGON -> {
                         List<Point2D> points = new ArrayList<>();
-                        // Parse listOfPoints: format "n:x1,y1/x2,y2/.../xn,yn"
-                        if (listOfPoints != null && !listOfPoints.isEmpty()) {
-                            String[] splitParts = listOfPoints.split(":");
-                            if (splitParts.length == 2) {
-                                String pointsString = splitParts[1];
-                                String[] pointPairs = pointsString.split("/");
-                                for (String pair : pointPairs) {
-                                    String[] coords = pair.split(",");
-                                    if (coords.length == 2) {
-                                        double x = Double.parseDouble(coords[0]);
-                                        double y = Double.parseDouble(coords[1]);
-                                        points.add(new Point2D(x, y));
-                                    }
-                                }
+                        // Parse listOfPoints: format "x1-y1/x2-y2/.../xn-yn"
+                        if (!listOfPoints.equals("null")) {
+                            String[] pointPairs = listOfPoints.split("/");
+                            for (String pair : pointPairs) {
+                                String[] coords = pair.split("-");
+                                double x = Double.parseDouble(coords[0]);
+                                double y = Double.parseDouble(coords[1]);
+                                points.add(new Point2D(x, y));
                             }
                         }
                         BorderColorDecorator myPolygon = new BorderColorDecorator(new FillColorDecorator(new MyPolygon(loadedStartX, loadedStartY, points), loadedFill), loadedBorder);

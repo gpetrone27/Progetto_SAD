@@ -24,16 +24,17 @@ public class MyPolygon extends MyShape {
         
         path = new Path();
         path.setStrokeWidth(3);
-        addMoveTo(startX, startY);
-        this.fxShape = path;
         
         if (points == null) {
-            this.points = new ArrayList<>(); 
+            this.points = new ArrayList<>();
+            addMoveTo(startX, startY);
         }
         else {
             this.points = points;
             reconstruct();
         }
+        
+        this.fxShape = path;
     }
     
     public void addMoveTo(double x, double y) {
@@ -66,9 +67,9 @@ public class MyPolygon extends MyShape {
     
     private void reconstruct() {
         Point2D firstPoint = points.remove(0);
-        addMoveTo(firstPoint.getX(), firstPoint.getY());
+        path.getElements().add(new MoveTo(firstPoint.getX(), firstPoint.getY()));
         for (Point2D point : points) {
-            addLineTo(point.getX(), point.getY());
+            path.getElements().add(new LineTo(point.getX(), point.getY()));
         }
         path.getElements().add(new ClosePath());
     }
@@ -100,9 +101,12 @@ public class MyPolygon extends MyShape {
     
     @Override
     public String toCSV() {
-        StringBuffer pointsList = new StringBuffer(String.format("%d:", points.size()));
+        StringBuffer pointsList = new StringBuffer();
         for(Point2D p : points) {
-            pointsList.append(String.format("%f,%f/", p.getX(), p.getY()));
+            pointsList.append(Double.toString(p.getX()));
+            pointsList.append("-");
+            pointsList.append(Double.toString(p.getY()));
+            pointsList.append("/");
         }
         pointsList.deleteCharAt(pointsList.length() - 1);
         return Shapes.POLYGON + ";" + startX + ";" + startY + ";" + getWidth() + ";" + getHeight() + ";" + path.getFill() + ";" + path.getStroke() + ";" + pointsList;
