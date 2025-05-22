@@ -8,6 +8,7 @@ import javafx.scene.shape.ClosePath;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
+import javafx.scene.shape.PathElement;
 
 public class MyPolygon extends MyShape {
     
@@ -66,9 +67,11 @@ public class MyPolygon extends MyShape {
     }
     
     private void reconstruct() {
-        Point2D firstPoint = points.remove(0);
+        Point2D firstPoint = points.get(0);
         path.getElements().add(new MoveTo(firstPoint.getX(), firstPoint.getY()));
-        for (Point2D point : points) {
+        
+        for (int i = 1; i < points.size(); i++) {
+            Point2D point = points.get(i);
             path.getElements().add(new LineTo(point.getX(), point.getY()));
         }
         path.getElements().add(new ClosePath());
@@ -96,7 +99,33 @@ public class MyPolygon extends MyShape {
 
     @Override
     public void moveTo(double x, double y) {
-        // TO DO
+        double dX = x - startX;
+        double dY = y - startY;
+        
+        int i = 0;
+        
+        for (PathElement elem : path.getElements()) {
+            if (elem instanceof MoveTo moveTo) {
+                moveTo.setX(moveTo.getX() + dX);
+                moveTo.setY(moveTo.getY() + dY);
+                Point2D p = points.get(i);
+                points.set(i, new Point2D(p.getX() + dX, p.getY() + dY));
+                i++;
+            } else if (elem instanceof LineTo lineTo) {
+                lineTo.setX(lineTo.getX() + dX);
+                lineTo.setY(lineTo.getY() + dY);
+                Point2D p = points.get(i);
+                points.set(i, new Point2D(p.getX() + dX, p.getY() + dY));
+                i++;
+            }            
+        }
+        startX += dX;
+        startY += dY;
+
+        smallerX += dX;
+        greaterX += dX;
+        smallerY += dY;
+        greaterY += dY;
     }
     
     @Override
