@@ -824,8 +824,8 @@
                                           <RowConstraints vgrow="SOMETIMES" />
                                        </rowConstraints>
                                        <children>
-                                          <Label fx:id="heightField" text="Height" />
-                                          <TextField onAction="#resizeHeight" GridPane.columnIndex="1" />
+                                          <Label text="Height" />
+                                          <TextField fx:id="heightField" onAction="#resizeHeight" GridPane.columnIndex="1" />
                                        </children>
                                     </GridPane>
                                  </children>

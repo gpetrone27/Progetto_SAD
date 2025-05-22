@@ -1,7 +1,7 @@
-sadprojectwork\ShapeDecorator.class
 shapes\MyShape.class
 command\CopyCommand.class
 command\MoveCommand.class
+decorator\ShapeDecorator.class
 sadprojectwork\PaintModel$1.class
 shapes\MyEllipse.class
 command\Command.class

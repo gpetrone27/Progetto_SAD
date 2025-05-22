@@ -73,10 +73,10 @@ class MyEllipseTest {
         assertEquals(orig.getRadiusY(), copy.getRadiusY());
     }
 
-    // Test setPosition sets the new center correctly
+    // Test moveTo sets the new center correctly
     @Test
-    void testSetPosition() {
-        ellipse.setPosition(100, 200);
+    void testMoveTo() {
+        ellipse.moveTo(100, 200);
         Ellipse fx = (Ellipse) ellipse.getFxShape();
         assertEquals(100, fx.getCenterX());
         assertEquals(200, fx.getCenterY());

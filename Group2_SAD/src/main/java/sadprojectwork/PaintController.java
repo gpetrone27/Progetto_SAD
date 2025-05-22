@@ -15,9 +15,6 @@ import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
@@ -32,15 +29,12 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Line;
 import javafx.stage.FileChooser;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 import org.kordamp.ikonli.javafx.FontIcon;
 import shapes.MyPolygon;
 
@@ -103,11 +97,17 @@ public class PaintController implements Initializable {
     @FXML
     private MenuItem pasteMenuItem;
     @FXML
+    private MenuItem frontMenuItem;
+    @FXML
+    private MenuItem backMenuItem;
+    @FXML
     private VBox propertiesPanel;
     @FXML
     private TitledPane borderPanel;
     @FXML
     private TitledPane fillPanel;
+    @FXML
+    private TitledPane positionPanel;
     @FXML
     private ToggleButton gridButton;
     @FXML
@@ -115,15 +115,9 @@ public class PaintController implements Initializable {
     @FXML
     private Button zoomOutButton;
     @FXML
-    private TitledPane positionPanel;
-    @FXML
-    private MenuItem frontMenuItem;
-    @FXML
-    private MenuItem backMenuItem;
-    @FXML
     private TextField widthField;
     @FXML
-    private Label heightField;
+    private TextField heightField;
     @FXML
     private Slider rotationSlider;
     @FXML
@@ -355,7 +349,7 @@ public class PaintController implements Initializable {
                             firstPoint = false;
                         }
                         else {
-                            MyPolygon myPolygon = (MyPolygon) ((FillColorDecorator) ((BorderColorDecorator) currentShape.get()).decoratedShape).decoratedShape;
+                            MyPolygon myPolygon = (MyPolygon) ((FillColorDecorator) ((BorderColorDecorator) currentShape.get()).getDecoratedShape()).getDecoratedShape();
                             boolean isPolygonClosed = myPolygon.addLineTo(startX, startY);
                             if (isPolygonClosed) {
                                 currentShape.set(null);
@@ -384,23 +378,15 @@ public class PaintController implements Initializable {
 
                     e.consume();
                 }
-            } // Preview of the shape while the user is creating it
+            }
+            
+            // Preview of the shape while the user is creating it
             else {
-
+                
                 double endX = e.getX();
                 double endY = e.getY();
-
-                switch (modeProperty.get()) {
-                    case LINE -> {
-                        ((MyLine) ((BorderColorDecorator) currentShape.get()).decoratedShape).resizeTo(endX, endY);
-                    }
-                    case POLYGON -> {
-                        // ((MyPolygon) ((BorderColorDecorator) currentShape.get()).decoratedShape).addLineTo(endX, endY);
-                    }
-                    default -> {
-                        currentShape.get().resize(endX - startX, endY - startY);
-                    }
-                }
+                
+                currentShape.get().resize(endX - startX, endY - startY);
             }
         });
 
@@ -652,12 +638,12 @@ public class PaintController implements Initializable {
     /**
      * Resizes the selected shape according to the new dimensions.
      * @param shape
-     * @param firstDim
-     * @param secondDim
+     * @param newWidth
+     * @param newHeight
      */
-    private void resizeShape(MyShape shape, double firstDim, double secondDim) {
+    private void resizeShape(MyShape shape, double newWidth, double newHeight) {
         if (shape != null) {
-            Command resizeCmd = new ResizeCommand(shape, firstDim, secondDim);
+            Command resizeCmd = new ResizeCommand(shape, newWidth, newHeight);
             model.execute(resizeCmd);
         }
     }

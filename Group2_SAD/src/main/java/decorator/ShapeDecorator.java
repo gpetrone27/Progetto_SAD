@@ -1,5 +1,5 @@
 
-package sadprojectwork;
+package decorator;
 
 import shapes.MyShape;
 import javafx.scene.shape.Shape;
@@ -18,6 +18,10 @@ public abstract class ShapeDecorator extends MyShape {
         this.decoratedShape = decoratedShape;
     }
 
+    public MyShape getDecoratedShape() {
+        return decoratedShape;
+    }
+    
     @Override
     public Shape getFxShape() {
         return decoratedShape.getFxShape();
@@ -44,13 +48,13 @@ public abstract class ShapeDecorator extends MyShape {
     }
     
     @Override
+    public void moveTo(double x, double y) {
+        decoratedShape.moveTo(x, y);
+    }
+    
+    @Override
     public void resize(double newFirstDim, double newSecondDim) {
         decoratedShape.resize(newFirstDim, newSecondDim);
-    }
-
-    @Override
-    public void setPosition(double x, double y) {
-        decoratedShape.setPosition(x, y);
     }
 
     @Override

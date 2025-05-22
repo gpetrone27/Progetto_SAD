@@ -90,10 +90,14 @@ public class MyLine extends MyShape {
         return new MyLine(startX, startY, line.getEndX(), line.getEndY());
     }
 
-    // Sets a new position for the start of the line, moving both start and
-    // end points accordingly
+    /**
+     * Sets a new position for the start of the line, moving both start and
+     * end points accordingly.
+     * @param x
+     * @param y
+     */
     @Override
-    public void setPosition(double x, double y) {
+    public void moveTo(double x, double y) {
         double dx = x - startX;
         double dy = y - startY;
         this.startX = x;

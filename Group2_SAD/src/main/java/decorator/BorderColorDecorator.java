@@ -3,7 +3,6 @@ package decorator;
 
 import shapes.MyShape;
 import javafx.scene.paint.Color;
-import sadprojectwork.ShapeDecorator;
 
 /**
  * Decorator class that adds or overrides the border (stroke) color

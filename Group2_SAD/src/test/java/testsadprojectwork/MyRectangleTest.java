@@ -93,10 +93,10 @@ class MyRectangleTest {
         assertEquals(r1.getHeight(), r2.getHeight());
     }
 
-    // Tests setPosition updates X and Y, but not width or height
+    // Tests moveTo updates X and Y, but not width or height
     @Test
-    void testSetPosition() {
-        rect.setPosition(50, 60);
+    void testMoveTo() {
+        rect.moveTo(50, 60);
         Rectangle r = (Rectangle) rect.getFxShape();
         assertEquals(50, r.getX());
         assertEquals(60, r.getY());

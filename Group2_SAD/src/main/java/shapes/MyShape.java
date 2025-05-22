@@ -59,12 +59,14 @@ public abstract class MyShape {
     // Creates and returns a copy of the shape
     public abstract MyShape cloneShape();
 
-    // Set the new position of the shape on the pane
-    public void setPosition(double x, double y) {
-        this.startX = x;
-        this.startY = y;
-    }
+    // Moves the shape to the specified coordinates
+    public abstract void moveTo(double x, double y);
 
+    // Moves the shape of the specified deltas
+    public void moveOf(double dx, double dy) {
+        moveTo(getStartX() + dx, getStartY() + dy);
+    }
+    
     /**
      * Returns the width of the shape.
      * @return 
@@ -76,14 +78,6 @@ public abstract class MyShape {
      * @return 
      */
     public abstract double getHeight();
-    
-    public void moveOf(double dx, double dy) {
-        setPosition(getStartX() + dx, getStartY() + dy);
-    }
-    
-    public void moveTo(double x, double y) {
-        setPosition(x, y);
-    }
     
     /**
      * Returns a String in CSV format containing all the shapes fields

@@ -35,7 +35,7 @@ public class MoveCommand implements Command {
     */
     @Override
     public void execute() {
-        shapeToMove.setPosition(newX, newY);
+        shapeToMove.moveTo(newX, newY);
     }
     
     /**
@@ -43,7 +43,7 @@ public class MoveCommand implements Command {
     */
     @Override
     public void undo() {
-        shapeToMove.setPosition(oldX, oldY);
+        shapeToMove.moveTo(oldX, oldY);
     }
     
 }

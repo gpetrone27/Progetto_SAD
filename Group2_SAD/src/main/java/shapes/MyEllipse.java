@@ -70,13 +70,17 @@ public class MyEllipse extends MyShape {
         return new MyEllipse(startX, startY, ellipse.getRadiusX(), ellipse.getRadiusY());
     }
 
-    // Sets a new position for the center of the ellipse
+    /**
+     * Sets a new position for the center of the ellipse.
+     * @param x
+     * @param y
+     */
     @Override
-    public void setPosition(double x, double y) {
+    public void moveTo(double x, double y) {
         this.startX = x;
         this.startY = y;
-        ellipse.setCenterX(x);
-        ellipse.setCenterY(y);
+        ellipse.setCenterX(x + ellipse.getRadiusX());
+        ellipse.setCenterY(y + ellipse.getRadiusY());
     }
 
     /**

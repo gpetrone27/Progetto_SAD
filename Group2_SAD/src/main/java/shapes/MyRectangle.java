@@ -65,10 +65,14 @@ public class MyRectangle extends MyShape {
         return new MyRectangle(startX, startY, rectangle.getWidth(), rectangle.getHeight());
     }
 
-    // Sets a new top-left position for the rectangle.
-    // Only updates X and Y, width and height remain unchanged
+    /**
+     * Sets a new top-left position for the rectangle.
+     * Only updates X and Y, width and height remain unchanged.
+     * @param x
+     * @param y
+     */
     @Override
-    public void setPosition(double x, double y) {
+    public void moveTo(double x, double y) {
         this.startX = x;
         this.startY = y;
         rectangle.setX(x);

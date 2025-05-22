@@ -75,9 +75,9 @@ class MyLineTest {
     }
 
     @Test
-    void testSetPosition() {
+    void testMoveTo() {
         // setPosition() should move the entire line by translating both endpoints
-        line.setPosition(2, 2); // from (0,0)-(3,4) to (2,2)-(5,6)
+        line.moveTo(2, 2); // from (0,0)-(3,4) to (2,2)-(5,6)
         Line fx = (Line) line.getFxShape();
         assertEquals(2.0, fx.getStartX());
         assertEquals(2.0, fx.getStartY());

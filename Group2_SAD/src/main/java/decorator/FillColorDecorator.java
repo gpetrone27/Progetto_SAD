@@ -3,7 +3,6 @@ package decorator;
 
 import shapes.MyShape;
 import javafx.scene.paint.Color;
-import sadprojectwork.ShapeDecorator;
 
 /**
  * Decorator that adds or overrides the fill color of a shape.
