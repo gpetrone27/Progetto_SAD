@@ -36,7 +36,7 @@ class MyLineTest {
     void testResize_correctLengthChange() {
         // Resizing the line to length 10 should keep direction and update end point
         line.resize(10, 0);
-        assertEquals(10, line.getFirstDim());
+        assertEquals(10, line.getWidth());
         Line fx = (Line) line.getFxShape();
         assertEquals(6.0, fx.getEndX());
         assertEquals(8.0, fx.getEndY());
@@ -88,13 +88,13 @@ class MyLineTest {
     @Test
     void testGetWidth() {
         // getWidth() should return the Euclidean distance between start and end points
-        assertEquals(5.0, line.getFirstDim()); // √(3² + 4²)
+        assertEquals(5.0, line.getWidth()); // √(3² + 4²)
     }
 
     @Test
     void testGetHeight() {
         // getHeight() always returns 0 for a line (by design)
-        assertEquals(0.0, line.getSecondDim());
+        assertEquals(0.0, line.getHeight());
     }
 
     @Test

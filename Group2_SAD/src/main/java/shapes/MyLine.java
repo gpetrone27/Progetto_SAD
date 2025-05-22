@@ -5,18 +5,24 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.Shape;
 
 /**
- * Represents a custom line shape in the drawing application. Extends the
- * abstract MyShape class and wraps a JavaFX Line.
+ * Represents a custom line shape in the drawing application.
+ * Extends the abstract MyShape class and wraps a JavaFX Line.
  */
 public class MyLine extends MyShape {
 
     // Strongly typed reference to wrapped FX shape
     private Line line;
 
-    // Initializes the line with a start and end point
-    public MyLine(double startX, double startY, double endX, double endY) {
+    /**
+     * Creates a FX Line
+     * @param startX
+     * @param startY
+     * @param width
+     * @param height 
+     */
+    public MyLine(double startX, double startY, double width, double height) {
         super(startX, startY);
-        line = new Line(startX, startY, endX, endY);
+        line = new Line(startX, startY, startX + width, startY + height);
         line.setStrokeWidth(3);
         this.fxShape = line;
     }
@@ -28,12 +34,31 @@ public class MyLine extends MyShape {
     }
 
     /**
-     * Resizes the line with the given length value
-     * @param newLength
-     * @param dummy
+     * Resizes the line with the given width and height values.
+     * @param newWidth
+     * @param newHeight
      */
     @Override
-    public void resize(double newLength, double dummy) {
+    public void resize(double newWidth, double newHeight) {
+        line.setEndX(line.getStartX() + newWidth);
+        line.setEndY(line.getStartY() + newHeight);
+    }
+    
+    /**
+     * Sets the end point of the line to the given coordinates.
+     * @param endX
+     * @param endY 
+     */
+    public void resizeTo(double endX, double endY) {
+        line.setEndX(endX);
+        line.setEndY(endY);
+    }
+    
+    /**
+     * Resizes the line with the new given length.
+     * @param newLength 
+     */
+    public void resizeLength(double newLength) {
         
         // Calculate current length
         double dx = line.getEndX() - startX;
@@ -54,16 +79,6 @@ public class MyLine extends MyShape {
         // Update end points of the line
         line.setEndX(startX + ux * newLength);
         line.setEndY(startY + uy * newLength);
-    }
-    
-    /**
-     * Sets the end point of the line to the given coordinates
-     * @param endX
-     * @param endY 
-     */
-    public void resizeTo(double endX, double endY) {
-        line.setEndX(endX);
-        line.setEndY(endY);
     }
 
     /**
@@ -90,27 +105,35 @@ public class MyLine extends MyShape {
     }
 
     /**
-     * Returns the length of the line
-     * @return length
+     * Returns the width of the line.
+     * @return width
      */
     @Override
-    public double getFirstDim() {
+    public double getWidth() {
+        return line.getEndX() - line.getStartX();
+    }
+
+    /**
+     * Returns the height of the line.
+     * @return height
+     */
+    @Override
+    public double getHeight() {
+        return line.getEndY() - line.getStartY();
+    }
+    
+    /**
+     * Calculates the length of the line and returns it.
+     * @return length
+     */
+    public double getLength() {
         double dx = line.getEndX() - startX;
         double dy = line.getEndY() - startY;
         return Math.sqrt(dx * dx + dy * dy);
     }
 
-    /**
-     * Dummy: Used to maintain compatibility with MyShape
-     * @return 0
-     */
-    @Override
-    public double getSecondDim() {
-        return 0;
-    }
-
     @Override
     public String toCSV() {
-        return Shapes.LINE + ";" + startX + ";" + startY + ";" + line.getEndX() + ";" + line.getEndY() + ";" + line.getStroke() + ";" + line.getStroke();
+        return Shapes.LINE + ";" + startX + ";" + startY + ";" + getWidth() + ";" + getHeight() + ";" + line.getStroke() + ";" + line.getStroke();
     }
 }

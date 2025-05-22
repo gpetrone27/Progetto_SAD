@@ -44,12 +44,12 @@ public class MyPolygon extends MyShape {
     }
 
     @Override
-    public double getFirstDim() {
+    public double getWidth() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public double getSecondDim() {
+    public double getHeight() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

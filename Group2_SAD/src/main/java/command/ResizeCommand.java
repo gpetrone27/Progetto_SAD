@@ -22,8 +22,8 @@ public class ResizeCommand implements Command {
 
     public ResizeCommand(MyShape shape, double newFirstDim, double newSecondDim) {
         this.shape = shape;
-        this.oldFirstDim = shape.getFirstDim();
-        this.oldSecondDim = shape.getSecondDim();
+        this.oldFirstDim = shape.getWidth();
+        this.oldSecondDim = shape.getHeight();
         this.newFirstDim = newFirstDim;
         this.newSecondDim = newSecondDim;
     }

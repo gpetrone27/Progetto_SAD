@@ -4,8 +4,8 @@ package shapes;
 import javafx.scene.shape.Rectangle;
 
 /**
- * Represents a custom rectangle shape in the drawing application. Extends
- * MyShape and wraps a JavaFX Rectangle.
+ * Represents a custom rectangle shape in the drawing application.
+ * Extends MyShape and wraps a JavaFX Rectangle.
  */
 public class MyRectangle extends MyShape {
 
@@ -14,21 +14,21 @@ public class MyRectangle extends MyShape {
     
     /**
      * Creates an FX Rectangle
-     * @param x
-     * @param y
+     * @param startX
+     * @param startY
      * @param width
      * @param height 
      */
-    public MyRectangle(double x, double y, double width, double height) {
-        super(x, y);
-        rectangle = new Rectangle(x, y, width, height);
+    public MyRectangle(double startX, double startY, double width, double height) {
+        super(startX, startY);
+        rectangle = new Rectangle(startX, startY, width, height);
         rectangle.setStrokeWidth(3); // Temporary: set border width to 3
         this.fxShape = rectangle;
     }
 
     /**
      * Resizes the rectangle based on the given width and height.
-     * Supports resizing in all directions by adjusting X and Y when width or height is negative
+     * Supports resizing in all directions by adjusting X and Y when width or height is negative.
      * @param newWidth
      * @param newHeight
      */
@@ -80,7 +80,7 @@ public class MyRectangle extends MyShape {
      * @return getWidth()
      */
     @Override
-    public double getFirstDim() {
+    public double getWidth() {
         return rectangle.getWidth();
     }
 
@@ -89,13 +89,13 @@ public class MyRectangle extends MyShape {
      * @return getHeight()
      */
     @Override
-    public double getSecondDim() {
+    public double getHeight() {
         return rectangle.getHeight();
     }
 
     @Override
     public String toCSV() {
-        return Shapes.RECTANGLE + ";" + rectangle.getX() + ";" + rectangle.getY() + ";" + getFirstDim() + ";" + getSecondDim() + ";" + rectangle.getFill() + ";" + rectangle.getStroke();
+        return Shapes.RECTANGLE + ";" + startX + ";" + startY + ";" + getWidth() + ";" + getHeight() + ";" + rectangle.getFill() + ";" + rectangle.getStroke();
     }
 
 }

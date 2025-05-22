@@ -27,8 +27,8 @@ class ResizeCommandTest {
         command.execute();
 
         // Check that the rectangle has new dimensions
-        assertEquals(30.0, rectangle.getFirstDim());
-        assertEquals(40.0, rectangle.getSecondDim());
+        assertEquals(30.0, rectangle.getWidth());
+        assertEquals(40.0, rectangle.getHeight());
     }
 
     @Test
@@ -38,8 +38,8 @@ class ResizeCommandTest {
         command.undo();
 
         // Check that the rectangle's original dimensions are restored
-        assertEquals(10.0, rectangle.getFirstDim());
-        assertEquals(20.0, rectangle.getSecondDim());
+        assertEquals(10.0, rectangle.getWidth());
+        assertEquals(20.0, rectangle.getHeight());
     }
 
 }

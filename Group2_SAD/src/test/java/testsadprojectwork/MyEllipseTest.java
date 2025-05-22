@@ -85,13 +85,13 @@ class MyEllipseTest {
     // getWidth should return radiusX
     @Test
     void testGetWidth() {
-        assertEquals(30, ellipse.getFirstDim());
+        assertEquals(30, ellipse.getWidth());
     }
 
     // getHeight should return radiusY
     @Test
     void testGetHeight() {
-        assertEquals(20, ellipse.getSecondDim());
+        assertEquals(20, ellipse.getHeight());
     }
 
     // Test the CSV format including color fields using Color.valueOf()

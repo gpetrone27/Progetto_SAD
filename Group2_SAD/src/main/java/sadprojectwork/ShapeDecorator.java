@@ -34,13 +34,13 @@ public abstract class ShapeDecorator extends MyShape {
     }
     
     @Override
-    public double getFirstDim() {
-        return decoratedShape.getFirstDim();
+    public double getWidth() {
+        return decoratedShape.getWidth();
     }
     
     @Override
-    public double getSecondDim() {
-        return decoratedShape.getSecondDim();
+    public double getHeight() {
+        return decoratedShape.getHeight();
     }
     
     @Override

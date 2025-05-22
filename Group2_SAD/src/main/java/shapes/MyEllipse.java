@@ -13,15 +13,34 @@ public class MyEllipse extends MyShape {
     private Ellipse ellipse;
 
     /**
-     * Creates an ellipse centered in (centerX, centerY) with the given radii
-     * @param centerX
-     * @param centerY
-     * @param radiusX
-     * @param radiusY 
+     * Creates a FX Ellipse
+     * @param startX
+     * @param startY
+     * @param width
+     * @param height 
      */
-    public MyEllipse(double centerX, double centerY, double radiusX, double radiusY) {
-        super(centerX, centerY);
-        ellipse = new Ellipse(centerX, centerY, radiusX, radiusY);
+    public MyEllipse(double startX, double startY, double width, double height) {
+        
+        // MyShape constructor
+        super(startX, startY);
+        
+        // Adjusted starting points to handle negative dimensions
+        double adjustedX = startX;
+        double adjustedY = startY;
+        
+        if (width < 0) {
+            adjustedX = startX + width; // Shift left
+            width = -width;
+        }
+        if (height < 0) {
+            adjustedY = startY + height; // Shift up
+            height = -height;
+        }
+            
+        double radiusX = width / 2.;
+        double radiusY = height / 2.0;
+        
+        ellipse = new Ellipse(adjustedX + radiusX, adjustedY + radiusY, radiusX, radiusY);
         ellipse.setStrokeWidth(3); // Temporary: set border width to 3
         this.fxShape = ellipse;
     }
@@ -29,19 +48,17 @@ public class MyEllipse extends MyShape {
     /**
      * Resizes the ellipse by adjusting its radii and center position based on
      * the specified deltas
-     * @param newRadiusX
-     * @param newRadiusY
+     * @param newWidth
+     * @param newHeight
      */
     @Override
-    public void resize(double newRadiusX, double newRadiusY) {
-        
-        // Resizes the ellipse
-        double centerX = startX + newRadiusX;
-        double centerY = startY + newRadiusY;
+    public void resize(double newWidth, double newHeight) {
+        double centerX = startX + newWidth / 2.0;
+        double centerY = startY + newHeight / 2.0;
         ellipse.setCenterX(centerX);
         ellipse.setCenterY(centerY);
-        ellipse.setRadiusX(Math.abs(newRadiusX));
-        ellipse.setRadiusY(Math.abs(newRadiusY));
+        ellipse.setRadiusX(Math.abs(newWidth / 2.0));
+        ellipse.setRadiusY(Math.abs(newHeight / 2.0));
     }
 
     /**
@@ -63,26 +80,26 @@ public class MyEllipse extends MyShape {
     }
 
     /**
-     * Returns the radius X value
-     * @return getRadiusX()
+     * Returns the width of the ellipse
+     * @return getRadiusX() * 2
      */
     @Override
-    public double getFirstDim() {
-        return ellipse.getRadiusX();
+    public double getWidth() {
+        return ellipse.getRadiusX() * 2;
     }
 
     /**
-     * Returns the radius Y value
+     * Returns the height of the ellipse
      * @return getRadiusY()
      */
     @Override
-    public double getSecondDim() {
-        return ellipse.getRadiusY();
+    public double getHeight() {
+        return ellipse.getRadiusY() * 2;
     }
 
     @Override
     public String toCSV() {
-        return Shapes.ELLIPSE + ";" + ellipse.getCenterX() + ";" + ellipse.getCenterY() + ";" + getFirstDim() + ";" + getSecondDim() + ";" + ellipse.getFill() + ";" + ellipse.getStroke();
+        return Shapes.ELLIPSE + ";" + startX + ";" + startY + ";" + getWidth() + ";" + getHeight() + ";" + ellipse.getFill() + ";" + ellipse.getStroke();
     }
     
 }

@@ -172,7 +172,7 @@ public class PaintController implements Initializable {
         copyMenuItem.disableProperty().bind(Bindings.createBooleanBinding(() -> selectedShape.get() == null, selectedShape));
         deleteMenuItem.disableProperty().bind(Bindings.createBooleanBinding(() -> selectedShape.get() == null, selectedShape));
         frontMenuItem.disableProperty().bind(Bindings.createBooleanBinding(() -> selectedShape.get() == null, selectedShape));
-        frontMenuItem.disableProperty().bind(Bindings.createBooleanBinding(() -> selectedShape.get() == null, selectedShape));
+        backMenuItem.disableProperty().bind(Bindings.createBooleanBinding(() -> selectedShape.get() == null, selectedShape));
 
         // Binds the disable property of the paste operation to the state of clipboard and the cursor selection
         pasteMenuItem.disableProperty().bind(Bindings.or(Bindings.createBooleanBinding(() -> model.getClipboard() == null, model.clipboardProperty()), Bindings.createBooleanBinding(() -> modeProperty.get() != Shapes.CURSOR, modeProperty)));
@@ -329,7 +329,7 @@ public class PaintController implements Initializable {
                 // Draws the shape if any of them is selected
                 switch(modeProperty.get()) {
                     case LINE -> {
-                        BorderColorDecorator myLine = new BorderColorDecorator(new MyLine(startX, startY, startX, startY), borderHex);
+                        BorderColorDecorator myLine = new BorderColorDecorator(new MyLine(startX, startY, 0, 0), borderHex);
                         addShape(myLine);
                         enableSelection(myLine);
                         currentShape.set(myLine);
@@ -506,8 +506,8 @@ public class PaintController implements Initializable {
         }
         
         // Width and height fields
-        widthField.setText(Double.toString(shape.getFirstDim()));
-        heightField.setText(Double.toString(shape.getSecondDim()));
+        widthField.setText(Double.toString(shape.getWidth()));
+        heightField.setText(Double.toString(shape.getHeight()));
         
         // Rotation
         rotationSlider.setValue(shape.getFxShape().getRotate()); // shape.getRotation() when implemented
@@ -669,81 +669,6 @@ public class PaintController implements Initializable {
     public void addShape(MyShape shape) {
         AddShapeCommand addCmd = new AddShapeCommand(model, shape);
         model.execute(addCmd);
-    }
-
-    /**
-     * Shows a popup window when the user clicks "Resize" in the right click
-     * menu.
-     * @param event
-     */
-    private void showResizeWindow(ActionEvent event) {
-
-        // Creation of the window
-        Stage popupWindow = new Stage();
-        popupWindow.setTitle("Resize");
-        popupWindow.initModality(Modality.APPLICATION_MODAL); // Blocks inputs to other windows
-
-        // Layout
-        VBox layout;
-
-        if (selectedShape.get().getFxShape().getClass() != Line.class) {
-
-            // UI Elements
-            TextField widthField = new TextField();
-            TextField heightField = new TextField();
-            Button submitButton = new Button("Submit");
-
-            widthField.setPromptText("Width");
-            heightField.setPromptText("Height");
-
-            // Functions that is run when the user clicks the Submit button
-            submitButton.setOnAction(e -> {
-
-                try {
-                    double width = Double.parseDouble(widthField.getText().trim());
-                    double height = Double.parseDouble(heightField.getText().trim());
-                    resizeShape(selectedShape.get(), width, height);
-                    popupWindow.close();
-
-                } catch (NumberFormatException ex) {
-                }
-            });
-
-            layout = new VBox(
-                    10,
-                    new Label("Enter new dimensions"),
-                    new HBox(5, widthField, new Label("x"), heightField),
-                    submitButton
-            );
-        } else {
-            // UI Elements
-            TextField lengthField = new TextField();
-            Button submitButton = new Button("Submit");
-
-            lengthField.setPromptText("Length");
-
-            // Functions that is run when the user clicks the Submit button
-            submitButton.setOnAction(e -> {
-                try {
-                    resizeShape(selectedShape.get(), Double.parseDouble(lengthField.getText().trim()), 0);
-                    popupWindow.close();
-                } catch (NumberFormatException ex) {
-                }
-            });
-
-            layout = new VBox(
-                    10,
-                    new Label("Enter new dimensions"),
-                    lengthField,
-                    submitButton
-            );
-        }
-        layout.setPadding(new Insets(15));
-        layout.setAlignment(Pos.CENTER);
-
-        // Shows the window
-        popupWindow.setScene(new Scene(layout, 240, 160));
-        popupWindow.showAndWait();
     }
 
     /**
