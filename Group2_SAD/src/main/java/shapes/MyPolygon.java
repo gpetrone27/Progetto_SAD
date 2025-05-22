@@ -84,7 +84,11 @@ public class MyPolygon extends MyShape {
 
     @Override
     public MyShape cloneShape() {
-        return new MyPolygon(smallerX, greaterY, points);
+        List<Point2D> clonedPoints = new ArrayList<>();
+        for(Point2D p : points) {
+            clonedPoints.add(new Point2D(p.getX(), p.getY()));
+        }
+        return new MyPolygon(startX, startY, clonedPoints);
     }
 
     @Override
