@@ -21,16 +21,19 @@ public class MyPolygon extends MyShape {
     public MyPolygon(double startX, double startY, List<Point2D> points) {
         
         super(startX, startY);
+        
+        path = new Path();
+        path.setStrokeWidth(3);
+        addMoveTo(startX, startY);
+        this.fxShape = path;
+        
         if (points == null) {
             this.points = new ArrayList<>(); 
         }
         else {
             this.points = points;
+            reconstruct();
         }
-        path = new Path();
-        path.setStrokeWidth(3);
-        addMoveTo(startX, startY);
-        this.fxShape = path;
     }
     
     public void addMoveTo(double x, double y) {
@@ -60,11 +63,19 @@ public class MyPolygon extends MyShape {
             return false;
         }
     }
-  
+    
+    private void reconstruct() {
+        Point2D firstPoint = points.remove(0);
+        addMoveTo(firstPoint.getX(), firstPoint.getY());
+        for (Point2D point : points) {
+            addLineTo(point.getX(), point.getY());
+        }
+        path.getElements().add(new ClosePath());
+    }
     
     @Override
-    public void resize(double newFirstDim, double newSecondDim) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void resize(double newWidth, double newHeight) {
+        // TO DO
     }
 
     @Override
@@ -83,18 +94,18 @@ public class MyPolygon extends MyShape {
     }
 
     @Override
+    public void moveTo(double x, double y) {
+        // TO DO
+    }
+    
+    @Override
     public String toCSV() {
         StringBuffer pointsList = new StringBuffer(String.format("%d:", points.size()));
         for(Point2D p : points) {
             pointsList.append(String.format("%f,%f/", p.getX(), p.getY()));
         }
         pointsList.deleteCharAt(pointsList.length() - 1);
-        return Shapes.POLYGON + ";" + smallerX + ";" + greaterY + ";" + getWidth() + ";" + getHeight() + ";" + path.getFill() + ";" + path.getStroke() + ";" + pointsList;
-    }
-
-    @Override
-    public void moveTo(double x, double y) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return Shapes.POLYGON + ";" + startX + ";" + startY + ";" + getWidth() + ";" + getHeight() + ";" + path.getFill() + ";" + path.getStroke() + ";" + pointsList;
     }
 
 }
