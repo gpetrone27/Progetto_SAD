@@ -29,7 +29,8 @@ public class BringToBackCommand implements Command {
     }
     
     /**
-    * Moves the shape to the top of model and canvas lists, so as to bring the shape to the back.
+    * Moves the shape to the top of model and canvas lists, so as to bring the
+    * shape to the back.
     */
     @Override
     public void execute() {

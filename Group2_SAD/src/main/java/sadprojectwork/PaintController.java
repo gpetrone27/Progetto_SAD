@@ -685,18 +685,45 @@ public class PaintController implements Initializable {
             model.execute(deleteCmd);
         }
     }
+    
+    /**
+     * Brings a shape to the front.
+     * @param event 
+     */
+    @FXML
+    public void bringToFront(ActionEvent event) {
+        Command brngFrntCmd = new BringToFrontCommand(model, selectedShape.get());
+        model.execute(brngFrntCmd);
+    }
 
     /**
-     * Resizes the selected shape according to the new dimensions.
-     * @param shape
-     * @param newWidth
-     * @param newHeight
+     * Brings a shape to the back.
+     * @param event 
      */
-    private void resizeShape(MyShape shape, double newWidth, double newHeight) {
-        if (shape != null) {
-            Command resizeCmd = new ResizeCommand(shape, newWidth, newHeight);
-            model.execute(resizeCmd);
-        }
+    @FXML
+    public void bringToBack(ActionEvent event) {
+       Command brngBckCmd = new BringToBackCommand(model, selectedShape.get()); 
+       model.execute(brngBckCmd);
+    }
+    
+    /**
+     * Resizes the selected shape when the width field is changed.
+     * @param event 
+     */
+    @FXML
+    private void resizeWidth(ActionEvent event) {
+        Command resizeCmd = new ResizeCommand(selectedShape.get(), Double.parseDouble(widthField.getText()), selectedShape.get().getHeight());
+        model.execute(resizeCmd);
+    }
+
+    /**
+     * Resized the selected shape when the height field is changed.
+     * @param event 
+     */
+    @FXML
+    private void resizeHeight(ActionEvent event) {
+        Command resizeCmd = new ResizeCommand(selectedShape.get(), selectedShape.get().getWidth(), Double.parseDouble(heightField.getText()));
+        model.execute(resizeCmd);
     }
 
     /**
@@ -706,6 +733,38 @@ public class PaintController implements Initializable {
     public void addShape(MyShape shape) {
         AddShapeCommand addCmd = new AddShapeCommand(model, shape);
         model.execute(addCmd);
+    }
+
+    @FXML
+    private void toggleGrid(ActionEvent event) {
+    }
+
+    /**
+     * Zooms in the canvas, scaling it up.
+     * @param event 
+     */
+    @FXML
+    private void zoomIn(ActionEvent event) {
+        if (zoomBase + zoomStep <= zoomMaxValue) {
+            zoomBase += zoomStep;
+            canvas.getTransforms().remove(canvasScale);
+            canvasScale = new Scale(zoomBase, zoomBase, 0, 0);
+            canvas.getTransforms().add(canvasScale);
+        }
+    }
+
+    /**
+     * Zooms out the canvas, scaling it down.
+     * @param event 
+     */
+    @FXML
+    private void zoomOut(ActionEvent event) {
+        if (zoomBase - zoomStep >= zoomMinValue) {
+            zoomBase -= zoomStep;
+            canvas.getTransforms().remove(canvasScale);
+            canvasScale = new Scale(zoomBase, zoomBase, 0, 0);
+            canvas.getTransforms().add(canvasScale);
+        }
     }
 
     public MyShape getSelectedShape() {
@@ -728,61 +787,4 @@ public class PaintController implements Initializable {
     public Pane getCanvas() {
         return canvas;
     }
-
-    @FXML
-    private void toggleGrid(ActionEvent event) {
-    }
-
-    @FXML
-    private void zoomIn(ActionEvent event) {
-        if (zoomBase + zoomStep <= zoomMaxValue) {
-            zoomBase += zoomStep;
-            canvas.getTransforms().remove(canvasScale);
-            canvasScale = new Scale(zoomBase, zoomBase, 0, 0);
-            canvas.getTransforms().add(canvasScale);
-        }
-    }
-
-    @FXML
-    private void zoomOut(ActionEvent event) {
-        if (zoomBase - zoomStep >= zoomMinValue) {
-            zoomBase -= zoomStep;
-            canvas.getTransforms().remove(canvasScale);
-            canvasScale = new Scale(zoomBase, zoomBase, 0, 0);
-            canvas.getTransforms().add(canvasScale);
-        }
-    }
-
-    /**
-     * Brings a shape to the front.
-     * @param event 
-     */
-    @FXML
-    public void bringToFront(ActionEvent event) {
-        Command brngFrntCmd = new BringToFrontCommand(model, selectedShape.get());
-        model.execute(brngFrntCmd);
-    }
-
-    /**
-     * Brings a shape to the back.
-     * @param event 
-     */
-    @FXML
-    public void bringToBack(ActionEvent event) {
-       Command brngBckCmd = new BringToBackCommand(model, selectedShape.get()); 
-       model.execute(brngBckCmd);
-    }
-
-    @FXML
-    private void resizeWidth(ActionEvent event) {
-        Command resizeCmd = new ResizeCommand(selectedShape.get(), Double.parseDouble(widthField.getText()), selectedShape.get().getHeight());
-        model.execute(resizeCmd);
-    }
-
-    @FXML
-    private void resizeHeight(ActionEvent event) {
-        Command resizeCmd = new ResizeCommand(selectedShape.get(), selectedShape.get().getWidth(), Double.parseDouble(heightField.getText()));
-        model.execute(resizeCmd);
-    }
-    
 }

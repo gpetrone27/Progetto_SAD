@@ -29,7 +29,8 @@ public class BringToFrontCommand implements Command {
     }
 
     /**
-    * Moves the shape to the end of model and canvas lists, so as to bring the shape in front.
+    * Moves the shape to the end of model and canvas lists, so as to bring the
+    * shape in front.
     */
     @Override
     public void execute() {
