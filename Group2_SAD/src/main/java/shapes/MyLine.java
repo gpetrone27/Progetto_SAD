@@ -89,7 +89,7 @@ public class MyLine extends MyShape {
      */
     @Override
     public MyShape cloneShape() {
-        return new MyLine(startX, startY, line.getEndX(), line.getEndY(), line.getRotate());
+        return new MyLine(startX, startY, getWidth(), getHeight(), line.getRotate());
     }
 
     /**

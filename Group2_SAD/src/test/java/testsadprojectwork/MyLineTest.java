@@ -17,7 +17,7 @@ class MyLineTest {
     @BeforeEach
     void setUp() {
         // Initialize a line from (0,0) to (3,4) – length should be 5
-        line = new MyLine(0, 0, 3, 4);
+        line = new MyLine(0, 0, 3, 4, 0);
     }
 
     @Test
@@ -45,7 +45,7 @@ class MyLineTest {
     @Test
     void testResize_fromZeroLength() {
         // If the original line has zero length, it should extend horizontally to the right
-        MyLine zeroLine = new MyLine(1, 1, 1, 1);
+        MyLine zeroLine = new MyLine(1, 1, 1, 1, 0);
         zeroLine.resize(5, 0);
         Line fx = (Line) zeroLine.getFxShape();
         assertEquals(6.0, fx.getEndX());

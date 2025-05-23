@@ -19,7 +19,7 @@ class FillColorDecoratorTest {
     // Set up a base shape (rectangle) and decorate it with a fill color
     @BeforeEach
     void setUp() {
-        baseShape = new MyRectangle(0, 0, 100, 50);
+        baseShape = new MyRectangle(0, 0, 100, 50, 0);
         decorated = new FillColorDecorator(baseShape, Color.RED);
     }
 
@@ -58,7 +58,7 @@ class FillColorDecoratorTest {
 
     @Test
     void testEllipseFillColor() {
-        MyShape ellipse = new MyEllipse(50, 50, 20, 10);
+        MyShape ellipse = new MyEllipse(50, 50, 20, 10, 0);
         FillColorDecorator decoratedEllipse = new FillColorDecorator(ellipse, Color.GREEN);
         assertEquals(Color.GREEN, decoratedEllipse.getFxShape().getFill());
         assertEquals(Color.GREEN, decoratedEllipse.getFillColor());

@@ -16,7 +16,7 @@ class MyEllipseTest {
     // Set up a default ellipse centered at (50, 60) with radiusX=30 and radiusY=20
     @BeforeEach
     void setUp() {
-        ellipse = new MyEllipse(50, 60, 30, 20);
+        ellipse = new MyEllipse(50, 60, 30, 20, 0);
     }
 
     // Verify that getFxShape returns a valid Ellipse with the correct initial values

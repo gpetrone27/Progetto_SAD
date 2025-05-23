@@ -15,7 +15,7 @@ class ResizeCommandTest {
     @BeforeEach
     void setUp() {
         // Create a rectangle at (0,0) with width 10 and height 20
-        rectangle = new MyRectangle(0, 0, 10, 20);
+        rectangle = new MyRectangle(0, 0, 10, 20, 0);
         
         // Create a ResizeCommand to change it to width 30 and height 40
         command = new ResizeCommand(rectangle, 30, 40);

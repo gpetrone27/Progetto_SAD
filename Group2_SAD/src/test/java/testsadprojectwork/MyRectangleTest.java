@@ -16,7 +16,7 @@ class MyRectangleTest {
     // Runs before each test: create a rectangle at (10, 20) with width=100 and height=50
     @BeforeEach
     void setUp() {
-        rect = new MyRectangle(10, 20, 100, 50);
+        rect = new MyRectangle(10, 20, 100, 50, 0);
     }
 
     // Tests that getFxShape returns a JavaFX Rectangle with correct properties

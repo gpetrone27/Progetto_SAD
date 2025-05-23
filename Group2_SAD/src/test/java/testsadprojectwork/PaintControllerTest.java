@@ -70,7 +70,7 @@ public class PaintControllerTest {
     @Test
     void testRectangleSelected(FxRobot robot) {
         Platform.runLater(() -> {
-            MyShape rectangle = new MyRectangle(385, 290, 30, 20);
+            MyShape rectangle = new MyRectangle(385, 290, 30, 20, 0);
             rectangle.getFxShape().setFill(Color.GREEN);
             rectangle.getFxShape().setStroke(Color.YELLOW);
             controller.getModel().addShape(rectangle);
@@ -95,7 +95,7 @@ public class PaintControllerTest {
     @Test
     void testEllipseSelected(FxRobot robot) {
         Platform.runLater(() -> {
-            MyShape ellipse = new MyEllipse(385, 290, 30, 20);
+            MyShape ellipse = new MyEllipse(385, 290, 30, 20, 0);
             ellipse.getFxShape().setFill(Color.BLUE);
             ellipse.getFxShape().setStroke(Color.PURPLE);
             controller.getModel().addShape(ellipse);
@@ -120,7 +120,7 @@ public class PaintControllerTest {
     @Test
     void testLineSelected(FxRobot robot) {
         Platform.runLater(() -> {
-            MyShape line = new MyLine(385, 290, 30, 20);
+            MyShape line = new MyLine(385, 290, 30, 20, 0);
             line.getFxShape().setStroke(Color.BLACK);
             controller.getModel().addShape(line);
             controller.enableSelection(line);
@@ -144,7 +144,7 @@ public class PaintControllerTest {
     @Test
     void testDisableSelection(FxRobot robot){
        Platform.runLater(() -> {
-            MyShape rectangle = new MyRectangle(385, 290, 30, 20);
+            MyShape rectangle = new MyRectangle(385, 290, 30, 20, 0);
             rectangle.getFxShape().setFill(Color.BLUE);
             rectangle.getFxShape().setStroke(Color.PURPLE);
             controller.getModel().addShape(rectangle);
@@ -166,10 +166,10 @@ public class PaintControllerTest {
     @Test
     void testNewSelectionWithShapeSelected(FxRobot robot){
         Platform.runLater(() -> {
-            MyShape rectangle = new MyRectangle(385, 290, 30, 20);
+            MyShape rectangle = new MyRectangle(385, 290, 30, 20, 0);
             rectangle.getFxShape().setFill(Color.GREEN);
             rectangle.getFxShape().setStroke(Color.YELLOW);
-            MyShape ellipse = new MyEllipse(100, 100, 40, 40);
+            MyShape ellipse = new MyEllipse(100, 100, 40, 40, 0);
             ellipse.getFxShape().setFill(Color.BLUE);
             ellipse.getFxShape().setStroke(Color.PURPLE);
             controller.getModel().addShape(rectangle);
@@ -201,7 +201,7 @@ public class PaintControllerTest {
         MyShape[] shapeRef = new MyShape[1];
 
         Platform.runLater(() -> {
-            MyShape rectangle = new MyRectangle(385, 290, 30, 20);
+            MyShape rectangle = new MyRectangle(385, 290, 30, 20, 0);
             rectangle.getFxShape().setFill(Color.GREEN);
             rectangle.getFxShape().setStroke(Color.YELLOW);
             shapeRef[0] = rectangle;
@@ -232,7 +232,7 @@ public class PaintControllerTest {
         MyShape[] shapeRef = new MyShape[1];
 
         Platform.runLater(() -> {
-            MyShape ellipse = new MyEllipse(385, 290, 30, 20);
+            MyShape ellipse = new MyEllipse(385, 290, 30, 20, 0);
             ellipse.getFxShape().setFill(Color.GREEN);
             ellipse.getFxShape().setStroke(Color.YELLOW);
             shapeRef[0] = ellipse;
@@ -263,7 +263,7 @@ public class PaintControllerTest {
         MyShape[] shapeRef = new MyShape[1];
 
         Platform.runLater(() -> {
-            MyShape line = new MyLine(385, 290, 30, 20);
+            MyShape line = new MyLine(385, 290, 30, 20, 0);
             line.getFxShape().setStroke(Color.PURPLE);
             shapeRef[0] = line;
             controller.getModel().addShape(line);
@@ -292,7 +292,7 @@ public class PaintControllerTest {
         MyShape[] shapeRef = new MyShape[1];
 
         Platform.runLater(() -> {
-            MyShape line = new MyLine(385, 290, 30, 20);
+            MyShape line = new MyLine(385, 290, 30, 20, 0);
             line.getFxShape().setStroke(Color.ORANGE);
             shapeRef[0] = line;
             controller.getModel().addShape(line);
@@ -322,7 +322,7 @@ public class PaintControllerTest {
         double newX = 120, newY = 130;
 
         Platform.runLater(() -> {
-            MyShape rectangle = new MyRectangle(oldX, oldY, 60, 40);
+            MyShape rectangle = new MyRectangle(oldX, oldY, 60, 40, 0);
             rectangle.getFxShape().setFill(Color.BLUE);
             rectangle.getFxShape().setStroke(Color.ORANGE);
             shapeRef[0] = rectangle;
@@ -352,7 +352,7 @@ public class PaintControllerTest {
         double newX = 120, newY = 130;
 
         Platform.runLater(() -> {
-            MyShape ellipse = new MyEllipse(oldX, oldY, 60, 40);
+            MyShape ellipse = new MyEllipse(oldX, oldY, 60, 40, 0);
             ellipse.getFxShape().setFill(Color.ORANGE);
             ellipse.getFxShape().setStroke(Color.YELLOW);
             shapeRef[0] = ellipse;
@@ -382,7 +382,7 @@ public class PaintControllerTest {
         double newX = 120, newY = 130;
 
         Platform.runLater(() -> {
-            MyShape line = new MyLine(oldX, oldY, 60, 40);
+            MyShape line = new MyLine(oldX, oldY, 60, 40, 0);
             line.getFxShape().setStroke(Color.PINK);
             shapeRef[0] = line;
             controller.getModel().addShape(line);
@@ -411,7 +411,7 @@ public class PaintControllerTest {
        double newX = 180, newY = 220;
 
        Platform.runLater(() -> {
-           MyShape rectangle = new MyRectangle(oldX, oldY, 40, 30);
+           MyShape rectangle = new MyRectangle(oldX, oldY, 40, 30, 0);
            rectangle.getFxShape().setFill(Color.PINK);
            rectangle.getFxShape().setStroke(Color.BLACK);
            shapeRef[0] = rectangle;
@@ -448,7 +448,7 @@ public class PaintControllerTest {
          MyShape[] shapeRef = new MyShape[1];
 
         Platform.runLater(() -> {
-            MyShape rectangle = new MyRectangle(385, 290, 30, 20);
+            MyShape rectangle = new MyRectangle(385, 290, 30, 20, 0);
             rectangle.getFxShape().setFill(Color.RED);
             rectangle.getFxShape().setStroke(Color.YELLOW);
             shapeRef[0] = rectangle;
@@ -479,7 +479,7 @@ public class PaintControllerTest {
         MyShape[] shapeRef = new MyShape[1];
 
         Platform.runLater(() -> {
-            MyShape rectangle = new MyRectangle(385, 290, 30, 20);
+            MyShape rectangle = new MyRectangle(385, 290, 30, 20, 0);
             rectangle.getFxShape().setFill(Color.RED);
             rectangle.getFxShape().setStroke(Color.YELLOW);
             shapeRef[0] = rectangle;
@@ -510,7 +510,7 @@ public class PaintControllerTest {
         MyShape[] shapeRef = new MyShape[1];
 
         Platform.runLater(() -> {
-            MyShape rectangle = new MyRectangle(385, 290, 30, 20);
+            MyShape rectangle = new MyRectangle(385, 290, 30, 20, 0);
             rectangle.getFxShape().setFill(Color.RED);
             rectangle.getFxShape().setStroke(Color.YELLOW);
             shapeRef[0] = rectangle;
@@ -543,7 +543,7 @@ public class PaintControllerTest {
         MyShape[] shapeRef = new MyShape[1];
 
         Platform.runLater(() -> {
-            MyShape ellipse = new MyEllipse(385, 290, 30, 20);
+            MyShape ellipse = new MyEllipse(385, 290, 30, 20, 0);
             ellipse.getFxShape().setFill(Color.BLUE);
             ellipse.getFxShape().setStroke(Color.GREEN);
             shapeRef[0] = ellipse;
@@ -574,7 +574,7 @@ public class PaintControllerTest {
         MyShape[] shapeRef = new MyShape[1];
 
         Platform.runLater(() -> {
-            MyShape ellipse = new MyEllipse(385, 290, 30, 20);
+            MyShape ellipse = new MyEllipse(385, 290, 30, 20, 0);
             ellipse.getFxShape().setFill(Color.BLUE);
             ellipse.getFxShape().setStroke(Color.GREEN);
             shapeRef[0] = ellipse;
@@ -605,7 +605,7 @@ public class PaintControllerTest {
         MyShape[] shapeRef = new MyShape[1];
 
         Platform.runLater(() -> {
-            MyShape ellipse = new MyEllipse(385, 290, 30, 20);
+            MyShape ellipse = new MyEllipse(385, 290, 30, 20, 0);
             ellipse.getFxShape().setFill(Color.BLUE);
             ellipse.getFxShape().setStroke(Color.GREEN);
             shapeRef[0] = ellipse;
@@ -638,7 +638,7 @@ public class PaintControllerTest {
         MyShape[] shapeRef = new MyShape[1];
 
         Platform.runLater(() -> {
-            MyShape line = new MyLine(385, 290, 30, 20);
+            MyShape line = new MyLine(385, 290, 30, 20, 0);
             line.getFxShape().setStroke(Color.PURPLE);
             shapeRef[0] = line;
             controller.getModel().addShape(line);
@@ -669,7 +669,7 @@ public class PaintControllerTest {
         Color newFill = Color.GREEN;
 
         Platform.runLater(() -> {
-            MyShape ellipse = new MyEllipse(385, 290, 30, 20);
+            MyShape ellipse = new MyEllipse(385, 290, 30, 20, 0);
             ellipse.getFxShape().setFill(originalFill);
             ellipse.getFxShape().setStroke(Color.BLACK);
             shapeRef[0] = ellipse;
@@ -703,7 +703,7 @@ public class PaintControllerTest {
         Color newBorder = Color.GREEN;
 
         Platform.runLater(() -> {
-            MyShape rectangle = new MyRectangle(385, 290, 30, 20);
+            MyShape rectangle = new MyRectangle(385, 290, 30, 20, 0);
             rectangle.getFxShape().setFill(Color.RED);
             rectangle.getFxShape().setStroke(originalBorder);
             shapeRef[0] = rectangle;
@@ -739,7 +739,7 @@ public class PaintControllerTest {
         Color newBorder = Color.BROWN;
 
         Platform.runLater(() -> {
-            MyShape ellipse = new MyEllipse(385, 290, 30, 20);
+            MyShape ellipse = new MyEllipse(385, 290, 30, 20, 0);
             ellipse.getFxShape().setFill(originalFill);
             ellipse.getFxShape().setStroke(originalBorder);
             shapeRef[0] = ellipse;
@@ -770,7 +770,7 @@ public class PaintControllerTest {
        MyShape[] shapeRef = new MyShape[1];
 
        Platform.runLater(() -> {
-           MyShape rectangle = new MyRectangle(385, 290, 30, 20);
+           MyShape rectangle = new MyRectangle(385, 290, 30, 20, 0);
            rectangle.getFxShape().setFill(Color.BLUE);
            rectangle.getFxShape().setStroke(Color.YELLOW);
            shapeRef[0] = rectangle;
@@ -797,7 +797,7 @@ public class PaintControllerTest {
        MyShape[] shapeRef = new MyShape[1];
 
        Platform.runLater(() -> {
-           MyShape ellipse = new MyEllipse(385, 290, 30, 20);
+           MyShape ellipse = new MyEllipse(385, 290, 30, 20, 0);
            ellipse.getFxShape().setFill(Color.BLUE);
            ellipse.getFxShape().setStroke(Color.YELLOW);
            shapeRef[0] = ellipse;
@@ -824,7 +824,7 @@ public class PaintControllerTest {
        MyShape[] shapeRef = new MyShape[1];
 
        Platform.runLater(() -> {
-           MyShape line = new MyLine(385, 290, 30, 20);
+           MyShape line = new MyLine(385, 290, 30, 20, 0);
            line.getFxShape().setStroke(Color.ORANGE);
            shapeRef[0] = line;
            controller.getModel().addShape(line);
@@ -850,7 +850,7 @@ public class PaintControllerTest {
        MyShape[] shapeRef = new MyShape[1];
 
         Platform.runLater(() -> {
-            MyShape ellipse = new MyEllipse(385, 290, 30, 20);
+            MyShape ellipse = new MyEllipse(385, 290, 30, 20, 0);
             ellipse.getFxShape().setFill(Color.PINK);
             ellipse.getFxShape().setStroke(Color.PURPLE);
             shapeRef[0] = ellipse;
@@ -881,7 +881,7 @@ public class PaintControllerTest {
         MyShape[] shapeRef = new MyShape[1];
 
         Platform.runLater(() -> {
-            MyShape rectangle = new MyRectangle(385, 290, 30, 20);
+            MyShape rectangle = new MyRectangle(385, 290, 30, 20, 0);
             rectangle.getFxShape().setFill(Color.BLUE);
             rectangle.getFxShape().setStroke(Color.BROWN);
             shapeRef[0] = rectangle;
@@ -908,7 +908,7 @@ public class PaintControllerTest {
         MyShape[] shapeRef = new MyShape[1];
 
         Platform.runLater(() -> {
-            MyShape ellipse = new MyEllipse(385, 290, 30, 20);
+            MyShape ellipse = new MyEllipse(385, 290, 30, 20, 0);
             ellipse.getFxShape().setFill(Color.BLUE);
             ellipse.getFxShape().setStroke(Color.BROWN);
             shapeRef[0] = ellipse;
@@ -935,7 +935,7 @@ public class PaintControllerTest {
         MyShape[] shapeRef = new MyShape[1];
 
         Platform.runLater(() -> {
-            MyShape line = new MyLine(385, 290, 30, 20);
+            MyShape line = new MyLine(385, 290, 30, 20, 0);
             line.getFxShape().setStroke(Color.YELLOW);
             shapeRef[0] = line;
             controller.getModel().addShape(line);
@@ -961,7 +961,7 @@ public class PaintControllerTest {
         MyShape[] shapeRef = new MyShape[1];
 
         Platform.runLater(() -> {
-            MyShape ellipse = new MyEllipse(385, 290, 30, 20);
+            MyShape ellipse = new MyEllipse(385, 290, 30, 20, 0);
             ellipse.getFxShape().setFill(Color.PINK);
             ellipse.getFxShape().setStroke(Color.GREY);
             shapeRef[0] = ellipse;
@@ -994,7 +994,7 @@ public class PaintControllerTest {
        Platform.runLater(() -> {
            MyShape rectangle = new BorderColorDecorator(
                                 new FillColorDecorator(
-                                        new MyRectangle(385, 290, 30, 20), Color.RED), Color.BLUE);
+                                        new MyRectangle(385, 290, 30, 20, 0), Color.RED), Color.BLUE);
            shapeRef[0] = rectangle;
            controller.getModel().addShape(rectangle);
            controller.enableSelection(rectangle);
@@ -1023,7 +1023,7 @@ public class PaintControllerTest {
        Platform.runLater(() -> {
            MyShape ellipse = new BorderColorDecorator(
                                 new FillColorDecorator(
-                                        new MyEllipse(385, 290, 30, 20), Color.RED), Color.ORANGE);
+                                        new MyEllipse(385, 290, 30, 20, 0), Color.RED), Color.ORANGE);
            shapeRef[0] = ellipse;
            controller.getModel().addShape(ellipse);
            controller.enableSelection(ellipse);
@@ -1051,7 +1051,7 @@ public class PaintControllerTest {
 
        Platform.runLater(() -> {
            MyShape line = new BorderColorDecorator(
-                                new MyLine(385, 290, 30, 20), Color.GREEN);
+                                new MyLine(385, 290, 30, 20, 0), Color.GREEN);
            shapeRef[0] = line;
            controller.getModel().addShape(line);
            controller.enableSelection(line);
@@ -1080,7 +1080,7 @@ public class PaintControllerTest {
        Platform.runLater(() -> {
            MyShape rectangle = new BorderColorDecorator(
                                 new FillColorDecorator(
-                                        new MyRectangle(385, 290, 30, 20), Color.GREY), Color.PURPLE);
+                                        new MyRectangle(385, 290, 30, 20, 0), Color.GREY), Color.PURPLE);
            shapeRef[0] = rectangle;
            controller.getModel().addShape(rectangle);
            controller.enableSelection(rectangle);
@@ -1110,7 +1110,7 @@ public class PaintControllerTest {
        Platform.runLater(() -> {
            MyShape ellipse = new BorderColorDecorator(
                                 new FillColorDecorator(
-                                        new MyEllipse(385, 290, 30, 20), Color.BLUE), Color.BLACK);
+                                        new MyEllipse(385, 290, 30, 20, 0), Color.BLUE), Color.BLACK);
            shapeRef[0] = ellipse;
            controller.getModel().addShape(ellipse);
            controller.enableSelection(ellipse);
@@ -1144,9 +1144,9 @@ public class PaintControllerTest {
         robot.interact(() -> {
             MyShape rectangle = new BorderColorDecorator(
                     new FillColorDecorator(
-                            new MyRectangle(385, 290, 30, 20), Color.BLUE), Color.LIGHTBLUE);
+                            new MyRectangle(385, 290, 30, 20, 0), Color.BLUE), Color.LIGHTBLUE);
 
-            MyShape line = new MyLine(385, 296, 30, 20);
+            MyShape line = new MyLine(385, 296, 30, 20, 0);
             line.getFxShape().setStroke(Color.RED);
            
             rectRef[0] = rectangle;
@@ -1183,9 +1183,9 @@ public class PaintControllerTest {
         robot.interact(() -> {
             MyShape rectangle = new BorderColorDecorator(
                     new FillColorDecorator(
-                            new MyRectangle(385, 290, 30, 20), Color.PINK), Color.LIGHTPINK);
+                            new MyRectangle(385, 290, 30, 20, 0), Color.PINK), Color.LIGHTPINK);
 
-            MyShape line = new MyLine(385, 296, 30, 20);
+            MyShape line = new MyLine(385, 296, 30, 20, 0);
             line.getFxShape().setStroke(Color.PURPLE);
            
             rectRef[0] = rectangle;
@@ -1222,8 +1222,8 @@ public class PaintControllerTest {
         robot.interact(() -> {
             MyShape rectangle = new BorderColorDecorator(
                     new FillColorDecorator(
-                            new MyRectangle(385, 290, 30, 20), Color.BLUE), Color.LIGHTBLUE);
-            MyShape line = new MyLine(385, 296, 30, 20);
+                            new MyRectangle(385, 290, 30, 20, 0), Color.BLUE), Color.LIGHTBLUE);
+            MyShape line = new MyLine(385, 296, 30, 20, 0);
             line.getFxShape().setStroke(Color.RED);
 
             rectRef[0] = rectangle;
@@ -1257,8 +1257,8 @@ public class PaintControllerTest {
         robot.interact(() -> {
             MyShape rectangle = new BorderColorDecorator(
                     new FillColorDecorator(
-                            new MyRectangle(385, 290, 30, 20), Color.PINK), Color.LIGHTPINK);
-            MyShape line = new MyLine(385, 296, 30, 20);
+                            new MyRectangle(385, 290, 30, 20, 0), Color.PINK), Color.LIGHTPINK);
+            MyShape line = new MyLine(385, 296, 30, 20, 0);
             line.getFxShape().setStroke(Color.PURPLE);
 
             rectRef[0] = rectangle;
@@ -1290,7 +1290,7 @@ public class PaintControllerTest {
 
         MyShape rectangle = new BorderColorDecorator(
                 new FillColorDecorator(
-                        new MyRectangle(385, 290, 30, 20), Color.PINK), Color.LIGHTPINK);
+                        new MyRectangle(385, 290, 30, 20, 0), Color.PINK), Color.LIGHTPINK);
 
         robot.interact(() -> {
             Shape shape = rectangle.getFxShape();
@@ -1329,7 +1329,7 @@ public class PaintControllerTest {
         // Adding shapes vertically 
         Platform.runLater(() -> {
             for (int i = 0; i < 100; i++) {
-                MyShape rect = new MyRectangle(50, i * 50, 30, 20);
+                MyShape rect = new MyRectangle(50, i * 50, 30, 20, 0);
                 controller.getModel().addShape(rect);
             }
         });
@@ -1366,7 +1366,7 @@ public class PaintControllerTest {
         
         Platform.runLater(() -> {
             for (int i = 0; i < 100; i++) {
-                MyShape rect = new MyRectangle(i * 50, 100, 30, 20); 
+                MyShape rect = new MyRectangle(i * 50, 100, 30, 20, 0); 
                 controller.getModel().addShape(rect);
             }
         });

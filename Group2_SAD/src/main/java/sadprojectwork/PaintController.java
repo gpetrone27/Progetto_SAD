@@ -267,6 +267,12 @@ public class PaintController implements Initializable {
             },
             selectedShape
         ));
+        fillPanel.managedProperty().bind(Bindings.createBooleanBinding(
+            () -> {
+                return selectedShape.get() != null && selectedShape.get().getFxShape().getClass() != Line.class;
+            },
+            selectedShape
+        ));
         
         // Sets text formatters to only accept numeric values in width and height fields
         widthField.setTextFormatter(new TextFormatter<>(change -> {
