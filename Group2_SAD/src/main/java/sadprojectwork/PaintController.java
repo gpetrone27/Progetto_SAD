@@ -787,4 +787,5 @@ public class PaintController implements Initializable {
     public Pane getCanvas() {
         return canvas;
     }
+    
 }
