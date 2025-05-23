@@ -25,6 +25,7 @@ public class MyLine extends MyShape {
         line = new Line(startX, startY, startX + width, startY + height);
         line.setStrokeWidth(3);
         this.fxShape = line;
+        line.setRotate(rotation);
     }
 
     // Returns the JavaFX shape object to be added to the pane

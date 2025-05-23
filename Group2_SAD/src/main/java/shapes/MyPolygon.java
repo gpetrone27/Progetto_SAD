@@ -36,6 +36,7 @@ public class MyPolygon extends MyShape {
         }
         
         this.fxShape = path;
+        this.setRotation(rotation);
     }
     
     public void addMoveTo(double x, double y) {
