@@ -523,7 +523,11 @@ public class PaintController implements Initializable {
         heightField.setText(Double.toString(shape.getHeight()));
         
         // Rotation
-        rotationSlider.setValue(shape.getFxShape().getRotate()); // shape.getRotation() when implemented
+        rotationSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
+            if (selectedShape != null) {
+                selectedShape.get().setRotation(newVal.doubleValue());
+            }
+        });
     }
 
     /**
@@ -781,7 +785,7 @@ public class PaintController implements Initializable {
             canvas.getTransforms().add(canvasScale);
         }
     }
-
+    
     public MyShape getSelectedShape() {
         return selectedShape.get();
     }

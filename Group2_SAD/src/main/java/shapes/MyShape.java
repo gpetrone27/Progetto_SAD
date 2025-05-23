@@ -20,6 +20,8 @@ public abstract class MyShape {
     protected double width;
     protected double height;
     
+    protected double rotation;
+    
     public MyShape(double startX, double startY) {
         this.startX = startX;
         this.startY = startY;
@@ -78,6 +80,15 @@ public abstract class MyShape {
      * @return 
      */
     public abstract double getHeight();
+    
+    public double getRotation() {
+        return rotation;
+    }
+    
+    public void setRotation (double rotation) {
+        this.rotation = rotation;
+        getFxShape().setRotate(rotation);
+    }
     
     /**
      * Returns a String in CSV format containing all the shapes fields

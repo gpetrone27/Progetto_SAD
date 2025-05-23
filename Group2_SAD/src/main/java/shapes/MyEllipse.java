@@ -43,6 +43,7 @@ public class MyEllipse extends MyShape {
         ellipse = new Ellipse(adjustedX + radiusX, adjustedY + radiusY, radiusX, radiusY);
         ellipse.setStrokeWidth(3); // Temporary: set border width to 3
         this.fxShape = ellipse;
+        ellipse.setRotate(rotation);
     }
 
     /**
@@ -100,7 +101,7 @@ public class MyEllipse extends MyShape {
     public double getHeight() {
         return ellipse.getRadiusY() * 2;
     }
-
+    
     @Override
     public String toCSV() {
         return Shapes.ELLIPSE + super.toCSV();
