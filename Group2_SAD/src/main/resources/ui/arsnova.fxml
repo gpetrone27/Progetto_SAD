@@ -447,6 +447,7 @@
                                     </VBox>
                                  </children>
                               </HBox>
+                              <TextField fx:id="displayTextField" onAction="#selectDisplayText" promptText="Insert your text here..." />
                               <Label text="Insert">
                                  <font>
                                     <Font name="System Bold" size="12.0" />

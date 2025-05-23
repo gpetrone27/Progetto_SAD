@@ -67,6 +67,7 @@ public class PaintController implements Initializable {
     private final double zoomMinValue = 0.5;
     private Scale canvasScale = new Scale(1.0, 1.0, 0, 0);
     
+    private String displayText = "";
     private String fontFamily = "Arial";
     private double textSize = 12;
 
@@ -140,6 +141,8 @@ public class PaintController implements Initializable {
     private ComboBox<String> fontsComboBox;
     @FXML
     private ComboBox<String> sizeComboBox;
+    @FXML
+    private TextField displayTextField;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -838,6 +841,15 @@ public class PaintController implements Initializable {
     @FXML
     private void selectSize(ActionEvent event) {
         textSize = Double.parseDouble(sizeComboBox.getValue());
+    }
+
+    /**
+     * Updates the text to write to match user selection.
+     * @param event 
+     */
+    @FXML
+    private void selectDisplayText(ActionEvent event) {
+        displayText = displayTextField.getText();
     }
     
     public MyShape getSelectedShape() {
