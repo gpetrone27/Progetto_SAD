@@ -14,12 +14,11 @@ public class MyPolygon extends MyShape {
     
     private Path path;
     private List<Point2D> points; 
-    
     private double smallerX = 0;
     private double greaterX = 0;
     private double smallerY = 0;
     private double greaterY = 0;
-        
+    
     public MyPolygon(double startX, double startY, List<Point2D> points) {
         
         super(startX, startY);
@@ -67,10 +66,6 @@ public class MyPolygon extends MyShape {
         }
     }
     
-    public void close() {
-        path.getElements().add(new ClosePath());
-    }
-    
     private void reconstruct() {
         Point2D firstPoint = points.get(0);
         path.getElements().add(new MoveTo(firstPoint.getX(), firstPoint.getY()));
@@ -82,29 +77,10 @@ public class MyPolygon extends MyShape {
         path.getElements().add(new ClosePath());
     }
     
-@Override
-public void resize(double newWidth, double newHeight) {
-    if (points == null || points.isEmpty()) return;
-
-    Point2D lastPoint = points.get(points.size() - 1);
-    double currentX = lastPoint.getX() + newWidth;
-    double currentY = lastPoint.getY() + newHeight;
-
-    path.getElements().clear();
-
-    path.getElements().add(new MoveTo(points.get(0).getX(), points.get(0).getY()));
-
-    for (int i = 1; i < points.size(); i++) {
-        path.getElements().add(new LineTo(points.get(i).getX(), points.get(i).getY()));
+    @Override
+    public void resize(double newWidth, double newHeight) {
+        // TO DO
     }
-
-    path.getElements().add(new LineTo(currentX, currentY));
-
-}
-
-public Point2D getLastPoint() {
-    return points.get(points.size() - 1);
-}
 
     @Override
     public MyShape cloneShape() {
