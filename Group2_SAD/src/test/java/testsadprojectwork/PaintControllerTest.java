@@ -21,6 +21,7 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
@@ -1401,5 +1402,31 @@ public class PaintControllerTest {
 
         assertTrue(afterScrollLeft < afterScrollRight, "Left Scroll: the value should decrease");
     }
+    
+    /**
+    * Tests the grid toggle functionality.
+    *
+    * @param TestFX robot: robot to simulate user interactions.
+    */
+    @Test
+    void testToggleGrid(FxRobot robot) {
+        Pane canvas = robot.lookup("#canvas").queryAs(Pane.class);
+       robot.clickOn("#gridButton");
+
+       long gridLinesCount = canvas.getChildren().stream()
+               .filter(node -> node instanceof Line && "grid".equals(node.getUserData()))
+               .count();
+
+       assertTrue(gridLinesCount > 0, "The grid should be visible now!");
+       
+       robot.clickOn("#gridButton");
+       
+       long remainingLines = canvas.getChildren().stream()
+               .filter(node -> node instanceof Line && "grid".equals(node.getUserData()))
+               .count();
+
+       assertEquals(0, remainingLines, "The grid should be unvisible now!");
+   }
+
 
 }
