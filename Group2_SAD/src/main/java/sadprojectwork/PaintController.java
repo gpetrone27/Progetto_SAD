@@ -6,7 +6,6 @@ import decorator.*;
 import shapes.*;
 import java.io.File;
 import java.net.URL;
-import java.text.DecimalFormat;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.beans.binding.Bindings;
@@ -38,7 +37,6 @@ import javafx.scene.shape.Line;
 import javafx.scene.transform.Scale;
 import javafx.stage.FileChooser;
 import org.kordamp.ikonli.javafx.FontIcon;
-import shapes.MyPolygon;
 
 public class PaintController implements Initializable {
 
@@ -129,6 +127,8 @@ public class PaintController implements Initializable {
     private ToggleButton polygonButton;
     @FXML
     private ToggleButton noFillButton;
+    @FXML
+    private ToggleButton noFillButtonPanel;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -316,6 +316,12 @@ public class PaintController implements Initializable {
         noFillIcon.setIconColor(Color.RED);
         noFillButton.setGraphic(noFillIcon);
 
+        // No Fill Panel button
+        FontIcon noFillPanelIcon = new FontIcon("fas-ban");
+        noFillPanelIcon.setIconSize(16);
+        noFillPanelIcon.setIconColor(Color.RED);
+        noFillButtonPanel.setGraphic(noFillPanelIcon);
+        
     }
 
     /**
@@ -508,6 +514,9 @@ public class PaintController implements Initializable {
                 break;
             }
         }
+        if (selectedShape.get().getFxShape().getFill() == Color.TRANSPARENT) {
+            fillColorPanel.selectToggle(noFillButtonPanel);
+        }
         
         // Width and height fields
         widthField.setText(Double.toString(shape.getWidth()));
@@ -636,6 +645,12 @@ public class PaintController implements Initializable {
         ToggleButton colorButton = (ToggleButton) event.getSource();
         Paint selectedColor = colorButton.getBackground().getFills().get(0).getFill();
         Command changeColor = new ChangeColorCommand(selectedShape.get(), (Color) selectedColor, null);
+        model.execute(changeColor);
+    }
+
+    @FXML
+    private void changeToNoFill(ActionEvent event) {
+        Command changeColor = new ChangeColorCommand(selectedShape.get(), Color.TRANSPARENT, null);
         model.execute(changeColor);
     }
 
