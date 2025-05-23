@@ -496,6 +496,10 @@ public class PaintController implements Initializable {
         for (MyShape shapeToAdd : model.getShapes()) {
             canvas.getChildren().add(shapeToAdd.getFxShape());
         }
+        if (gridActived) {
+            toggleGrid(null);
+            toggleGrid(null);
+        }
     }
 
     /**
@@ -630,10 +634,6 @@ public class PaintController implements Initializable {
     @FXML
     public void undoOperation(ActionEvent event) {
         model.undoLast();
-        if (gridActived) {
-            toggleGrid(null);
-            toggleGrid(null);
-        }
     }
 
     /**
@@ -643,10 +643,6 @@ public class PaintController implements Initializable {
     @FXML
     private void redoOperation(ActionEvent event) {
         model.redoLast();
-        if (gridActived) {
-            toggleGrid(null);
-            toggleGrid(null);
-        }
     }
 
     /**
@@ -719,11 +715,6 @@ public class PaintController implements Initializable {
         if (selectedShape.get() != null) {
             Command cutCmd = new CutCommand(model, selectedShape.get());
             model.execute(cutCmd);
-            
-            if (gridActived) {
-                toggleGrid(null);
-                toggleGrid(null);
-            }
         }
     }
 
@@ -748,11 +739,6 @@ public class PaintController implements Initializable {
         PasteCommand pasteCmd = new PasteCommand(model, lastMouseX, lastMouseY);
         model.execute(pasteCmd);
         enableSelection(pasteCmd.getPastedShape());
-        
-        if (gridActived) {
-            toggleGrid(null);
-            toggleGrid(null);
-        }
     }
 
     /**
@@ -764,11 +750,6 @@ public class PaintController implements Initializable {
         if (selectedShape.get() != null) {
             Command deleteCmd = new DeleteCommand(model, selectedShape.get());
             model.execute(deleteCmd);
-            
-            if (gridActived) {
-                toggleGrid(null);
-                toggleGrid(null);
-            }
         }
     }
     
@@ -781,11 +762,6 @@ public class PaintController implements Initializable {
         if (selectedShape.get() != null) {
             Command brngFrntCmd = new BringToFrontCommand(model, selectedShape.get());
             model.execute(brngFrntCmd);
-
-            if (gridActived) {
-                toggleGrid(null);
-                toggleGrid(null);
-            }
         }
     }
 
@@ -798,11 +774,6 @@ public class PaintController implements Initializable {
         if (selectedShape.get() != null) {
             Command brngBckCmd = new BringToBackCommand(model, selectedShape.get()); 
             model.execute(brngBckCmd);
-
-            if (gridActived) {
-                 toggleGrid(null);
-                 toggleGrid(null);
-             }
         }
     }
     
@@ -833,11 +804,6 @@ public class PaintController implements Initializable {
     public void addShape(MyShape shape) {
         AddShapeCommand addCmd = new AddShapeCommand(model, shape);
         model.execute(addCmd);
-        
-        if (gridActived) {
-            toggleGrid(null);
-            toggleGrid(null);
-        }
     }
 
     /**
