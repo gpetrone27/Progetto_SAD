@@ -283,11 +283,11 @@ public class PaintController implements Initializable {
         }));
         
         // Rotates the selected shape while the slider is being dragged
-        rotationSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
+        /*rotationSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
             if (selectedShape != null) {
                 selectedShape.get().setRotation(newVal.doubleValue());
             }
-        });
+        });*/
         
     }
 
