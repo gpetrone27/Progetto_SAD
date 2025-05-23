@@ -243,6 +243,15 @@ public class PaintController implements Initializable {
             selectedShape
         ));
         
+        // closes the Polygon if the User deselect MyPolygon button without closing the shape, 
+        modeProperty.addListener((obs, oldMode, newMode) -> {
+            if (oldMode == Shapes.POLYGON && currentShape.get() != null) {
+                MyPolygon myPolygon = (MyPolygon) ((FillColorDecorator) ((BorderColorDecorator) currentShape.get()).getDecoratedShape()).getDecoratedShape();
+                myPolygon.close(); 
+                currentShape.set(null);
+        }
+});
+        
     }
 
     /**
@@ -386,10 +395,30 @@ public class PaintController implements Initializable {
                 double endX = e.getX();
                 double endY = e.getY();
                 
-                currentShape.get().resize(endX - startX, endY - startY);
+                // The polygon does not create a preview here
+                if(modeProperty.get() != Shapes.POLYGON) {
+                    currentShape.get().resize(endX - startX, endY - startY);
+                }
+            }
+            
+            
+        });
+        
+        
+        // Preview when the user is creating the Polygon 
+        canvas.setOnMouseMoved(e -> {
+            
+            if (modeProperty.get() == Shapes.POLYGON && currentShape.get() != null) {
+                MyPolygon myPolygon = (MyPolygon) ((FillColorDecorator) ((BorderColorDecorator) currentShape.get()).getDecoratedShape()).getDecoratedShape();
+        
+                double previewX = e.getX() - myPolygon.getLastPoint().getX();
+                double previewY = e.getY() - myPolygon.getLastPoint().getY();
+        
+                myPolygon.resize(previewX, previewY);
             }
         });
-
+        
+        
         canvas.setOnMouseReleased(e -> {
 
             // Finalizes the move command when the user releases the shape
