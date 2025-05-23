@@ -81,15 +81,6 @@ public abstract class MyShape {
      */
     public abstract double getHeight();
     
-    public double getRotation() {
-        return rotation;
-    }
-    
-    public void setRotation (double rotation) {
-        this.rotation = rotation;
-        getFxShape().setRotate(rotation);
-    }
-    
     /**
      * Returns a String in CSV format containing all the shapes fields
      * @return 

@@ -38,8 +38,8 @@ class MyLineTest {
         line.resize(10, 0);
         assertEquals(10, line.getWidth());
         Line fx = (Line) line.getFxShape();
-        assertEquals(6.0, fx.getEndX());
-        assertEquals(8.0, fx.getEndY());
+        assertEquals(10.0, fx.getEndX());
+        assertEquals(0.0, fx.getEndY());
     }
 
     @Test
@@ -59,6 +59,17 @@ class MyLineTest {
         Line fx = (Line) line.getFxShape();
         assertEquals(7.0, fx.getEndX());
         assertEquals(2.0, fx.getEndY());
+    }
+    
+    @Test
+    void testResizeLength() {
+        
+        line.resizeLength(10);
+
+        Line fx = (Line) line.getFxShape();
+    
+        assertEquals(6.0, fx.getEndX());
+        assertEquals(8.0, fx.getEndY());
     }
 
     @Test
@@ -84,17 +95,23 @@ class MyLineTest {
         assertEquals(5.0, fx.getEndX());
         assertEquals(6.0, fx.getEndY());
     }
-
+    
     @Test
-    void testGetWidth() {
-        // getWidth() should return the Euclidean distance between start and end points
-        assertEquals(5.0, line.getWidth()); // √(3² + 4²)
+    void testGetWidthPositiveDirection() {
+        MyLine line = new MyLine(10, 20, 30, 20);
+        assertEquals(30.0, line.getWidth());
+    }
+    
+    @Test
+    void testGetHeightPositiveDirection() {
+        MyLine line = new MyLine(10, 20, 10, 50);
+        assertEquals(50.0, line.getHeight());
     }
 
     @Test
-    void testGetHeight() {
-        // getHeight() always returns 0 for a line (by design)
-        assertEquals(0.0, line.getHeight());
+    void testGetLengthDiagonalLine() {
+        MyLine line = new MyLine(0, 0, 3, 4); 
+        assertEquals(5.0, line.getLength());
     }
 
     @Test
@@ -105,4 +122,5 @@ class MyLineTest {
         assertTrue(csv.startsWith("LINE;0.0;0.0;3.0;4.0;"));
         assertTrue(csv.contains("0x0000ffff")); // Default JavaFX format for Color.BLUE
     }
+    
 }

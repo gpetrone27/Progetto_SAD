@@ -150,17 +150,17 @@ public class PaintModel {
                 switch (loadedMode) {
                     case LINE -> {
                         BorderColorDecorator myLine = new BorderColorDecorator(new MyLine(loadedStartX, loadedStartY, loadedWidth, loadedHeight), loadedBorder);
-                        myLine.setRotation(loadedRotation);
+                        //myLine.setRotation(loadedRotation);
                         loadedShapes.add(myLine);
                     }
                     case RECTANGLE -> {
                         BorderColorDecorator myRectangle = new BorderColorDecorator(new FillColorDecorator(new MyRectangle(loadedStartX, loadedStartY, loadedWidth, loadedHeight), loadedFill), loadedBorder);
-                        myRectangle.setRotation(loadedRotation);
+                        //myRectangle.setRotation(loadedRotation);
                         loadedShapes.add(myRectangle);
                     }
                     case ELLIPSE -> {
                         BorderColorDecorator myEllipse = new BorderColorDecorator(new FillColorDecorator(new MyEllipse(loadedStartX, loadedStartY, loadedWidth, loadedHeight), loadedFill), loadedBorder);
-                        myEllipse.setRotation(loadedRotation);
+                        //myEllipse.setRotation(loadedRotation);
                         loadedShapes.add(myEllipse);
                     }
                     case POLYGON -> {
@@ -176,7 +176,7 @@ public class PaintModel {
                             }
                         }
                         BorderColorDecorator myPolygon = new BorderColorDecorator(new FillColorDecorator(new MyPolygon(loadedStartX, loadedStartY, points), loadedFill), loadedBorder);
-                        myPolygon.setRotation(loadedRotation);
+                        //myPolygon.setRotation(loadedRotation);
                         loadedShapes.add(myPolygon);
                     }
                 }
