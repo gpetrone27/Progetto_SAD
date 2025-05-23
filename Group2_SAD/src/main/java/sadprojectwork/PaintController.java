@@ -6,6 +6,7 @@ import decorator.*;
 import shapes.*;
 import java.io.File;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.beans.binding.Bindings;
@@ -16,11 +17,11 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
@@ -46,7 +47,7 @@ public class PaintController implements Initializable {
 
     // Colors variables
     private Color borderHex = Color.BLACK;
-    private Color fillHex = Color.WHITE;
+    private Color fillHex = Color.TRANSPARENT;
 
     private ObjectProperty<Shapes> modeProperty = new SimpleObjectProperty<>(Shapes.CURSOR);
     private ObjectProperty<MyShape> currentShape = new SimpleObjectProperty<>(null);
@@ -113,6 +114,8 @@ public class PaintController implements Initializable {
     @FXML
     private ToggleButton gridButton;
     @FXML
+    private Slider gridSizeSlider;
+    @FXML
     private Button zoomInButton;
     @FXML
     private Button zoomOutButton;
@@ -124,6 +127,8 @@ public class PaintController implements Initializable {
     private Slider rotationSlider;
     @FXML
     private ToggleButton polygonButton;
+    @FXML
+    private ToggleButton noFillButton;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -145,6 +150,13 @@ public class PaintController implements Initializable {
         ellipseButton.setUserData(Shapes.ELLIPSE);
         polygonButton.setUserData(Shapes.POLYGON);
         
+        // Sets text formatters to only accept numeric values in width and height fields
+        widthField.setTextFormatter(new TextFormatter<>(change -> {
+            return change.getControlNewText().matches("-?\\d*(\\.\\d*)?") ? change : null;
+        }));
+        heightField.setTextFormatter(new TextFormatter<>(change -> {
+            return change.getControlNewText().matches("-?\\d*(\\.\\d*)?") ? change : null;
+        }));
     }
 
     /**
@@ -297,6 +309,12 @@ public class PaintController implements Initializable {
         zoomOutIcon.setIconSize(16);
         zoomOutIcon.setIconColor(Color.BLACK);
         zoomOutButton.setGraphic(zoomOutIcon);
+        
+        // No Fill button
+        FontIcon noFillIcon = new FontIcon("fas-ban");
+        noFillIcon.setIconSize(16);
+        noFillIcon.setIconColor(Color.RED);
+        noFillButton.setGraphic(noFillIcon);
 
     }
 
@@ -589,6 +607,39 @@ public class PaintController implements Initializable {
     }
 
     /**
+     * Sets the fill color to transparent.
+     * @param event 
+     */
+    @FXML
+    private void selectNoFill(ActionEvent event) {
+        fillHex = Color.TRANSPARENT;
+    }
+
+    /**
+     * Updates the border color of the selected shape.
+     * @param event
+     */
+    @FXML
+    private void changeBorderColor(ActionEvent event) {
+        ToggleButton colorButton = (ToggleButton) event.getSource();
+        Paint selectedColor = colorButton.getBackground().getFills().get(0).getFill();
+        Command changeColor = new ChangeColorCommand(selectedShape.get(), null, (Color) selectedColor);
+        model.execute(changeColor);
+    }
+
+    /**
+     * Updates the fill color of the selected shape.
+     * @param event
+     */
+    @FXML
+    private void changeFillColor(ActionEvent event) {
+        ToggleButton colorButton = (ToggleButton) event.getSource();
+        Paint selectedColor = colorButton.getBackground().getFills().get(0).getFill();
+        Command changeColor = new ChangeColorCommand(selectedShape.get(), (Color) selectedColor, null);
+        model.execute(changeColor);
+    }
+
+    /**
      * Copies the selected shape into the clipboard and deletes it.
      * @param event
      */
@@ -657,30 +708,6 @@ public class PaintController implements Initializable {
         model.execute(addCmd);
     }
 
-    /**
-     * Updates the border color of the selected shape.
-     * @param event
-     */
-    @FXML
-    private void changeBorderColor(ActionEvent event) {
-        ToggleButton colorButton = (ToggleButton) event.getSource();
-        Paint selectedColor = colorButton.getBackground().getFills().get(0).getFill();
-        Command changeColor = new ChangeColorCommand(selectedShape.get(), null, (Color) selectedColor);
-        model.execute(changeColor);
-    }
-
-    /**
-     * Updates the fill color of the selected shape.
-     * @param event
-     */
-    @FXML
-    private void changeFillColor(ActionEvent event) {
-        ToggleButton colorButton = (ToggleButton) event.getSource();
-        Paint selectedColor = colorButton.getBackground().getFills().get(0).getFill();
-        Command changeColor = new ChangeColorCommand(selectedShape.get(), (Color) selectedColor, null);
-        model.execute(changeColor);
-    }
-
     public MyShape getSelectedShape() {
         return selectedShape.get();
     }
@@ -710,9 +737,7 @@ public class PaintController implements Initializable {
     private void zoomIn(ActionEvent event) {
         if (zoomBase + zoomStep <= zoomMaxValue) {
             zoomBase += zoomStep;
-
             canvas.getTransforms().remove(canvasScale);
-
             canvasScale = new Scale(zoomBase, zoomBase, 0, 0);
             canvas.getTransforms().add(canvasScale);
         }
@@ -722,9 +747,7 @@ public class PaintController implements Initializable {
     private void zoomOut(ActionEvent event) {
         if (zoomBase - zoomStep >= zoomMinValue) {
             zoomBase -= zoomStep;
-
             canvas.getTransforms().remove(canvasScale);
-
             canvasScale = new Scale(zoomBase, zoomBase, 0, 0);
             canvas.getTransforms().add(canvasScale);
         }
@@ -732,32 +755,34 @@ public class PaintController implements Initializable {
 
     /**
      * Brings a shape to the front.
-     * 
      * @param event 
      */
     @FXML
     public void bringToFront(ActionEvent event) {
-        Command brngFrntCmd = new BringToFrontCommand(model, selectedShape.get(), canvas);
+        Command brngFrntCmd = new BringToFrontCommand(model, selectedShape.get());
         model.execute(brngFrntCmd);
     }
 
     /**
      * Brings a shape to the back.
-     * 
      * @param event 
      */
     @FXML
     public void bringToBack(ActionEvent event) {
-       Command brngBckCmd = new BringToBackCommand(model, canvas, selectedShape.get()); 
+       Command brngBckCmd = new BringToBackCommand(model, selectedShape.get()); 
        model.execute(brngBckCmd);
     }
 
     @FXML
     private void resizeWidth(ActionEvent event) {
+        Command resizeCmd = new ResizeCommand(selectedShape.get(), Double.parseDouble(widthField.getText()), selectedShape.get().getHeight());
+        model.execute(resizeCmd);
     }
 
     @FXML
     private void resizeHeight(ActionEvent event) {
+        Command resizeCmd = new ResizeCommand(selectedShape.get(), selectedShape.get().getWidth(), Double.parseDouble(heightField.getText()));
+        model.execute(resizeCmd);
     }
     
 }

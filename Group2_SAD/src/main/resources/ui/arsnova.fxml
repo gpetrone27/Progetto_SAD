@@ -126,7 +126,7 @@
                            <children>
                               <HBox alignment="CENTER" spacing="10.0">
                                  <children>
-                                    <VBox alignment="TOP_CENTER" spacing="10.0">
+                                    <VBox alignment="TOP_CENTER" prefHeight="100.0" spacing="10.0">
                                        <children>
                                           <Label text="Border" />
                                           <HBox alignment="CENTER_LEFT" spacing="10.0">
@@ -270,7 +270,7 @@
                                        </opaqueInsets>
                                     </VBox>
                                     <Separator orientation="VERTICAL" />
-                                    <VBox alignment="TOP_CENTER" spacing="10.0">
+                                    <VBox alignment="TOP_CENTER" prefHeight="100.0" spacing="10.0">
                                        <children>
                                           <Label text="Fill" />
                                           <HBox alignment="CENTER_LEFT" spacing="10.0">
@@ -370,7 +370,7 @@
                                           </HBox>
                                           <HBox alignment="CENTER_LEFT" spacing="10.0">
                                              <children>
-                                                <ToggleButton mnemonicParsing="false" onAction="#selectFillColor" selected="true" textAlignment="CENTER" toggleGroup="$fillColor">
+                                                <ToggleButton mnemonicParsing="false" onAction="#selectFillColor" textAlignment="CENTER" toggleGroup="$fillColor">
                                                    <styleClass>
                                                       <String fx:value="color-button" />
                                                       <String fx:value="grey-shade-2" />
@@ -427,22 +427,32 @@
                               <Insets />
                            </HBox.margin>
                         </VBox>
+                        <ToggleButton fx:id="noFillButton" mnemonicParsing="false" onAction="#selectNoFill" selected="true" styleClass="transparent-button" toggleGroup="$fillColor" />
                         <Separator orientation="VERTICAL" />
                         <VBox alignment="BOTTOM_CENTER" layoutX="319.0" layoutY="20.0" spacing="10.0">
                            <children>
-                              <ToggleButton fx:id="gridButton" mnemonicParsing="false" onAction="#toggleGrid" prefHeight="50.0" prefWidth="50.0" />
-                              <HBox spacing="10.0">
+                              <HBox alignment="CENTER_LEFT" spacing="10.0">
                                  <children>
-                                    <Button fx:id="zoomInButton" mnemonicParsing="false" onAction="#zoomIn" prefHeight="30.0" prefWidth="30.0">
-                                       <tooltip>
-                                          <Tooltip text="Zoom In" />
-                                       </tooltip>
-                                    </Button>
-                                    <Button fx:id="zoomOutButton" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#zoomOut" prefHeight="30.0" prefWidth="30.0">
-                                       <tooltip>
-                                          <Tooltip text="Zoom Out" />
-                                       </tooltip>
-                                    </Button>
+                                    <ToggleButton fx:id="gridButton" mnemonicParsing="false" onAction="#toggleGrid" prefHeight="50.0" prefWidth="50.0" />
+                                    <Slider fx:id="gridSizeSlider" majorTickUnit="10.0" max="50.0" min="10.0" minorTickCount="0" orientation="VERTICAL" prefHeight="100.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="10.0">
+                                       <padding>
+                                          <Insets bottom="5.0" right="20.0" top="5.0" />
+                                       </padding>
+                                    </Slider>
+                                    <VBox alignment="CENTER" spacing="10.0">
+                                       <children>
+                                          <Button fx:id="zoomInButton" mnemonicParsing="false" onAction="#zoomIn" prefHeight="30.0" prefWidth="30.0">
+                                             <tooltip>
+                                                <Tooltip text="Zoom In" />
+                                             </tooltip>
+                                          </Button>
+                                          <Button fx:id="zoomOutButton" mnemonicParsing="false" onAction="#zoomOut" prefHeight="30.0" prefWidth="30.0">
+                                             <tooltip>
+                                                <Tooltip text="Zoom Out" />
+                                             </tooltip>
+                                          </Button>
+                                       </children>
+                                    </VBox>
                                  </children>
                               </HBox>
                               <Label text="Navigation">

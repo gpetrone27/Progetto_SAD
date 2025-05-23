@@ -1,11 +1,6 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package command;
 
-import javafx.scene.Node;
-import javafx.scene.layout.Pane;
 import sadprojectwork.PaintModel;
 import shapes.MyShape;
 
@@ -17,26 +12,20 @@ import shapes.MyShape;
  * preserving the previous order.
  */
 public class BringToBackCommand implements Command {
+    
     private final PaintModel model;
-    private final Pane canvas;
     private final MyShape shapeToBring;
-    private final int oldModel;
-    private final int oldCanvas;
-    private final Node fxShape;
+    private final int oldPosition;
 
     /**
     * Creates a bring to back command.
     * @param shapeToBring: shape to bring to back
     * @param model: data model that contains the clipboard
-    * @param canvas: JavaFX pane representing drawing area
     */ 
-    public BringToBackCommand(PaintModel model, Pane canvas, MyShape shapeToBring) {
+    public BringToBackCommand(PaintModel model, MyShape shapeToBring) {
         this.model = model;
-        this.canvas = canvas;
         this.shapeToBring = shapeToBring;
-        this.oldModel = model.getShapes().indexOf(shapeToBring);
-        this.oldCanvas = canvas.getChildren().indexOf(shapeToBring.getFxShape());
-        this.fxShape = shapeToBring.getFxShape();
+        this.oldPosition = model.getShapes().indexOf(shapeToBring);
     }
     
     /**
@@ -45,8 +34,6 @@ public class BringToBackCommand implements Command {
     @Override
     public void execute() {
         model.getShapes().remove(shapeToBring);
-        canvas.getChildren().remove(fxShape);
-
         model.getShapes().add(0, shapeToBring);
     }
 
@@ -57,8 +44,6 @@ public class BringToBackCommand implements Command {
     @Override
     public void undo() {
         model.getShapes().remove(shapeToBring);
-        canvas.getChildren().remove(shapeToBring.getFxShape());
-
-        model.getShapes().add(oldModel, shapeToBring);
+        model.getShapes().add(oldPosition, shapeToBring);
     }
 }

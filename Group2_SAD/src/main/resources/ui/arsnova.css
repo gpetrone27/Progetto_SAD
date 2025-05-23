@@ -31,6 +31,26 @@
     -fx-scale-y: 1.4;
 }
 
+.transparent-button {
+    -fx-min-width: 30px;
+    -fx-max-width: 30px;
+    -fx-min-height: 30px;
+    -fx-min-height: 30px;
+    -fx-background-radius: 50%;
+    -fx-border-radius: 50%;
+    -fx-padding: 0;
+    -fx-border-width: 2;
+    -fx-cursor: hand;
+    -fx-scale-x: 1;
+    -fx-scale-y: 1;
+    -fx-font-size: 1;
+    -fx-transition: all 0.2s ease-in-out;
+}
+
+.transparent-button:selected {
+    -fx-border-color: DODGERBLUE;
+}
+
 .grey-shade-0 {
     -fx-background-color: black;
 }
