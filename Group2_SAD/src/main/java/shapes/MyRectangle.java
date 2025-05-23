@@ -25,7 +25,7 @@ public class MyRectangle extends MyShape {
         rectangle = new Rectangle(startX, startY, width, height);
         rectangle.setStrokeWidth(3); // Temporary: set border width to 3
         this.fxShape = rectangle;
-        rectangle.setRotate(rotation);
+        setRotation(rotation);
     }
 
     /**

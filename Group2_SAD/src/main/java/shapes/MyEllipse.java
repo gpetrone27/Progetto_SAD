@@ -44,7 +44,7 @@ public class MyEllipse extends MyShape {
         ellipse = new Ellipse(adjustedX + radiusX, adjustedY + radiusY, radiusX, radiusY);
         ellipse.setStrokeWidth(3); // Temporary: set border width to 3
         this.fxShape = ellipse;
-        ellipse.setRotate(rotation);
+        setRotation(rotation);
     }
 
     /**

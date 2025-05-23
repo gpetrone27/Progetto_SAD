@@ -20,8 +20,6 @@ public abstract class MyShape {
     protected double width;
     protected double height;
     
-    protected double rotation;
-    
     public MyShape(double startX, double startY) {
         this.startX = startX;
         this.startY = startY;
@@ -82,11 +80,10 @@ public abstract class MyShape {
     public abstract double getHeight();
     
     public double getRotation() {
-        return rotation;
+        return getFxShape().getRotate();
     }
     
     public void setRotation (double rotation) {
-        this.rotation = rotation;
         getFxShape().setRotate(rotation);
     }
     
@@ -95,7 +92,7 @@ public abstract class MyShape {
      * @return 
      */
     public String toCSV() {
-        return ";" + getStartX() + ";" + getStartY() + ";" + getWidth() + ";" + getHeight() + ";" + fxShape.getFill() + ";" + fxShape.getStroke() + ";" + fxShape.getRotate() + ";null";
+        return ";" + getStartX() + ";" + getStartY() + ";" + getWidth() + ";" + getHeight() + ";" + getFxShape().getFill() + ";" + getFxShape().getStroke() + ";" + getFxShape().getRotate() + ";null";
     }
 
 }

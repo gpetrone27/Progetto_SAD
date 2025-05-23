@@ -18,7 +18,7 @@ public class MyText extends MyShape {
         text = new Text(displayText);
         text.setFont(Font.font(fontFamily, size));
         this.fxShape = text;
-        text.setRotate(rotation);
+        setRotation(rotation);
     }
 
     /**
