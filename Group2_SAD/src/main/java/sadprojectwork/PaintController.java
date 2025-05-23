@@ -6,6 +6,7 @@ import decorator.*;
 import shapes.*;
 import java.io.File;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.beans.binding.Bindings;
@@ -15,6 +16,7 @@ import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.MenuItem;
@@ -66,6 +68,9 @@ public class PaintController implements Initializable {
     private final double zoomMaxValue = 4.0;
     private final double zoomMinValue = 0.5;
     private Scale canvasScale = new Scale(1.0, 1.0, 0, 0);
+    
+    private boolean gridActived = false;
+    private double gridCellsSize = 5;
     
     private String displayText = "";
     private String fontFamily = "Arial";
@@ -791,10 +796,49 @@ public class PaintController implements Initializable {
     public void addShape(MyShape shape) {
         AddShapeCommand addCmd = new AddShapeCommand(model, shape);
         model.execute(addCmd);
+        
+        if (gridActived) {
+            toggleGrid(null);
+            toggleGrid(null);
+        }
     }
 
+    /**
+    * Activates or deactivates the grid on the drawing panel.
+    * @param event 
+    */
     @FXML
     private void toggleGrid(ActionEvent event) {
+        gridActived = !gridActived;
+
+        canvas.getChildren().removeIf(node ->
+            node instanceof Line && "grid".equals(node.getUserData()));
+
+        if (!gridActived) return;
+
+        double width = canvas.getWidth();
+        double height = canvas.getHeight();
+        double spacing = gridCellsSize * zoomBase;
+
+        List<Node> gridLines = new ArrayList<>();
+
+        for (double x = 0; x < width; x += spacing) {
+            Line verticalLine = new Line(x, 0, x, height);
+            verticalLine.setStroke(Color.LIGHTGRAY);
+            verticalLine.setStrokeWidth(0.5);
+            verticalLine.setUserData("grid");
+            gridLines.add(verticalLine);
+        }
+
+        for (double y = 0; y < height; y += spacing) {
+            Line horizontalLine = new Line(0, y, width, y);
+            horizontalLine.setStroke(Color.LIGHTGRAY);
+            horizontalLine.setStrokeWidth(0.5);
+            horizontalLine.setUserData("grid");
+            gridLines.add(horizontalLine);
+        }
+
+        canvas.getChildren().addAll(0, gridLines);
     }
 
     /**
