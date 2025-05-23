@@ -61,6 +61,16 @@ public class MyEllipse extends MyShape {
         ellipse.setRadiusX(Math.abs(newWidth / 2.0));
         ellipse.setRadiusY(Math.abs(newHeight / 2.0));
     }
+    
+    @Override
+    public double getStartX() {
+        return ellipse.getCenterX() - ellipse.getRadiusX();
+    }
+    
+    @Override
+    public double getStartY() {
+        return ellipse.getCenterY() - ellipse.getRadiusY();
+    }
 
     /**
      * Creates a copy of the shape, useful for the copy and paste command

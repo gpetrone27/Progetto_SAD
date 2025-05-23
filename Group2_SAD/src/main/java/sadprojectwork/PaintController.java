@@ -150,13 +150,6 @@ public class PaintController implements Initializable {
         ellipseButton.setUserData(Shapes.ELLIPSE);
         polygonButton.setUserData(Shapes.POLYGON);
         
-        // Sets text formatters to only accept numeric values in width and height fields
-        widthField.setTextFormatter(new TextFormatter<>(change -> {
-            return change.getControlNewText().matches("-?\\d*(\\.\\d*)?") ? change : null;
-        }));
-        heightField.setTextFormatter(new TextFormatter<>(change -> {
-            return change.getControlNewText().matches("-?\\d*(\\.\\d*)?") ? change : null;
-        }));
     }
 
     /**
@@ -254,6 +247,21 @@ public class PaintController implements Initializable {
             },
             selectedShape
         ));
+        
+        // Sets text formatters to only accept numeric values in width and height fields
+        widthField.setTextFormatter(new TextFormatter<>(change -> {
+            return change.getControlNewText().matches("\\d*(\\.\\d*)?") ? change : null;
+        }));
+        heightField.setTextFormatter(new TextFormatter<>(change -> {
+            return change.getControlNewText().matches("\\d*(\\.\\d*)?") ? change : null;
+        }));
+        
+        // Rotates the selected shape while the slider is being dragged
+        rotationSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
+            if (selectedShape != null) {
+                selectedShape.get().setRotation(newVal.doubleValue());
+            }
+        });
         
     }
 
@@ -523,11 +531,7 @@ public class PaintController implements Initializable {
         heightField.setText(Double.toString(shape.getHeight()));
         
         // Rotation
-        rotationSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
-            if (selectedShape != null) {
-                selectedShape.get().setRotation(newVal.doubleValue());
-            }
-        });
+        rotationSlider.setValue(selectedShape.get().getRotation());
     }
 
     /**

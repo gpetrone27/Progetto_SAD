@@ -56,6 +56,16 @@ public class MyRectangle extends MyShape {
             rectangle.setHeight(newHeight);
         }
     }
+    
+    @Override
+    public double getStartX() {
+        return rectangle.getX();
+    }
+    
+    @Override
+    public double getStartY() {
+        return rectangle.getY();
+    }
 
     /**
      * Creates a copy of the shape, useful for the copy and paste command

@@ -95,7 +95,7 @@ public abstract class MyShape {
      * @return 
      */
     public String toCSV() {
-        return ";" + startX + ";" + startY + ";" + getWidth() + ";" + getHeight() + ";" + fxShape.getFill() + ";" + fxShape.getStroke() + ";null";
+        return ";" + getStartX() + ";" + getStartY() + ";" + getWidth() + ";" + getHeight() + ";" + fxShape.getFill() + ";" + fxShape.getStroke() + ";" + fxShape.getRotate() + ";null";
     }
 
 }
