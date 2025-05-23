@@ -60,11 +60,11 @@ public class PaintController implements Initializable {
 
     private double lastMouseX, lastMouseY; // Last registered mouse coordinates
     
-    private double zoomBase = 1.0;
+    private double zoomBase = 1.5;
     private final double zoomStep = 0.25;
-    private final double zoomMaxValue = 4.0;
+    private final double zoomMaxValue = 2.5;
     private final double zoomMinValue = 0.5;
-    private Scale canvasScale = new Scale(1.0, 1.0, 0, 0);
+    private Scale canvasScale = new Scale(zoomBase, zoomBase, 0, 0);
 
     @FXML
     private AnchorPane rootPane;
