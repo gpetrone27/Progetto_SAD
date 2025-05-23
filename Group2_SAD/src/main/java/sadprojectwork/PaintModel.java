@@ -149,18 +149,15 @@ public class PaintModel {
                 String listOfPoints = parts[8]; // "x1-y1/x2-y2/.../xn-yn"
                 switch (loadedMode) {
                     case LINE -> {
-                        BorderColorDecorator myLine = new BorderColorDecorator(new MyLine(loadedStartX, loadedStartY, loadedWidth, loadedHeight), loadedBorder);
-                        myLine.setRotation(loadedRotation);
+                        BorderColorDecorator myLine = new BorderColorDecorator(new MyLine(loadedStartX, loadedStartY, loadedWidth, loadedHeight, loadedRotation), loadedBorder);
                         loadedShapes.add(myLine);
                     }
                     case RECTANGLE -> {
-                        BorderColorDecorator myRectangle = new BorderColorDecorator(new FillColorDecorator(new MyRectangle(loadedStartX, loadedStartY, loadedWidth, loadedHeight), loadedFill), loadedBorder);
-                        myRectangle.setRotation(loadedRotation);
+                        BorderColorDecorator myRectangle = new BorderColorDecorator(new FillColorDecorator(new MyRectangle(loadedStartX, loadedStartY, loadedWidth, loadedHeight, loadedRotation), loadedFill), loadedBorder);
                         loadedShapes.add(myRectangle);
                     }
                     case ELLIPSE -> {
-                        BorderColorDecorator myEllipse = new BorderColorDecorator(new FillColorDecorator(new MyEllipse(loadedStartX, loadedStartY, loadedWidth, loadedHeight), loadedFill), loadedBorder);
-                        myEllipse.setRotation(loadedRotation);
+                        BorderColorDecorator myEllipse = new BorderColorDecorator(new FillColorDecorator(new MyEllipse(loadedStartX, loadedStartY, loadedWidth, loadedHeight, loadedRotation), loadedFill), loadedBorder);
                         loadedShapes.add(myEllipse);
                     }
                     case POLYGON -> {
@@ -175,8 +172,7 @@ public class PaintModel {
                                 points.add(new Point2D(x, y));
                             }
                         }
-                        BorderColorDecorator myPolygon = new BorderColorDecorator(new FillColorDecorator(new MyPolygon(loadedStartX, loadedStartY, points), loadedFill), loadedBorder);
-                        myPolygon.setRotation(loadedRotation);
+                        BorderColorDecorator myPolygon = new BorderColorDecorator(new FillColorDecorator(new MyPolygon(loadedStartX, loadedStartY, points, loadedRotation), loadedFill), loadedBorder);
                         loadedShapes.add(myPolygon);
                     }
                 }

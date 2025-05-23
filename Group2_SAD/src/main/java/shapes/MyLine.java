@@ -19,8 +19,9 @@ public class MyLine extends MyShape {
      * @param startY
      * @param width
      * @param height 
+     * @param rotation 
      */
-    public MyLine(double startX, double startY, double width, double height) {
+    public MyLine(double startX, double startY, double width, double height, double rotation) {
         super(startX, startY);
         line = new Line(startX, startY, startX + width, startY + height);
         line.setStrokeWidth(3);
@@ -88,7 +89,7 @@ public class MyLine extends MyShape {
      */
     @Override
     public MyShape cloneShape() {
-        return new MyLine(startX, startY, line.getEndX(), line.getEndY());
+        return new MyLine(startX, startY, line.getEndX(), line.getEndY(), line.getRotate());
     }
 
     /**

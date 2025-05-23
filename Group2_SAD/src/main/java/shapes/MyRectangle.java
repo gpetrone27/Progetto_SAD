@@ -18,8 +18,9 @@ public class MyRectangle extends MyShape {
      * @param startY
      * @param width
      * @param height 
+     * @param rotation 
      */
-    public MyRectangle(double startX, double startY, double width, double height) {
+    public MyRectangle(double startX, double startY, double width, double height, double rotation) {
         super(startX, startY);
         rectangle = new Rectangle(startX, startY, width, height);
         rectangle.setStrokeWidth(3); // Temporary: set border width to 3
@@ -73,7 +74,7 @@ public class MyRectangle extends MyShape {
      */
     @Override
     public MyShape cloneShape() {
-        return new MyRectangle(startX, startY, rectangle.getWidth(), rectangle.getHeight());
+        return new MyRectangle(startX, startY, rectangle.getWidth(), rectangle.getHeight(), rectangle.getRotate());
     }
 
     /**

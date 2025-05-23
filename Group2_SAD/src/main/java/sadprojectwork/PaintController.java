@@ -16,6 +16,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Slider;
@@ -34,6 +35,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Line;
+import javafx.scene.text.Font;
 import javafx.scene.transform.Scale;
 import javafx.stage.FileChooser;
 import org.kordamp.ikonli.javafx.FontIcon;
@@ -64,6 +66,9 @@ public class PaintController implements Initializable {
     private final double zoomMaxValue = 4.0;
     private final double zoomMinValue = 0.5;
     private Scale canvasScale = new Scale(1.0, 1.0, 0, 0);
+    
+    private String fontFamily = "Arial";
+    private double textSize = 12;
 
     @FXML
     private AnchorPane rootPane;
@@ -78,17 +83,25 @@ public class PaintController implements Initializable {
     @FXML
     private ToggleGroup fillColor;
     @FXML
-    private ToggleGroup borderColorPanel;
+    private ToggleButton noFillButton;
     @FXML
     private ToggleGroup fillColorPanel;
     @FXML
+    private ToggleButton noFillButtonPanel;
+    @FXML
+    private ToggleGroup borderColorPanel;
+    @FXML
     private ToggleButton cursorButton;
     @FXML
-    private ToggleButton ellipseButton;
+    private ToggleButton lineButton;
     @FXML
     private ToggleButton rectangleButton;
     @FXML
-    private ToggleButton lineButton;
+    private ToggleButton ellipseButton;
+    @FXML
+    private ToggleButton polygonButton;
+    @FXML
+    private ToggleButton textButton;
     @FXML
     private MenuItem cutMenuItem;
     @FXML
@@ -124,11 +137,9 @@ public class PaintController implements Initializable {
     @FXML
     private Slider rotationSlider;
     @FXML
-    private ToggleButton polygonButton;
+    private ComboBox<String> fontsComboBox;
     @FXML
-    private ToggleButton noFillButton;
-    @FXML
-    private ToggleButton noFillButtonPanel;
+    private ComboBox<String> sizeComboBox;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -149,6 +160,15 @@ public class PaintController implements Initializable {
         rectangleButton.setUserData(Shapes.RECTANGLE);
         ellipseButton.setUserData(Shapes.ELLIPSE);
         polygonButton.setUserData(Shapes.POLYGON);
+        textButton.setUserData(Shapes.TEXT);
+        
+        // Available fonts
+        fontsComboBox.getItems().addAll(Font.getFamilies());
+        fontsComboBox.setValue("Arial");
+        
+        // Available sizes
+        sizeComboBox.getItems().addAll("8", "10", "12", "14", "16", "18", "24", "36", "48", "72");
+        sizeComboBox.setValue("12");
         
     }
 
@@ -330,6 +350,12 @@ public class PaintController implements Initializable {
         noFillPanelIcon.setIconColor(Color.RED);
         noFillButtonPanel.setGraphic(noFillPanelIcon);
         
+        // Text button
+        FontIcon textIcon = new FontIcon("fas-font");
+        textIcon.setIconSize(20);
+        textIcon.setIconColor(Color.BLACK);
+        textButton.setGraphic(textIcon);
+        
     }
 
     /**
@@ -357,26 +383,26 @@ public class PaintController implements Initializable {
                 // Draws the shape if any of them is selected
                 switch(modeProperty.get()) {
                     case LINE -> {
-                        BorderColorDecorator myLine = new BorderColorDecorator(new MyLine(startX, startY, 0, 0), borderHex);
+                        BorderColorDecorator myLine = new BorderColorDecorator(new MyLine(startX, startY, 0, 0, 0), borderHex);
                         addShape(myLine);
                         enableSelection(myLine);
                         currentShape.set(myLine);
                     }
                     case RECTANGLE -> {
-                        BorderColorDecorator myRectangle = new BorderColorDecorator(new FillColorDecorator(new MyRectangle(startX, startY, 0, 0), fillHex), borderHex);
+                        BorderColorDecorator myRectangle = new BorderColorDecorator(new FillColorDecorator(new MyRectangle(startX, startY, 0, 0, 0), fillHex), borderHex);
                         addShape(myRectangle);
                         enableSelection(myRectangle);
                         currentShape.set(myRectangle);
                     }
                     case ELLIPSE -> {
-                        BorderColorDecorator myEllipse = new BorderColorDecorator(new FillColorDecorator(new MyEllipse(startX, startY, 0, 0), fillHex), borderHex);
+                        BorderColorDecorator myEllipse = new BorderColorDecorator(new FillColorDecorator(new MyEllipse(startX, startY, 0, 0, 0), fillHex), borderHex);
                         addShape(myEllipse);
                         enableSelection(myEllipse);
                         currentShape.set(myEllipse);
                     }
                     case POLYGON -> {
                         if (currentShape.get() == null) {
-                            BorderColorDecorator myPolygon = new BorderColorDecorator(new FillColorDecorator(new MyPolygon(startX, startY, null), fillHex), borderHex);
+                            BorderColorDecorator myPolygon = new BorderColorDecorator(new FillColorDecorator(new MyPolygon(startX, startY, null, 0), fillHex), borderHex);
                             addShape(myPolygon);
                             enableSelection(myPolygon);
                             currentShape.set(myPolygon);
@@ -788,6 +814,24 @@ public class PaintController implements Initializable {
             canvasScale = new Scale(zoomBase, zoomBase, 0, 0);
             canvas.getTransforms().add(canvasScale);
         }
+    }
+
+    /**
+     * Updates the font family variable to match user selection.
+     * @param event 
+     */
+    @FXML
+    private void selectFont(ActionEvent event) {
+        fontFamily = fontsComboBox.getValue();
+    }
+
+    /**
+     * Updates the text size variable to match user selection.
+     * @param event 
+     */
+    @FXML
+    private void selectSize(ActionEvent event) {
+        textSize = Double.parseDouble(sizeComboBox.getValue());
     }
     
     public MyShape getSelectedShape() {

@@ -3,6 +3,7 @@
 <?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.ContextMenu?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
@@ -124,9 +125,9 @@
                         <Separator layoutX="677.0" layoutY="20.0" orientation="VERTICAL" />
                         <VBox alignment="BOTTOM_CENTER" spacing="10.0">
                            <children>
-                              <HBox alignment="CENTER" spacing="10.0">
+                              <HBox alignment="CENTER" spacing="10.0" VBox.vgrow="ALWAYS">
                                  <children>
-                                    <VBox alignment="TOP_CENTER" prefHeight="100.0" spacing="10.0">
+                                    <VBox alignment="CENTER" prefHeight="100.0" spacing="10.0">
                                        <children>
                                           <Label text="Border" />
                                           <HBox alignment="CENTER_LEFT" spacing="10.0">
@@ -270,7 +271,7 @@
                                        </opaqueInsets>
                                     </VBox>
                                     <Separator orientation="VERTICAL" />
-                                    <VBox alignment="TOP_CENTER" prefHeight="100.0" spacing="10.0">
+                                    <VBox alignment="CENTER" prefHeight="100.0" spacing="10.0">
                                        <children>
                                           <Label text="Fill" />
                                           <HBox alignment="CENTER_LEFT" spacing="10.0">
@@ -429,9 +430,34 @@
                         </VBox>
                         <ToggleButton fx:id="noFillButton" mnemonicParsing="false" onAction="#selectNoFill" selected="true" styleClass="transparent-button" toggleGroup="$fillColor" />
                         <Separator orientation="VERTICAL" />
+                        <VBox alignment="BOTTOM_CENTER" spacing="10.0">
+                           <children>
+                              <HBox alignment="CENTER" spacing="10.0" VBox.vgrow="ALWAYS">
+                                 <children>
+                                    <ToggleButton fx:id="textButton" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" toggleGroup="$shapes">
+                                       <tooltip>
+                                          <Tooltip text="Polygon" />
+                                       </tooltip>
+                                    </ToggleButton>
+                                    <VBox alignment="CENTER" spacing="10.0">
+                                       <children>
+                                          <ComboBox fx:id="fontsComboBox" onAction="#selectFont" prefWidth="100.0" promptText="Font" />
+                                          <ComboBox fx:id="sizeComboBox" onAction="#selectSize" prefWidth="100.0" promptText="Size" />
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </HBox>
+                              <Label text="Insert">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </VBox>
+                        <Separator layoutX="694.0" layoutY="20.0" orientation="VERTICAL" />
                         <VBox alignment="BOTTOM_CENTER" layoutX="319.0" layoutY="20.0" spacing="10.0">
                            <children>
-                              <HBox alignment="CENTER_LEFT" spacing="10.0">
+                              <HBox alignment="CENTER" spacing="10.0" VBox.vgrow="ALWAYS">
                                  <children>
                                     <ToggleButton fx:id="gridButton" mnemonicParsing="false" onAction="#toggleGrid" prefHeight="50.0" prefWidth="50.0" />
                                     <Slider fx:id="gridSizeSlider" majorTickUnit="10.0" max="50.0" min="10.0" minorTickCount="0" orientation="VERTICAL" prefHeight="100.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="10.0">

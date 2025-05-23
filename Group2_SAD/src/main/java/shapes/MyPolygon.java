@@ -19,7 +19,7 @@ public class MyPolygon extends MyShape {
     private double smallerY = 0;
     private double greaterY = 0;
     
-    public MyPolygon(double startX, double startY, List<Point2D> points) {
+    public MyPolygon(double startX, double startY, List<Point2D> points, double rotation) {
         
         super(startX, startY);
         
@@ -89,7 +89,7 @@ public class MyPolygon extends MyShape {
         for(Point2D p : points) {
             clonedPoints.add(new Point2D(p.getX(), p.getY()));
         }
-        return new MyPolygon(startX, startY, clonedPoints);
+        return new MyPolygon(startX, startY, clonedPoints, path.getRotate());
     }
 
     @Override

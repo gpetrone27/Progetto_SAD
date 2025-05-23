@@ -15,6 +15,7 @@ sadprojectwork\PaintModel.class
 command\DeleteCommand.class
 command\AddShapeCommand.class
 command\ChangeColorCommand.class
+shapes\MyText.class
 command\CutCommand.class
 command\PasteCommand.class
 decorator\FillColorDecorator.class

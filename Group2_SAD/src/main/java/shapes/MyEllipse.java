@@ -18,8 +18,9 @@ public class MyEllipse extends MyShape {
      * @param startY
      * @param width
      * @param height 
+     * @param rotation 
      */
-    public MyEllipse(double startX, double startY, double width, double height) {
+    public MyEllipse(double startX, double startY, double width, double height, double rotation) {
         
         // MyShape constructor
         super(startX, startY);
@@ -78,7 +79,7 @@ public class MyEllipse extends MyShape {
      */
     @Override
     public MyShape cloneShape() {
-        return new MyEllipse(startX, startY, ellipse.getRadiusX(), ellipse.getRadiusY());
+        return new MyEllipse(startX, startY, ellipse.getRadiusX(), ellipse.getRadiusY(), ellipse.getRotate());
     }
 
     /**
