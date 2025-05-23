@@ -69,7 +69,7 @@ public class PaintController implements Initializable {
     @FXML
     private AnchorPane rootPane;
     @FXML
-    private ScrollPane drawingPane;
+    public ScrollPane drawingPane;
     @FXML
     private Pane canvas;
     @FXML

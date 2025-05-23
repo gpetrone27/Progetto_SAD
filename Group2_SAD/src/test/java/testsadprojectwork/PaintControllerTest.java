@@ -1318,5 +1318,88 @@ public class PaintControllerTest {
         assertEquals(beforein, afterout, "The zoom is not decremented!");
     }
 
+    /**
+     * Tests the vertical scroll of the scrollbar.
+     *
+     * @param robot
+     * @throws InterruptedException
+     */
+    @Test
+    void testVerticalScroll(FxRobot robot) throws InterruptedException {
+        // Adding shapes vertically 
+        Platform.runLater(() -> {
+            for (int i = 0; i < 100; i++) {
+                MyShape rect = new MyRectangle(50, i * 50, 30, 20);
+                controller.getModel().addShape(rect);
+            }
+        });
+
+        robot.interact(() -> {
+        });
+
+        javafx.scene.control.ScrollPane scrollPane = controller.drawingPane;
+
+        // Save initial value  
+        double initialValue = scrollPane.getVvalue();
+
+        // Simulate a downwards
+        robot.moveTo(scrollPane).scroll(30);
+
+        double afterScrollDown = scrollPane.getVvalue();
+        assertTrue(afterScrollDown > initialValue, "Scroll downwardso: the value should increase");
+
+        // Simulate a upward
+        robot.moveTo(scrollPane).scroll(-20);
+
+        double afterScrollUp = scrollPane.getVvalue();
+        assertTrue(afterScrollUp < afterScrollDown, "Scroll upwards: the value should decrease");
+    }
+
+    /**
+     * Tests the horizontal scroll of the scrollbar.
+     *
+     * @param robot
+     * @throws InterruptedException
+     */
+    @Test
+    void testHorizontalScroll(FxRobot robot) throws InterruptedException {
+        
+        Platform.runLater(() -> {
+            for (int i = 0; i < 100; i++) {
+                MyShape rect = new MyRectangle(i * 50, 100, 30, 20); 
+                controller.getModel().addShape(rect);
+            }
+        });
+
+        robot.interact(() -> {
+        }); 
+
+        javafx.scene.control.ScrollPane scrollPane = controller.drawingPane;
+        double initialHValue = scrollPane.getHvalue();
+
+        // Simulate horizontal right scroll 
+        for (int i = 0; i <= 20; i++) {
+            double progress = i / 10.0; 
+            double finalProgress = progress;
+            Platform.runLater(() -> scrollPane.setHvalue(finalProgress));
+            robot.interact(() -> {
+            }); 
+        } 
+
+        double afterScrollRight = scrollPane.getHvalue();
+
+        assertTrue(afterScrollRight > initialHValue, "Right scroll: the value should increase");
+
+        // Simulate horizontal left scroll 
+        for (int i = 20; i >= 0; i--) {
+            double progress = i / 10.0;
+            Platform.runLater(() -> scrollPane.setHvalue(progress));
+            robot.interact(() -> {
+            });
+        }
+        double afterScrollLeft = scrollPane.getHvalue();
+
+        assertTrue(afterScrollLeft < afterScrollRight, "Left Scroll: the value should decrease");
+    }
 
 }
