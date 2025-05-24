@@ -78,6 +78,10 @@ public class MyPolygon extends MyShape {
         path.getElements().add(new ClosePath());
     }
     
+    public void closeShape() {
+        path.getElements().add(new ClosePath());
+    }
+    
     @Override
     public void resize(double newWidth, double newHeight) {
         // TO DO
