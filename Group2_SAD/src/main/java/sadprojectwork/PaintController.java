@@ -467,8 +467,9 @@ public class PaintController implements Initializable {
                 
                 double endX = e.getX();
                 double endY = e.getY();
-                
-                currentShape.get().resize(endX - startX, endY - startY);
+                if(modeProperty.get() != Shapes.POLYGON) {
+                    currentShape.get().resize(endX - startX, endY - startY);
+                }
             }
         });
 

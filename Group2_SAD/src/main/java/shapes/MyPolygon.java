@@ -10,15 +10,27 @@ import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
 
+/**
+ * Represents a custom polygon shape made of Points2D using the JavaFX object Path.
+ * The polygon supports basic transformations such as moving and resizing, and can be cloned or serialized to CSV.
+ */
 public class MyPolygon extends MyShape {
     
     private Path path;
     private List<Point2D> points; 
-    private double smallerX = 0;
-    private double greaterX = 0;
-    private double smallerY = 0;
-    private double greaterY = 0;
-    
+    private double smallerX;
+    private double greaterX;
+    private double smallerY;
+    private double greaterY;
+  
+    /**
+     * Constructs a MyPolygon object.
+     *
+     * @param startX    The initial X coordinate
+     * @param startY    The initial Y coordinate
+     * @param points    The list of polygon points (can be null to start an empty polygon)
+     * @param rotation  The initial rotation of the polygon
+     */
     public MyPolygon(double startX, double startY, List<Point2D> points, double rotation) {
         
         super(startX, startY);
@@ -39,6 +51,12 @@ public class MyPolygon extends MyShape {
         setRotation(rotation);
     }
     
+    /**
+     * Adds the first point of the polygon
+     *
+     * @param x The X coordinate of the point
+     * @param y The Y coordinate of the point
+     */    
     public void addMoveTo(double x, double y) {
         path.getElements().add(new MoveTo(x, y));
         points.add(new Point2D(x, y));
@@ -55,6 +73,13 @@ public class MyPolygon extends MyShape {
         }
     }
     
+    /**
+     * Adds a line to the polygon or closes the shape if the point is close to the starting point.
+     *
+     * @param x The X coordinate of the new point
+     * @param y The Y coordinate of the new point
+     * @return true if the shape was closed, false otherwise
+     */
     public boolean addLineTo(double x, double y) {
         if (Math.abs(x - startX) <= 10 && Math.abs(y - startY) <= 10) {
             path.getElements().add(new ClosePath());
@@ -67,6 +92,15 @@ public class MyPolygon extends MyShape {
         }
     }
     
+    /**
+     * Reconstructs the polygon's {@link Path} from the current list of points.
+     * 
+     * This method clears the path and rebuilds it by creating a {@link MoveTo} element
+     * for the first point and {@link LineTo} elements for each subsequent point, 
+     * followed by a {@link ClosePath} to close the shape.
+     * 
+     * It is typically used when loading or cloning an existing polygon.
+     */   
     private void reconstruct() {
         Point2D firstPoint = points.get(0);
         path.getElements().add(new MoveTo(firstPoint.getX(), firstPoint.getY()));
@@ -78,15 +112,99 @@ public class MyPolygon extends MyShape {
         path.getElements().add(new ClosePath());
     }
     
+    /**
+     * Closes the polygon.
+     */
     public void closeShape() {
         path.getElements().add(new ClosePath());
     }
     
+
+    /**
+     * Resizes the polygon proportionally based on new width and height,
+     * keeping the top-left corner fixed.
+     *
+     * @param newWidth  The new width
+     * @param newHeight The new height
+     */    
     @Override
     public void resize(double newWidth, double newHeight) {
-        // TO DO
+        double oldWidth = getWidth();
+        double oldHeight = getHeight();
+
+        if (oldWidth == 0 || oldHeight == 0) return;
+
+        double scaleX = newWidth / oldWidth;
+        double scaleY = newHeight / oldHeight;
+
+        // The top-left point remains fixed
+        Point2D ref = new Point2D(smallerX, smallerY);
+        List<Point2D> newPoints = new ArrayList<>();
+
+        path.getElements().clear();
+
+        for (int i = 0; i < points.size(); i++) {
+            Point2D p = points.get(i);
+            double newX = ref.getX() + (p.getX() - ref.getX()) * scaleX;
+            double newY = ref.getY() + (p.getY() - ref.getY()) * scaleY;
+            Point2D scaled = new Point2D(newX, newY);
+            newPoints.add(scaled);
+
+            if (i == 0) {
+                path.getElements().add(new MoveTo(newX, newY));
+            } else {
+                path.getElements().add(new LineTo(newX, newY));
+            }
+        }
+
+        path.getElements().add(new ClosePath());
+
+        points = newPoints;
+        
+        recomputeBounds();
+}
+
+    
+    /**
+     * Recomputes the bounding box coordinates based on the current points.
+     */
+    private void recomputeBounds() {
+        if (points == null || points.isEmpty()) {
+            smallerX = startX;
+            greaterX = startX;
+            smallerY = startY;
+            greaterY = startY;
+            return;
+        }
+
+        double minX = Double.POSITIVE_INFINITY;
+        double maxX = Double.NEGATIVE_INFINITY;
+        double minY = Double.POSITIVE_INFINITY;
+        double maxY = Double.NEGATIVE_INFINITY;
+
+        for (Point2D p : points) {
+            double x = p.getX();
+            double y = p.getY();
+
+            if (x < minX) minX = x;
+            if (x > maxX) maxX = x;
+            if (y < minY) minY = y;
+            if (y > maxY) maxY = y;
+            
+        }
+
+        smallerX = minX;
+        greaterX = maxX;
+        smallerY = minY;
+        greaterY = maxY;
     }
 
+    
+    /**
+     * Clones the current shape, including its points and rotation.
+     *
+     * @return A new instance of {@link MyPolygon} identical to the current one
+     */
     @Override
     public MyShape cloneShape() {
         List<Point2D> clonedPoints = new ArrayList<>();
@@ -95,17 +213,32 @@ public class MyPolygon extends MyShape {
         }
         return new MyPolygon(startX, startY, clonedPoints, path.getRotate());
     }
-
+    /**
+     * Returns the width of the polygon's bounding box.
+     *
+     * @return The width
+     */
     @Override
     public double getWidth() {
        return greaterX - smallerX;
     }
 
+    /**
+     * Returns the height of the polygon's bounding box.
+     *
+     * @return The height
+     */
     @Override
     public double getHeight() {
         return greaterY - smallerY;
     }
 
+    /**
+     * Moves the entire polygon to a new position based on the given coordinates.
+     *
+     * @param x The new X coordinate
+     * @param y The new Y coordinate
+     */
     @Override
     public void moveTo(double x, double y) {
         
@@ -138,6 +271,11 @@ public class MyPolygon extends MyShape {
         greaterY += dY;
     }
     
+    /**
+    * Serializes the polygon to a CSV format string.
+    *
+    * @return A CSV string representing the polygon's data
+    */
     @Override
     public String toCSV() {
         StringBuffer pointsList = new StringBuffer();
