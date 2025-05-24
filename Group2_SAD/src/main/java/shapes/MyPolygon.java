@@ -236,6 +236,14 @@ public class MyPolygon extends MyShape {
     public double getHeight() {
         return greaterY - smallerY;
     }
+    
+    /**
+     * Returns the list of points
+     * @return points
+     */
+    public List<Point2D> getPoints() {
+        return new ArrayList<>(points);
+    }
 
     /**
      * Moves the entire polygon to a new position based on the given coordinates.
