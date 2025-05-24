@@ -19,7 +19,7 @@ public class MyPolygon extends MyShape {
     private double smallerY = 0;
     private double greaterY = 0;
     
-    public MyPolygon(double startX, double startY, List<Point2D> points) {
+    public MyPolygon(double startX, double startY, List<Point2D> points, double rotation) {
         
         super(startX, startY);
         
@@ -36,6 +36,7 @@ public class MyPolygon extends MyShape {
         }
         
         this.fxShape = path;
+        setRotation(rotation);
     }
     
     public void addMoveTo(double x, double y) {
@@ -88,7 +89,7 @@ public class MyPolygon extends MyShape {
         for(Point2D p : points) {
             clonedPoints.add(new Point2D(p.getX(), p.getY()));
         }
-        return new MyPolygon(startX, startY, clonedPoints);
+        return new MyPolygon(startX, startY, clonedPoints, path.getRotate());
     }
 
     @Override
@@ -103,6 +104,7 @@ public class MyPolygon extends MyShape {
 
     @Override
     public void moveTo(double x, double y) {
+        
         double dX = x - startX;
         double dY = y - startY;
         
@@ -142,7 +144,7 @@ public class MyPolygon extends MyShape {
             pointsList.append("/");
         }
         pointsList.deleteCharAt(pointsList.length() - 1);
-        return Shapes.POLYGON + ";" + startX + ";" + startY + ";" + getWidth() + ";" + getHeight() + ";" + path.getFill() + ";" + path.getStroke() + ";" + pointsList;
+        return Shapes.POLYGON + ";" + startX + ";" + startY + ";" + getWidth() + ";" + getHeight() + ";" + path.getFill() + ";" + path.getStroke() + ";" + path.getRotate() + ";" + pointsList;
     }
 
 }

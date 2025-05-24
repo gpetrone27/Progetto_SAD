@@ -61,7 +61,7 @@ public abstract class ShapeDecorator extends MyShape {
     public MyShape cloneShape() {
         return decoratedShape.cloneShape();
     }
-    
+        
     @Override
     public String toCSV() {
         return decoratedShape.toCSV();

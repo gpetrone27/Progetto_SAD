@@ -115,7 +115,7 @@ public class PaintModel {
     public void saveDrawing(File file) {
         
         try (PrintWriter writer = new PrintWriter(file)) {
-            writer.println("SHAPE;STARTX;STARTY;WIDTH;HEIGHT;FILL;BORDER;POINTS");
+            writer.println("SHAPE;STARTX;STARTY;WIDTH;HEIGHT;FILL;BORDER;ROTATION;POINTS");
             for (MyShape shape : shapes) {
                 writer.println(shape.toCSV());
             }
@@ -145,18 +145,19 @@ public class PaintModel {
                 double loadedHeight = Double.parseDouble(parts[4]);
                 Color loadedFill = Color.valueOf(parts[5]);
                 Color loadedBorder = Color.valueOf(parts[6]);
-                String listOfPoints = parts[7]; // "x1-y1/x2-y2/.../xn-yn"
+                double loadedRotation = Double.parseDouble(parts[7]);
+                String listOfPoints = parts[8]; // "x1-y1/x2-y2/.../xn-yn"
                 switch (loadedMode) {
                     case LINE -> {
-                        BorderColorDecorator myLine = new BorderColorDecorator(new MyLine(loadedStartX, loadedStartY, loadedWidth, loadedHeight), loadedBorder);
+                        BorderColorDecorator myLine = new BorderColorDecorator(new MyLine(loadedStartX, loadedStartY, loadedWidth, loadedHeight, loadedRotation), loadedBorder);
                         loadedShapes.add(myLine);
                     }
                     case RECTANGLE -> {
-                        BorderColorDecorator myRectangle = new BorderColorDecorator(new FillColorDecorator(new MyRectangle(loadedStartX, loadedStartY, loadedWidth, loadedHeight), loadedFill), loadedBorder);
+                        BorderColorDecorator myRectangle = new BorderColorDecorator(new FillColorDecorator(new MyRectangle(loadedStartX, loadedStartY, loadedWidth, loadedHeight, loadedRotation), loadedFill), loadedBorder);
                         loadedShapes.add(myRectangle);
                     }
                     case ELLIPSE -> {
-                        BorderColorDecorator myEllipse = new BorderColorDecorator(new FillColorDecorator(new MyEllipse(loadedStartX, loadedStartY, loadedWidth, loadedHeight), loadedFill), loadedBorder);
+                        BorderColorDecorator myEllipse = new BorderColorDecorator(new FillColorDecorator(new MyEllipse(loadedStartX, loadedStartY, loadedWidth, loadedHeight, loadedRotation), loadedFill), loadedBorder);
                         loadedShapes.add(myEllipse);
                     }
                     case POLYGON -> {
@@ -171,7 +172,7 @@ public class PaintModel {
                                 points.add(new Point2D(x, y));
                             }
                         }
-                        BorderColorDecorator myPolygon = new BorderColorDecorator(new FillColorDecorator(new MyPolygon(loadedStartX, loadedStartY, points), loadedFill), loadedBorder);
+                        BorderColorDecorator myPolygon = new BorderColorDecorator(new FillColorDecorator(new MyPolygon(loadedStartX, loadedStartY, points, loadedRotation), loadedFill), loadedBorder);
                         loadedShapes.add(myPolygon);
                     }
                 }

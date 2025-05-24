@@ -19,12 +19,14 @@ public class MyLine extends MyShape {
      * @param startY
      * @param width
      * @param height 
+     * @param rotation 
      */
-    public MyLine(double startX, double startY, double width, double height) {
+    public MyLine(double startX, double startY, double width, double height, double rotation) {
         super(startX, startY);
         line = new Line(startX, startY, startX + width, startY + height);
         line.setStrokeWidth(3);
         this.fxShape = line;
+        setRotation(rotation);
     }
 
     // Returns the JavaFX shape object to be added to the pane
@@ -87,7 +89,7 @@ public class MyLine extends MyShape {
      */
     @Override
     public MyShape cloneShape() {
-        return new MyLine(startX, startY, line.getEndX(), line.getEndY());
+        return new MyLine(startX, startY, getWidth(), getHeight(), line.getRotate());
     }
 
     /**
@@ -138,6 +140,6 @@ public class MyLine extends MyShape {
 
     @Override
     public String toCSV() {
-        return Shapes.LINE + ";" + startX + ";" + startY + ";" + getWidth() + ";" + getHeight() + ";" + fxShape.getStroke() + ";" + fxShape.getStroke() + ";null";
+        return Shapes.LINE + ";" + startX + ";" + startY + ";" + getWidth() + ";" + getHeight() + ";" + fxShape.getStroke() + ";" + fxShape.getStroke() + ";" + fxShape.getRotate() + ";null";
     }
 }

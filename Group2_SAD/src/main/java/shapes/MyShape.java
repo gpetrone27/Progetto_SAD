@@ -79,12 +79,20 @@ public abstract class MyShape {
      */
     public abstract double getHeight();
     
+    public double getRotation() {
+        return getFxShape().getRotate();
+    }
+    
+    public void setRotation (double rotation) {
+        getFxShape().setRotate(rotation);
+    }
+    
     /**
      * Returns a String in CSV format containing all the shapes fields
      * @return 
      */
     public String toCSV() {
-        return ";" + startX + ";" + startY + ";" + getWidth() + ";" + getHeight() + ";" + fxShape.getFill() + ";" + fxShape.getStroke() + ";null";
+        return ";" + getStartX() + ";" + getStartY() + ";" + getWidth() + ";" + getHeight() + ";" + getFxShape().getFill() + ";" + getFxShape().getStroke() + ";" + getFxShape().getRotate() + ";null";
     }
 
 }

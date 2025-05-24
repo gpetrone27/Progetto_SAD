@@ -7,4 +7,5 @@ public enum Shapes {
     RECTANGLE,
     ELLIPSE,
     POLYGON,
+    TEXT,
 }

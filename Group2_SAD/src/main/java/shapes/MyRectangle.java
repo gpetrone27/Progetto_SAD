@@ -18,12 +18,14 @@ public class MyRectangle extends MyShape {
      * @param startY
      * @param width
      * @param height 
+     * @param rotation 
      */
-    public MyRectangle(double startX, double startY, double width, double height) {
+    public MyRectangle(double startX, double startY, double width, double height, double rotation) {
         super(startX, startY);
         rectangle = new Rectangle(startX, startY, width, height);
         rectangle.setStrokeWidth(3); // Temporary: set border width to 3
         this.fxShape = rectangle;
+        setRotation(rotation);
     }
 
     /**
@@ -55,6 +57,16 @@ public class MyRectangle extends MyShape {
             rectangle.setHeight(newHeight);
         }
     }
+    
+    @Override
+    public double getStartX() {
+        return rectangle.getX();
+    }
+    
+    @Override
+    public double getStartY() {
+        return rectangle.getY();
+    }
 
     /**
      * Creates a copy of the shape, useful for the copy and paste command
@@ -62,7 +74,7 @@ public class MyRectangle extends MyShape {
      */
     @Override
     public MyShape cloneShape() {
-        return new MyRectangle(startX, startY, rectangle.getWidth(), rectangle.getHeight());
+        return new MyRectangle(startX, startY, rectangle.getWidth(), rectangle.getHeight(), rectangle.getRotate());
     }
 
     /**
@@ -96,7 +108,7 @@ public class MyRectangle extends MyShape {
     public double getHeight() {
         return rectangle.getHeight();
     }
-
+    
     @Override
     public String toCSV() {
         return Shapes.RECTANGLE + super.toCSV();

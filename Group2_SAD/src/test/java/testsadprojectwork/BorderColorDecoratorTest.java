@@ -23,7 +23,7 @@ class BorderColorDecoratorTest {
     // Set up a base shape (rectangle) and decorate it with a border color
     @BeforeEach
     void setUp() {
-        baseShape = new MyRectangle(0, 0, 100, 50);
+        baseShape = new MyRectangle(0, 0, 100, 50, 0);
         decorated = new BorderColorDecorator(baseShape, Color.BLUE);
     }
 
@@ -63,7 +63,7 @@ class BorderColorDecoratorTest {
     // Test BorderColorDecorator with a Rectangle shape
     @Test
     void testRectangleBorderColor() {
-        MyShape rect = new MyRectangle(0, 0, 100, 50);
+        MyShape rect = new MyRectangle(0, 0, 100, 50, 0);
         BorderColorDecorator decorated = new BorderColorDecorator(rect, Color.RED);
 
         Shape fxShape = decorated.getFxShape();
@@ -75,7 +75,7 @@ class BorderColorDecoratorTest {
     // Test BorderColorDecorator with an Ellipse shape
     @Test
     void testEllipseBorderColor() {
-        MyShape ellipse = new MyEllipse(50, 50, 20, 10);
+        MyShape ellipse = new MyEllipse(50, 50, 20, 10, 0);
         BorderColorDecorator decorated = new BorderColorDecorator(ellipse, Color.GREEN);
 
         Shape fxShape = decorated.getFxShape();
@@ -87,7 +87,7 @@ class BorderColorDecoratorTest {
     // Test BorderColorDecorator with a Line shape
     @Test
     void testLineBorderColor() {
-        MyShape line = new MyLine(0, 0, 50, 50);
+        MyShape line = new MyLine(0, 0, 50, 50, 0);
         BorderColorDecorator decorated = new BorderColorDecorator(line, Color.BLUE);
 
         Shape fxShape = decorated.getFxShape();
@@ -99,7 +99,7 @@ class BorderColorDecoratorTest {
     // Test cloneShape with a decorated Rectangle
     @Test
     void testCloneShapeWithRectangle() {
-        MyShape rect = new MyRectangle(10, 10, 40, 20);
+        MyShape rect = new MyRectangle(10, 10, 40, 20, 0);
         BorderColorDecorator decorated = new BorderColorDecorator(rect, Color.BLACK);
         BorderColorDecorator clone = (BorderColorDecorator) decorated.cloneShape();
 
@@ -111,7 +111,7 @@ class BorderColorDecoratorTest {
     // Test toCSV delegates correctly for an Ellipse
     @Test
     void testToCSVWithEllipse() {
-        MyShape ellipse = new MyEllipse(100, 100, 30, 15);
+        MyShape ellipse = new MyEllipse(100, 100, 30, 15, 0);
         BorderColorDecorator decorated = new BorderColorDecorator(ellipse, Color.PURPLE);
 
         String baseCSV = ellipse.toCSV();

@@ -16,7 +16,7 @@ class MyRectangleTest {
     // Runs before each test: create a rectangle at (10, 20) with width=100 and height=50
     @BeforeEach
     void setUp() {
-        rect = new MyRectangle(10, 20, 100, 50);
+        rect = new MyRectangle(10, 20, 100, 50, 0);
     }
 
     // Tests that getFxShape returns a JavaFX Rectangle with correct properties
@@ -126,7 +126,7 @@ class MyRectangleTest {
         String csv = rect.toCSV();
         String[] parts = csv.split(";");
 
-        assertEquals(7, parts.length);
+        assertEquals(9, parts.length);
 
         // Parse the string color representations back to Color objects
         Color fillColor = Color.valueOf(parts[5]);
@@ -136,4 +136,5 @@ class MyRectangleTest {
         assertEquals(Color.RED, fillColor);
         assertEquals(Color.BLACK, strokeColor);
     }
+    
 }

@@ -6,6 +6,7 @@ import decorator.*;
 import shapes.*;
 import java.io.File;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.beans.binding.Bindings;
@@ -15,12 +16,14 @@ import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
@@ -34,10 +37,10 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Line;
+import javafx.scene.text.Font;
 import javafx.scene.transform.Scale;
 import javafx.stage.FileChooser;
 import org.kordamp.ikonli.javafx.FontIcon;
-import shapes.MyPolygon;
 
 public class PaintController implements Initializable {
 
@@ -46,7 +49,7 @@ public class PaintController implements Initializable {
 
     // Colors variables
     private Color borderHex = Color.BLACK;
-    private Color fillHex = Color.WHITE;
+    private Color fillHex = Color.TRANSPARENT;
 
     private ObjectProperty<Shapes> modeProperty = new SimpleObjectProperty<>(Shapes.CURSOR);
     private ObjectProperty<MyShape> currentShape = new SimpleObjectProperty<>(null);
@@ -65,6 +68,13 @@ public class PaintController implements Initializable {
     private final double zoomMaxValue = 4.0;
     private final double zoomMinValue = 0.5;
     private Scale canvasScale = new Scale(1.0, 1.0, 0, 0);
+    
+    private boolean gridActived = false;
+    private double gridCellsSize = 5;
+    
+    private String displayText = "";
+    private String fontFamily = "Arial";
+    private double textSize = 12;
 
     @FXML
     private AnchorPane rootPane;
@@ -79,17 +89,25 @@ public class PaintController implements Initializable {
     @FXML
     private ToggleGroup fillColor;
     @FXML
-    private ToggleGroup borderColorPanel;
+    private ToggleButton noFillButton;
     @FXML
     private ToggleGroup fillColorPanel;
     @FXML
+    private ToggleButton noFillButtonPanel;
+    @FXML
+    private ToggleGroup borderColorPanel;
+    @FXML
     private ToggleButton cursorButton;
     @FXML
-    private ToggleButton ellipseButton;
+    private ToggleButton lineButton;
     @FXML
     private ToggleButton rectangleButton;
     @FXML
-    private ToggleButton lineButton;
+    private ToggleButton ellipseButton;
+    @FXML
+    private ToggleButton polygonButton;
+    @FXML
+    private ToggleButton textButton;
     @FXML
     private MenuItem cutMenuItem;
     @FXML
@@ -113,6 +131,8 @@ public class PaintController implements Initializable {
     @FXML
     private ToggleButton gridButton;
     @FXML
+    private Slider gridSizeSlider;
+    @FXML
     private Button zoomInButton;
     @FXML
     private Button zoomOutButton;
@@ -123,7 +143,11 @@ public class PaintController implements Initializable {
     @FXML
     private Slider rotationSlider;
     @FXML
-    private ToggleButton polygonButton;
+    private ComboBox<String> fontsComboBox;
+    @FXML
+    private ComboBox<String> sizeComboBox;
+    @FXML
+    private TextField displayTextField;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -144,6 +168,15 @@ public class PaintController implements Initializable {
         rectangleButton.setUserData(Shapes.RECTANGLE);
         ellipseButton.setUserData(Shapes.ELLIPSE);
         polygonButton.setUserData(Shapes.POLYGON);
+        textButton.setUserData(Shapes.TEXT);
+        
+        // Available fonts
+        fontsComboBox.getItems().addAll(Font.getFamilies());
+        fontsComboBox.setValue("Arial");
+        
+        // Available sizes
+        sizeComboBox.getItems().addAll("8", "10", "12", "14", "16", "18", "24", "36", "48", "72");
+        sizeComboBox.setValue("12");
         
     }
 
@@ -242,6 +275,27 @@ public class PaintController implements Initializable {
             },
             selectedShape
         ));
+        fillPanel.managedProperty().bind(Bindings.createBooleanBinding(
+            () -> {
+                return selectedShape.get() != null && selectedShape.get().getFxShape().getClass() != Line.class;
+            },
+            selectedShape
+        ));
+        
+        // Sets text formatters to only accept numeric values in width and height fields
+        widthField.setTextFormatter(new TextFormatter<>(change -> {
+            return change.getControlNewText().matches("\\d*(\\.\\d*)?") ? change : null;
+        }));
+        heightField.setTextFormatter(new TextFormatter<>(change -> {
+            return change.getControlNewText().matches("\\d*(\\.\\d*)?") ? change : null;
+        }));
+        
+        // Rotates the selected shape while the slider is being dragged
+        /*rotationSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
+            if (selectedShape != null) {
+                selectedShape.get().setRotation(newVal.doubleValue());
+            }
+        });*/
         
     }
 
@@ -297,7 +351,25 @@ public class PaintController implements Initializable {
         zoomOutIcon.setIconSize(16);
         zoomOutIcon.setIconColor(Color.BLACK);
         zoomOutButton.setGraphic(zoomOutIcon);
+        
+        // No Fill button
+        FontIcon noFillIcon = new FontIcon("fas-ban");
+        noFillIcon.setIconSize(16);
+        noFillIcon.setIconColor(Color.RED);
+        noFillButton.setGraphic(noFillIcon);
 
+        // No Fill Panel button
+        FontIcon noFillPanelIcon = new FontIcon("fas-ban");
+        noFillPanelIcon.setIconSize(16);
+        noFillPanelIcon.setIconColor(Color.RED);
+        noFillButtonPanel.setGraphic(noFillPanelIcon);
+        
+        // Text button
+        FontIcon textIcon = new FontIcon("fas-font");
+        textIcon.setIconSize(20);
+        textIcon.setIconColor(Color.BLACK);
+        textButton.setGraphic(textIcon);
+        
     }
 
     /**
@@ -325,26 +397,26 @@ public class PaintController implements Initializable {
                 // Draws the shape if any of them is selected
                 switch(modeProperty.get()) {
                     case LINE -> {
-                        BorderColorDecorator myLine = new BorderColorDecorator(new MyLine(startX, startY, 0, 0), borderHex);
+                        BorderColorDecorator myLine = new BorderColorDecorator(new MyLine(startX, startY, 0, 0, 0), borderHex);
                         addShape(myLine);
                         enableSelection(myLine);
                         currentShape.set(myLine);
                     }
                     case RECTANGLE -> {
-                        BorderColorDecorator myRectangle = new BorderColorDecorator(new FillColorDecorator(new MyRectangle(startX, startY, 0, 0), fillHex), borderHex);
+                        BorderColorDecorator myRectangle = new BorderColorDecorator(new FillColorDecorator(new MyRectangle(startX, startY, 0, 0, 0), fillHex), borderHex);
                         addShape(myRectangle);
                         enableSelection(myRectangle);
                         currentShape.set(myRectangle);
                     }
                     case ELLIPSE -> {
-                        BorderColorDecorator myEllipse = new BorderColorDecorator(new FillColorDecorator(new MyEllipse(startX, startY, 0, 0), fillHex), borderHex);
+                        BorderColorDecorator myEllipse = new BorderColorDecorator(new FillColorDecorator(new MyEllipse(startX, startY, 0, 0, 0), fillHex), borderHex);
                         addShape(myEllipse);
                         enableSelection(myEllipse);
                         currentShape.set(myEllipse);
                     }
                     case POLYGON -> {
                         if (currentShape.get() == null) {
-                            BorderColorDecorator myPolygon = new BorderColorDecorator(new FillColorDecorator(new MyPolygon(startX, startY, null), fillHex), borderHex);
+                            BorderColorDecorator myPolygon = new BorderColorDecorator(new FillColorDecorator(new MyPolygon(startX, startY, null, 0), fillHex), borderHex);
                             addShape(myPolygon);
                             enableSelection(myPolygon);
                             currentShape.set(myPolygon);
@@ -424,6 +496,10 @@ public class PaintController implements Initializable {
         for (MyShape shapeToAdd : model.getShapes()) {
             canvas.getChildren().add(shapeToAdd.getFxShape());
         }
+        if (gridActived) {
+            toggleGrid(null);
+            toggleGrid(null);
+        }
     }
 
     /**
@@ -490,13 +566,16 @@ public class PaintController implements Initializable {
                 break;
             }
         }
+        if (selectedShape.get().getFxShape().getFill() == Color.TRANSPARENT) {
+            fillColorPanel.selectToggle(noFillButtonPanel);
+        }
         
         // Width and height fields
         widthField.setText(Double.toString(shape.getWidth()));
         heightField.setText(Double.toString(shape.getHeight()));
         
         // Rotation
-        rotationSlider.setValue(shape.getFxShape().getRotate()); // shape.getRotation() when implemented
+        rotationSlider.setValue(selectedShape.get().getRotation());
     }
 
     /**
@@ -589,6 +668,45 @@ public class PaintController implements Initializable {
     }
 
     /**
+     * Sets the fill color to transparent.
+     * @param event 
+     */
+    @FXML
+    private void selectNoFill(ActionEvent event) {
+        fillHex = Color.TRANSPARENT;
+    }
+
+    /**
+     * Updates the border color of the selected shape.
+     * @param event
+     */
+    @FXML
+    private void changeBorderColor(ActionEvent event) {
+        ToggleButton colorButton = (ToggleButton) event.getSource();
+        Paint selectedColor = colorButton.getBackground().getFills().get(0).getFill();
+        Command changeColor = new ChangeColorCommand(selectedShape.get(), null, (Color) selectedColor);
+        model.execute(changeColor);
+    }
+
+    /**
+     * Updates the fill color of the selected shape.
+     * @param event
+     */
+    @FXML
+    private void changeFillColor(ActionEvent event) {
+        ToggleButton colorButton = (ToggleButton) event.getSource();
+        Paint selectedColor = colorButton.getBackground().getFills().get(0).getFill();
+        Command changeColor = new ChangeColorCommand(selectedShape.get(), (Color) selectedColor, null);
+        model.execute(changeColor);
+    }
+
+    @FXML
+    private void changeToNoFill(ActionEvent event) {
+        Command changeColor = new ChangeColorCommand(selectedShape.get(), Color.TRANSPARENT, null);
+        model.execute(changeColor);
+    }
+
+    /**
      * Copies the selected shape into the clipboard and deletes it.
      * @param event
      */
@@ -634,18 +752,49 @@ public class PaintController implements Initializable {
             model.execute(deleteCmd);
         }
     }
+    
+    /**
+     * Brings a shape to the front.
+     * @param event 
+     */
+    @FXML
+    public void bringToFront(ActionEvent event) {
+        if (selectedShape.get() != null) {
+            Command brngFrntCmd = new BringToFrontCommand(model, selectedShape.get());
+            model.execute(brngFrntCmd);
+        }
+    }
 
     /**
-     * Resizes the selected shape according to the new dimensions.
-     * @param shape
-     * @param newWidth
-     * @param newHeight
+     * Brings a shape to the back.
+     * @param event 
      */
-    private void resizeShape(MyShape shape, double newWidth, double newHeight) {
-        if (shape != null) {
-            Command resizeCmd = new ResizeCommand(shape, newWidth, newHeight);
-            model.execute(resizeCmd);
+    @FXML
+    public void bringToBack(ActionEvent event) {
+        if (selectedShape.get() != null) {
+            Command brngBckCmd = new BringToBackCommand(model, selectedShape.get()); 
+            model.execute(brngBckCmd);
         }
+    }
+    
+    /**
+     * Resizes the selected shape when the width field is changed.
+     * @param event 
+     */
+    @FXML
+    private void resizeWidth(ActionEvent event) {
+        Command resizeCmd = new ResizeCommand(selectedShape.get(), Double.parseDouble(widthField.getText()), selectedShape.get().getHeight());
+        model.execute(resizeCmd);
+    }
+
+    /**
+     * Resized the selected shape when the height field is changed.
+     * @param event 
+     */
+    @FXML
+    private void resizeHeight(ActionEvent event) {
+        Command resizeCmd = new ResizeCommand(selectedShape.get(), selectedShape.get().getWidth(), Double.parseDouble(heightField.getText()));
+        model.execute(resizeCmd);
     }
 
     /**
@@ -658,29 +807,98 @@ public class PaintController implements Initializable {
     }
 
     /**
-     * Updates the border color of the selected shape.
-     * @param event
-     */
+    * Activates or deactivates the grid on the drawing panel.
+    * @param event 
+    */
     @FXML
-    private void changeBorderColor(ActionEvent event) {
-        ToggleButton colorButton = (ToggleButton) event.getSource();
-        Paint selectedColor = colorButton.getBackground().getFills().get(0).getFill();
-        Command changeColor = new ChangeColorCommand(selectedShape.get(), null, (Color) selectedColor);
-        model.execute(changeColor);
+    private void toggleGrid(ActionEvent event) {
+        gridActived = !gridActived;
+
+        canvas.getChildren().removeIf(node ->
+            node instanceof Line && "grid".equals(node.getUserData()));
+
+        if (!gridActived) return;
+
+        double width = canvas.getWidth();
+        double height = canvas.getHeight();
+        double spacing = gridCellsSize * zoomBase;
+
+        List<Node> gridLines = new ArrayList<>();
+
+        for (double x = 0; x < width; x += spacing) {
+            Line verticalLine = new Line(x, 0, x, height);
+            verticalLine.setStroke(Color.LIGHTGRAY);
+            verticalLine.setStrokeWidth(0.5);
+            verticalLine.setUserData("grid");
+            gridLines.add(verticalLine);
+        }
+
+        for (double y = 0; y < height; y += spacing) {
+            Line horizontalLine = new Line(0, y, width, y);
+            horizontalLine.setStroke(Color.LIGHTGRAY);
+            horizontalLine.setStrokeWidth(0.5);
+            horizontalLine.setUserData("grid");
+            gridLines.add(horizontalLine);
+        }
+
+        canvas.getChildren().addAll(0, gridLines);
     }
 
     /**
-     * Updates the fill color of the selected shape.
-     * @param event
+     * Zooms in the canvas, scaling it up.
+     * @param event 
      */
     @FXML
-    private void changeFillColor(ActionEvent event) {
-        ToggleButton colorButton = (ToggleButton) event.getSource();
-        Paint selectedColor = colorButton.getBackground().getFills().get(0).getFill();
-        Command changeColor = new ChangeColorCommand(selectedShape.get(), (Color) selectedColor, null);
-        model.execute(changeColor);
+    private void zoomIn(ActionEvent event) {
+        if (zoomBase + zoomStep <= zoomMaxValue) {
+            zoomBase += zoomStep;
+            canvas.getTransforms().remove(canvasScale);
+            canvasScale = new Scale(zoomBase, zoomBase, 0, 0);
+            canvas.getTransforms().add(canvasScale);
+        }
     }
 
+    /**
+     * Zooms out the canvas, scaling it down.
+     * @param event 
+     */
+    @FXML
+    private void zoomOut(ActionEvent event) {
+        if (zoomBase - zoomStep >= zoomMinValue) {
+            zoomBase -= zoomStep;
+            canvas.getTransforms().remove(canvasScale);
+            canvasScale = new Scale(zoomBase, zoomBase, 0, 0);
+            canvas.getTransforms().add(canvasScale);
+        }
+    }
+
+    /**
+     * Updates the font family variable to match user selection.
+     * @param event 
+     */
+    @FXML
+    private void selectFont(ActionEvent event) {
+        fontFamily = fontsComboBox.getValue();
+    }
+
+    /**
+     * Updates the text size variable to match user selection.
+     * @param event 
+     */
+    @FXML
+    private void selectSize(ActionEvent event) {
+        textSize = Double.parseDouble(sizeComboBox.getValue());
+    }
+
+    /**
+     * Updates the text to write to match user selection.
+     * @param event 
+     */
+    @FXML
+    private void selectDisplayText(ActionEvent event) {
+        displayText = displayTextField.getText();
+    }
+    
     public MyShape getSelectedShape() {
         return selectedShape.get();
     }
@@ -700,64 +918,6 @@ public class PaintController implements Initializable {
 
     public Pane getCanvas() {
         return canvas;
-    }
-
-    @FXML
-    private void toggleGrid(ActionEvent event) {
-    }
-
-    @FXML
-    private void zoomIn(ActionEvent event) {
-        if (zoomBase + zoomStep <= zoomMaxValue) {
-            zoomBase += zoomStep;
-
-            canvas.getTransforms().remove(canvasScale);
-
-            canvasScale = new Scale(zoomBase, zoomBase, 0, 0);
-            canvas.getTransforms().add(canvasScale);
-        }
-    }
-
-    @FXML
-    private void zoomOut(ActionEvent event) {
-        if (zoomBase - zoomStep >= zoomMinValue) {
-            zoomBase -= zoomStep;
-
-            canvas.getTransforms().remove(canvasScale);
-
-            canvasScale = new Scale(zoomBase, zoomBase, 0, 0);
-            canvas.getTransforms().add(canvasScale);
-        }
-    }
-
-    /**
-     * Brings a shape to the front.
-     * 
-     * @param event 
-     */
-    @FXML
-    public void bringToFront(ActionEvent event) {
-        Command brngFrntCmd = new BringToFrontCommand(model, selectedShape.get(), canvas);
-        model.execute(brngFrntCmd);
-    }
-
-    /**
-     * Brings a shape to the back.
-     * 
-     * @param event 
-     */
-    @FXML
-    public void bringToBack(ActionEvent event) {
-       Command brngBckCmd = new BringToBackCommand(model, canvas, selectedShape.get()); 
-       model.execute(brngBckCmd);
-    }
-
-    @FXML
-    private void resizeWidth(ActionEvent event) {
-    }
-
-    @FXML
-    private void resizeHeight(ActionEvent event) {
     }
     
 }
