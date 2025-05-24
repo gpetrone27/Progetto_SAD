@@ -146,7 +146,7 @@ public class PaintModel {
                 Color loadedFill = Color.valueOf(parts[5]);
                 Color loadedBorder = Color.valueOf(parts[6]);
                 double loadedRotation = Double.parseDouble(parts[7]);
-                String listOfPoints = parts[8]; // "x1-y1/x2-y2/.../xn-yn"
+                String listOfPoints = parts[8]; // "x1~y1/x2~y2/.../xn~yn"
                 switch (loadedMode) {
                     case LINE -> {
                         BorderColorDecorator myLine = new BorderColorDecorator(new MyLine(loadedStartX, loadedStartY, loadedWidth, loadedHeight, loadedRotation), loadedBorder);
@@ -162,11 +162,11 @@ public class PaintModel {
                     }
                     case POLYGON -> {
                         List<Point2D> points = new ArrayList<>();
-                        // Parse listOfPoints: format "x1-y1/x2-y2/.../xn-yn"
+                        // Parse listOfPoints: format "x1~y1/x2~y2/.../xn~yn"
                         if (!listOfPoints.equals("null")) {
                             String[] pointPairs = listOfPoints.split("/");
                             for (String pair : pointPairs) {
-                                String[] coords = pair.split("-");
+                                String[] coords = pair.split("~");
                                 double x = Double.parseDouble(coords[0]);
                                 double y = Double.parseDouble(coords[1]);
                                 points.add(new Point2D(x, y));

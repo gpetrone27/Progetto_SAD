@@ -285,7 +285,7 @@ public class MyPolygon extends MyShape {
         StringBuffer pointsList = new StringBuffer();
         for(Point2D p : points) {
             pointsList.append(Double.toString(p.getX()));
-            pointsList.append("-");
+            pointsList.append("~");
             pointsList.append(Double.toString(p.getY()));
             pointsList.append("/");
         }
