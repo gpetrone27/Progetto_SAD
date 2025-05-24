@@ -49,6 +49,7 @@ public class MyPolygon extends MyShape {
         
         this.fxShape = path;
         setRotation(rotation);
+        recomputeBounds();
     }
     
     /**
@@ -60,15 +61,15 @@ public class MyPolygon extends MyShape {
     public void addMoveTo(double x, double y) {
         path.getElements().add(new MoveTo(x, y));
         points.add(new Point2D(x, y));
-        if(x < smallerX) {
+        if (x < smallerX) {
             smallerX = x;
-        } else if(x > greaterX) {
+        } else if (x > greaterX) {
             greaterX  = x;
         }
         
-        if(y < smallerY) {
+        if (y < smallerY) {
             smallerY = y;
-        } else if(y > greaterY) {
+        } else if (y > greaterY) {
           greaterY = y;  
         }
     }
@@ -83,6 +84,7 @@ public class MyPolygon extends MyShape {
     public boolean addLineTo(double x, double y) {
         if (Math.abs(x - startX) <= 10 && Math.abs(y - startY) <= 10) {
             path.getElements().add(new ClosePath());
+            recomputeBounds();
             return true;
         }
         else {
@@ -102,6 +104,7 @@ public class MyPolygon extends MyShape {
      * It is typically used when loading or cloning an existing polygon.
      */   
     private void reconstruct() {
+        
         Point2D firstPoint = points.get(0);
         path.getElements().add(new MoveTo(firstPoint.getX(), firstPoint.getY()));
         
@@ -117,6 +120,7 @@ public class MyPolygon extends MyShape {
      */
     public void closeShape() {
         path.getElements().add(new ClosePath());
+        recomputeBounds();
     }
     
 

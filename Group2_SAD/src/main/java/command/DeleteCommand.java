@@ -2,7 +2,6 @@
 package command;
 
 import sadprojectwork.PaintModel;
-import sadprojectwork.PaintModel;
 import shapes.MyShape;
 
 /**

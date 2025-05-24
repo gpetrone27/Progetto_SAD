@@ -70,12 +70,14 @@ public class PaintController implements Initializable {
     private Scale canvasScale = new Scale(1.0, 1.0, 0, 0);
     
     private boolean gridActived = false;
-    private double gridCellsSize = 5;
+    private double gridCellsSize = 10;
     
     private String displayText = "";
     private String fontFamily = "Arial";
     private double textSize = 12;
-
+    
+    private double initialRotation;
+    
     @FXML
     private AnchorPane rootPane;
     @FXML
@@ -300,12 +302,34 @@ public class PaintController implements Initializable {
             return change.getControlNewText().matches("\\d*(\\.\\d*)?") ? change : null;
         }));
         
+        rotationSlider.setOnMousePressed(e -> {
+            if(selectedShape != null){
+                initialRotation = selectedShape.get().getRotation();
+            }
+        });
+        
+        rotationSlider.setOnMouseReleased(e -> {
+            if(selectedShape != null){
+                double finalRotation = selectedShape.get().getRotation();
+                if(finalRotation != initialRotation){
+                    RotationCommand cmd = new RotationCommand(selectedShape.get(), initialRotation, finalRotation);
+                    model.execute(cmd);
+                }
+            }
+        });
+        
         // Rotates the selected shape while the slider is being dragged
-        /*rotationSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
+        rotationSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
             if (selectedShape != null) {
                 selectedShape.get().setRotation(newVal.doubleValue());
             }
-        });*/
+        });
+        
+        // Adjusts the grid cells size while the slider is being dragged
+        gridSizeSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
+            gridCellsSize = newVal.doubleValue();
+            redrawGrid();
+        });
         
     }
 
@@ -464,11 +488,8 @@ public class PaintController implements Initializable {
             
             // Preview of the shape while the user is creating it
             else {
-                
-                double endX = e.getX();
-                double endY = e.getY();
-                if(modeProperty.get() != Shapes.POLYGON) {
-                    currentShape.get().resize(endX - startX, endY - startY);
+                if (modeProperty.get() != Shapes.POLYGON) {
+                    currentShape.get().resize(e.getX() - startX, e.getY() - startY); 
                 }
             }
         });
@@ -507,10 +528,7 @@ public class PaintController implements Initializable {
         for (MyShape shapeToAdd : model.getShapes()) {
             canvas.getChildren().add(shapeToAdd.getFxShape());
         }
-        if (gridActived) {
-            toggleGrid(null);
-            toggleGrid(null);
-        }
+        redrawGrid();
     }
 
     /**
@@ -824,19 +842,26 @@ public class PaintController implements Initializable {
     @FXML
     private void toggleGrid(ActionEvent event) {
         gridActived = !gridActived;
+        redrawGrid();
+    }
+    
+    /**
+     * Redraws the grid.
+     */
+    private void redrawGrid() {
 
-        canvas.getChildren().removeIf(node ->
-            node instanceof Line && "grid".equals(node.getUserData()));
+        // Clears all the lines of the grid
+        canvas.getChildren().removeIf(node -> node instanceof Line && "grid".equals(node.getUserData()));
 
-        if (!gridActived) return;
+        if (!gridActived)
+            return;
 
         double width = canvas.getWidth();
         double height = canvas.getHeight();
-        double spacing = gridCellsSize * zoomBase;
 
         List<Node> gridLines = new ArrayList<>();
 
-        for (double x = 0; x < width; x += spacing) {
+        for (double x = 0; x < width; x += gridCellsSize) {
             Line verticalLine = new Line(x, 0, x, height);
             verticalLine.setStroke(Color.LIGHTGRAY);
             verticalLine.setStrokeWidth(0.5);
@@ -844,7 +869,7 @@ public class PaintController implements Initializable {
             gridLines.add(verticalLine);
         }
 
-        for (double y = 0; y < height; y += spacing) {
+        for (double y = 0; y < height; y += gridCellsSize) {
             Line horizontalLine = new Line(0, y, width, y);
             horizontalLine.setStroke(Color.LIGHTGRAY);
             horizontalLine.setStrokeWidth(0.5);
@@ -853,6 +878,7 @@ public class PaintController implements Initializable {
         }
 
         canvas.getChildren().addAll(0, gridLines);
+        
     }
 
     /**

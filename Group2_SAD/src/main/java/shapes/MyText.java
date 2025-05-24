@@ -88,7 +88,7 @@ public class MyText extends MyShape {
 
     @Override
     public void resize(double newWidth, double newHeight) {
-        System.out.println("Resizing a text is meaningless, change its font instead.");
+        System.out.println("Resizing a text is meaningless, change its font and size instead.");
     }
     
     @Override
