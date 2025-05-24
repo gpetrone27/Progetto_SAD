@@ -75,7 +75,9 @@ public class PaintController implements Initializable {
     private String displayText = "";
     private String fontFamily = "Arial";
     private double textSize = 12;
-
+    
+    private double initialRotation;
+    
     @FXML
     private AnchorPane rootPane;
     @FXML
@@ -300,12 +302,28 @@ public class PaintController implements Initializable {
             return change.getControlNewText().matches("\\d*(\\.\\d*)?") ? change : null;
         }));
         
+        rotationSlider.setOnMousePressed(e -> {
+            if(selectedShape != null){
+                initialRotation = selectedShape.get().getRotation();
+            }
+        });
+        
+        rotationSlider.setOnMouseReleased(e -> {
+            if(selectedShape != null){
+                double finalRotation = selectedShape.get().getRotation();
+                if(finalRotation != initialRotation){
+                    RotationCommand cmd = new RotationCommand(selectedShape.get(), initialRotation, finalRotation);
+                    model.execute(cmd);
+                }
+            }
+        });
+        
         // Rotates the selected shape while the slider is being dragged
-        /*rotationSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
+        rotationSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
             if (selectedShape != null) {
                 selectedShape.get().setRotation(newVal.doubleValue());
             }
-        });*/
+        });
         
     }
 
