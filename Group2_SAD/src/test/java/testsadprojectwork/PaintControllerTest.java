@@ -6,6 +6,7 @@ import command.MoveCommand;
 import command.Command;
 import decorator.BorderColorDecorator;
 import decorator.FillColorDecorator;
+import java.util.ArrayList;
 import java.util.List;
 import shapes.MyRectangle;
 import shapes.MyEllipse;
@@ -14,6 +15,7 @@ import shapes.MyShape;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -31,6 +33,7 @@ import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 import org.testfx.api.FxRobot;
 import sadprojectwork.PaintController;
+import shapes.MyPolygon;
 
 /**
  * Test class for the method in the controller, that uses 
@@ -1428,5 +1431,84 @@ public class PaintControllerTest {
        assertEquals(0, remainingLines, "The grid should be unvisible now!");
    }
 
+
+    /**
+     * Tests creation, selection, movement and resizing of a MyPolygon shape.
+     * @param TestFX robot: robot to simulate user interactions.
+     */
+    @Test
+    void testPolygonCreationMoveAndResize(FxRobot robot) {
+        MyShape[] shapeRef = new MyShape[1];
+
+        double x1 = 100, y1 = 100;
+        double x2 = 150, y2 = 120;
+        double x3 = 120, y3 = 180;
+
+        double newX = 200, newY = 220;
+
+        double newWidth = 80, newHeight = 100;
+
+        Platform.runLater(() -> {
+            List<Point2D> points = new ArrayList<>();
+            points.add(new Point2D(x1, y1));
+            points.add(new Point2D(x2, y2));
+            points.add(new Point2D(x3, y3));
+            MyPolygon polygon = new MyPolygon(x1, y1, points, 0);
+            polygon.getFxShape().setFill(Color.CYAN);
+            polygon.getFxShape().setStroke(Color.BLACK);
+            shapeRef[0] = polygon;
+            controller.getModel().addShape(polygon);
+            controller.enableSelection(polygon);
+        });
+
+        robot.interact(() -> {});
+        robot.moveTo(shapeRef[0].getFxShape()).clickOn();
+
+        Platform.runLater(() -> shapeRef[0].moveTo(newX, newY));
+        robot.interact(() -> {});
+        assertEquals(newX, shapeRef[0].getStartX(), 0.001, "Polygon X should be updated after move!");
+        assertEquals(newY, shapeRef[0].getStartY(), 0.001, "Polygon Y should be updated after move!");
+
+        Platform.runLater(() -> shapeRef[0].resize(newWidth, newHeight));
+        robot.interact(() -> {});
+        assertEquals(newWidth, shapeRef[0].getWidth(), 0.001, "Polygon width should be updated after resize!");
+        assertEquals(newHeight, shapeRef[0].getHeight(), 0.001, "Polygon height should be updated after resize!");
+    }
+
+    /**
+     * Tests the color change of a selected polygon.
+     * @param TestFX robot: robot to simulate user interaction
+     */
+    @Test
+    void testChangeColorPolygon(FxRobot robot) {
+        MyShape[] shapeRef = new MyShape[1];
+
+        Platform.runLater(() -> {
+            List<Point2D> points = new ArrayList<>();
+            points.add(new Point2D(100, 100));
+            points.add(new Point2D(150, 120));
+            points.add(new Point2D(120, 180));
+            MyPolygon polygon = new MyPolygon(100, 100, points, 0);
+            polygon.getFxShape().setFill(Color.GRAY);
+            polygon.getFxShape().setStroke(Color.BLACK);
+            shapeRef[0] = polygon;
+            controller.getModel().addShape(polygon);
+            controller.enableSelection(polygon);
+        });
+
+        robot.interact(() -> {});
+        robot.moveTo(shapeRef[0].getFxShape()).clickOn();
+
+        Color newFill = Color.PINK;
+        Color newBorder = Color.BLUE;
+
+        robot.interact(() -> {
+            Command changeColor = new ChangeColorCommand(shapeRef[0], newFill, newBorder);
+            controller.getModel().execute(changeColor);
+        });
+
+        assertEquals(newFill, shapeRef[0].getFxShape().getFill(), "Polygon fill color should be updated!");
+        assertEquals(newBorder, shapeRef[0].getFxShape().getStroke(), "Polygon border color should be updated!");
+    }
 
 }
