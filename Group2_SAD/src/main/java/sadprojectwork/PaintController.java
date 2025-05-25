@@ -38,6 +38,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.scene.transform.Scale;
 import javafx.stage.FileChooser;
 import org.kordamp.ikonli.javafx.FontIcon;
@@ -63,19 +64,23 @@ public class PaintController implements Initializable {
 
     private double lastMouseX, lastMouseY; // Last registered mouse coordinates
     
+    // Navigation: Grid
+    private boolean gridActived = false;
+    private double gridCellsSize = 10;
+    
+    // Navigation: Zoom
     private double zoomBase = 1.0;
     private final double zoomStep = 0.25;
     private final double zoomMaxValue = 4.0;
     private final double zoomMinValue = 0.5;
     private Scale canvasScale = new Scale(1.0, 1.0, 0, 0);
     
-    private boolean gridActived = false;
-    private double gridCellsSize = 10;
-    
+    // Text
     private String displayText = "";
     private String fontFamily = "Arial";
-    private double textSize = 12;
+    private double textSize = 24;
     
+    // Rotation
     private double initialRotation;
     
     @FXML
@@ -84,6 +89,8 @@ public class PaintController implements Initializable {
     public ScrollPane drawingPane;
     @FXML
     private Pane canvas;
+    @FXML
+    private VBox sidePanel;
     @FXML
     private ToggleGroup shapes;
     @FXML
@@ -123,13 +130,11 @@ public class PaintController implements Initializable {
     @FXML
     private MenuItem backMenuItem;
     @FXML
-    private VBox propertiesPanel;
-    @FXML
     private TitledPane borderPanel;
     @FXML
     private TitledPane fillPanel;
     @FXML
-    private TitledPane positionPanel;
+    private TitledPane propertiesPanel;
     @FXML
     private ToggleButton gridButton;
     @FXML
@@ -149,7 +154,15 @@ public class PaintController implements Initializable {
     @FXML
     private ComboBox<String> sizeComboBox;
     @FXML
+    private ComboBox<String> fontsComboBoxSide;
+    @FXML
+    private ComboBox<String> sizeComboBoxSide;
+    @FXML
     private TextField displayTextField;
+    @FXML
+    private VBox shapesPanel;
+    @FXML
+    private VBox textPanel;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -175,10 +188,12 @@ public class PaintController implements Initializable {
         // Available fonts
         fontsComboBox.getItems().addAll(Font.getFamilies());
         fontsComboBox.setValue("Arial");
+        fontsComboBoxSide.getItems().addAll(Font.getFamilies());
         
         // Available sizes
         sizeComboBox.getItems().addAll("8", "10", "12", "14", "16", "18", "24", "36", "48", "72");
-        sizeComboBox.setValue("12");
+        sizeComboBox.setValue("24");
+        sizeComboBoxSide.getItems().addAll("8", "10", "12", "14", "16", "18", "24", "36", "48", "72");
         
     }
 
@@ -208,10 +223,18 @@ public class PaintController implements Initializable {
         // Binds the disable property of the paste operation to the state of clipboard and the cursor selection
         pasteMenuItem.disableProperty().bind(Bindings.or(Bindings.createBooleanBinding(() -> model.getClipboard() == null, model.clipboardProperty()), Bindings.createBooleanBinding(() -> modeProperty.get() != Shapes.CURSOR, modeProperty)));
 
-        // Binds the visible and managed property of the propertiesPanel to shapeSelected
-        propertiesPanel.visibleProperty().bind(Bindings.createBooleanBinding(() -> selectedShape.get() != null, selectedShape));
-        propertiesPanel.managedProperty().bind(Bindings.createBooleanBinding(() -> selectedShape.get() != null, selectedShape));
-
+        // Binds the visible and managed property of the side panel to shapeSelected
+        sidePanel.visibleProperty().bind(Bindings.createBooleanBinding(() -> selectedShape.get() != null, selectedShape));
+        sidePanel.managedProperty().bind(Bindings.createBooleanBinding(() -> selectedShape.get() != null, selectedShape));
+        
+        // Binds the visible and managed property of the shapes panel to shapeSelected state
+        shapesPanel.visibleProperty().bind(Bindings.createBooleanBinding(() -> selectedShape.get() != null && selectedShape.get().getFxShape().getClass() != Text.class, selectedShape));
+        shapesPanel.managedProperty().bind(Bindings.createBooleanBinding(() -> selectedShape.get() != null && selectedShape.get().getFxShape().getClass() != Text.class, selectedShape));
+        
+        // Binds the visible and managed property of the text panel to shapeSelected state
+        textPanel.visibleProperty().bind(Bindings.createBooleanBinding(() -> selectedShape.get() != null && selectedShape.get().getFxShape().getClass() == Text.class, selectedShape));
+        textPanel.managedProperty().bind(Bindings.createBooleanBinding(() -> selectedShape.get() != null && selectedShape.get().getFxShape().getClass() == Text.class, selectedShape));
+        
         // Prevents the user from unselecting colors
         borderColor.selectedToggleProperty().addListener((obs, oldToggle, newToggle) -> {
             if (newToggle == null) {
@@ -280,7 +303,7 @@ public class PaintController implements Initializable {
             }
         });
         
-        // Hides the fill color section in the properties panel if line is selected
+        // Hides the fill color section in the side panel if line is selected
         fillPanel.visibleProperty().bind(Bindings.createBooleanBinding(
             () -> {
                 return selectedShape.get() != null && selectedShape.get().getFxShape().getClass() != Line.class;
@@ -464,10 +487,11 @@ public class PaintController implements Initializable {
                         }
                     }
                     case TEXT -> {
-                        BorderColorDecorator myText = new BorderColorDecorator(new FillColorDecorator(new MyText(startX, startY, displayTextField.getText(),fontsComboBox.getValue(), Double.parseDouble(sizeComboBox.getValue()), 0), fillHex), borderHex);
-                        addShape(myText);
-                        enableSelection(myText);
-                        currentShape.set(myText);
+                        if (!displayTextField.getText().equals("")) {
+                            BorderColorDecorator myText = new BorderColorDecorator(new FillColorDecorator(new MyText(startX, startY, displayTextField.getText(), fontsComboBox.getValue(), Double.parseDouble(sizeComboBox.getValue()), 0), fillHex), borderHex);
+                            addShape(myText);
+                            enableSelection(myText);
+                        }
                     }
                 }
             }
@@ -611,6 +635,16 @@ public class PaintController implements Initializable {
         
         // Rotation
         rotationSlider.setValue(selectedShape.get().getRotation());
+        
+        FillColorDecorator decoratedShape = (FillColorDecorator) ((BorderColorDecorator) selectedShape.get()).getDecoratedShape();
+        if (decoratedShape.getDecoratedShape() instanceof MyText selectedText) {
+            
+            // Font
+            fontsComboBoxSide.setValue(selectedText.getFontFamily());
+            
+            // Size
+            sizeComboBoxSide.setValue(Integer.toString((int) selectedText.getSize()));
+        }
     }
 
     /**
@@ -750,6 +784,7 @@ public class PaintController implements Initializable {
         if (selectedShape.get() != null) {
             Command cutCmd = new CutCommand(model, selectedShape.get());
             model.execute(cutCmd);
+            selectedShape.set(null);
         }
     }
 
@@ -773,7 +808,10 @@ public class PaintController implements Initializable {
     public void pasteShape(ActionEvent event) {
         PasteCommand pasteCmd = new PasteCommand(model, lastMouseX, lastMouseY);
         model.execute(pasteCmd);
-        enableSelection(pasteCmd.getPastedShape());
+        MyShape pastedShape = pasteCmd.getPastedShape();
+        enableSelection(pastedShape);
+        selectedShape.set(pastedShape);
+        highlightSelected(pastedShape);
     }
 
     /**
@@ -785,6 +823,7 @@ public class PaintController implements Initializable {
         if (selectedShape.get() != null) {
             Command deleteCmd = new DeleteCommand(model, selectedShape.get());
             model.execute(deleteCmd);
+            selectedShape.set(null);
         }
     }
     
@@ -823,7 +862,7 @@ public class PaintController implements Initializable {
     }
 
     /**
-     * Resized the selected shape when the height field is changed.
+     * Resizes the selected shape when the height field is changed.
      * @param event 
      */
     @FXML
@@ -931,6 +970,26 @@ public class PaintController implements Initializable {
     @FXML
     private void selectSize(ActionEvent event) {
         textSize = Double.parseDouble(sizeComboBox.getValue());
+    }
+
+    /**
+     * Updates the font family of the selected text.
+     * @param event 
+     */
+    @FXML
+    private void changeFont(ActionEvent event) {
+        MyText selectedText = (MyText) ((FillColorDecorator) (((BorderColorDecorator) selectedShape.get()).getDecoratedShape())).getDecoratedShape();
+        selectedText.setFontFamily(fontsComboBoxSide.getValue());
+    }
+
+    /**
+     * Updates the size of the selected text.
+     * @param event 
+     */
+    @FXML
+    private void changeSize(ActionEvent event) {
+        MyText selectedText = (MyText) ((FillColorDecorator) (((BorderColorDecorator) selectedShape.get()).getDecoratedShape())).getDecoratedShape();
+        selectedText.setSize(Double.parseDouble(sizeComboBoxSide.getValue()));
     }
 
     /**
