@@ -298,7 +298,7 @@ public class MyPolygon extends MyShape {
             pointsList.append("/");
         }
         pointsList.deleteCharAt(pointsList.length() - 1);
-        return Shapes.POLYGON + ";" + startX + ";" + startY + ";" + getWidth() + ";" + getHeight() + ";" + path.getFill() + ";" + path.getStroke() + ";" + path.getRotate() + ";" + pointsList;
+        return Shapes.POLYGON + ";" + startX + ";" + startY + ";" + getWidth() + ";" + getHeight() + ";" + path.getFill() + ";" + path.getStroke() + ";" + path.getRotate() + ";" + pointsList + ";null;null;null";
     }
 
 }

@@ -115,7 +115,7 @@ public class PaintModel {
     public void saveDrawing(File file) {
         
         try (PrintWriter writer = new PrintWriter(file)) {
-            writer.println("SHAPE;STARTX;STARTY;WIDTH;HEIGHT;FILL;BORDER;ROTATION;POINTS");
+            writer.println("SHAPE;STARTX;STARTY;WIDTH;HEIGHT;FILL;BORDER;ROTATION;POINTS;TEXT;FONT;SIZE");
             for (MyShape shape : shapes) {
                 writer.println(shape.toCSV());
             }
@@ -146,7 +146,7 @@ public class PaintModel {
                 Color loadedFill = Color.valueOf(parts[5]);
                 Color loadedBorder = Color.valueOf(parts[6]);
                 double loadedRotation = Double.parseDouble(parts[7]);
-                String listOfPoints = parts[8]; // "x1~y1/x2~y2/.../xn~yn"
+                
                 switch (loadedMode) {
                     case LINE -> {
                         BorderColorDecorator myLine = new BorderColorDecorator(new MyLine(loadedStartX, loadedStartY, loadedWidth, loadedHeight, loadedRotation), loadedBorder);
@@ -162,6 +162,7 @@ public class PaintModel {
                     }
                     case POLYGON -> {
                         List<Point2D> points = new ArrayList<>();
+                        String listOfPoints = parts[8]; // "x1~y1/x2~y2/.../xn~yn"
                         // Parse listOfPoints: format "x1~y1/x2~y2/.../xn~yn"
                         if (!listOfPoints.equals("null")) {
                             String[] pointPairs = listOfPoints.split("/");
@@ -174,6 +175,14 @@ public class PaintModel {
                         }
                         BorderColorDecorator myPolygon = new BorderColorDecorator(new FillColorDecorator(new MyPolygon(loadedStartX, loadedStartY, points, loadedRotation), loadedFill), loadedBorder);
                         loadedShapes.add(myPolygon);
+                    }
+                    case TEXT -> {
+                        String loadedText = parts[9];
+                        String loadedFont = parts[10];
+                        double loadedSize = 0;
+                        if (parts[11] != null) loadedSize = Double.parseDouble(parts[11]);
+                        BorderColorDecorator myText = new BorderColorDecorator(new FillColorDecorator(new MyText(loadedStartX, loadedStartY,  loadedText, loadedFont,loadedSize, loadedRotation), loadedFill), loadedBorder);
+                        loadedShapes.add(myText);
                     }
                 }
             }

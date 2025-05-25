@@ -267,7 +267,7 @@ public class PaintController implements Initializable {
         modeProperty.addListener((obs, oldMode, newMode) -> {
             if (oldMode == Shapes.POLYGON && currentShape.get() != null) {
                 MyPolygon myPolygon = (MyPolygon) ((FillColorDecorator) ((BorderColorDecorator) currentShape.get()).getDecoratedShape()).getDecoratedShape();
-                myPolygon.closeShape(); // metodo da implementare per chiudere il poligono
+                myPolygon.closeShape(); 
                 currentShape.set(null);
             }
         });
@@ -463,6 +463,12 @@ public class PaintController implements Initializable {
                             }
                         }
                     }
+                    case TEXT -> {
+                        BorderColorDecorator myText = new BorderColorDecorator(new FillColorDecorator(new MyText(startX, startY, displayTextField.getText(),fontsComboBox.getValue(), Double.parseDouble(sizeComboBox.getValue()), 0), fillHex), borderHex);
+                        addShape(myText);
+                        enableSelection(myText);
+                        currentShape.set(myText);
+                    }
                 }
             }
         });
@@ -488,7 +494,7 @@ public class PaintController implements Initializable {
             
             // Preview of the shape while the user is creating it
             else {
-                if (modeProperty.get() != Shapes.POLYGON) {
+                if (modeProperty.get() != Shapes.POLYGON && modeProperty.get() != Shapes.TEXT) {
                     currentShape.get().resize(e.getX() - startX, e.getY() - startY); 
                 }
             }

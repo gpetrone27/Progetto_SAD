@@ -15,7 +15,7 @@ public class MyText extends MyShape {
     
     public MyText(double startX, double startY, String displayText, String fontFamily, double size, double rotation) {
         super(startX, startY);
-        text = new Text(displayText);
+        text = new Text(startX, startY, displayText);
         text.setFont(Font.font(fontFamily, size));
         this.fxShape = text;
         setRotation(rotation);
@@ -93,7 +93,8 @@ public class MyText extends MyShape {
     
     @Override
     public String toCSV() {
-        return ""; // TO DO
+        // in width it saves the size
+        return Shapes.TEXT + ";" + startX + ";" + startY + ";" + getWidth() + ";" + getHeight() + ";" + getFxShape().getFill() + ";" + getFxShape().getStroke() + ";" + getFxShape().getRotate() + ";null;" + text.getText() + ";" + getFontFamily() + ";" + getSize();
     }
     
 }
