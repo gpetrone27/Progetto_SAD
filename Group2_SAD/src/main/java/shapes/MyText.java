@@ -93,7 +93,6 @@ public class MyText extends MyShape {
     
     @Override
     public String toCSV() {
-        // in width it saves the size
         return Shapes.TEXT + ";" + startX + ";" + startY + ";" + getWidth() + ";" + getHeight() + ";" + getFxShape().getFill() + ";" + getFxShape().getStroke() + ";" + getFxShape().getRotate() + ";null;" + text.getText() + ";" + getFontFamily() + ";" + getSize();
     }
     
