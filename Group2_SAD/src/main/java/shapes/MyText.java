@@ -19,6 +19,9 @@ public class MyText extends MyShape {
         text.setFont(Font.font(fontFamily, size));
         this.fxShape = text;
         setRotation(rotation);
+        
+        width = getWidth();
+        height = getHeight();
     }
 
     /**
