@@ -4,28 +4,19 @@ package shapes;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.geometry.Point2D;
-import javafx.scene.shape.ClosePath;
-import javafx.scene.shape.LineTo;
-import javafx.scene.shape.MoveTo;
-import javafx.scene.shape.Path;
-import javafx.scene.shape.PathElement;
+import javafx.scene.shape.Polygon;
 
 /**
- * Represents a custom polygon shape made of Points2D using the JavaFX object Path.
+ * Represents a custom polygon shape using the JavaFX object Polygon.
  * The polygon supports basic transformations such as moving and resizing, and can be cloned or serialized to CSV.
  */
 public class MyPolygon extends MyShape {
     
-    private Path path;
-    private List<Point2D> points; 
-    private double smallerX;
-    private double greaterX;
-    private double smallerY;
-    private double greaterY;
+    // Strongly typed reference to wrapped FX shape
+    private Polygon polygon;
   
     /**
      * Constructs a MyPolygon object.
-     *
      * @param startX    The initial X coordinate
      * @param startY    The initial Y coordinate
      * @param points    The list of polygon points (can be null to start an empty polygon)
@@ -35,270 +26,209 @@ public class MyPolygon extends MyShape {
         
         super(startX, startY);
         
-        path = new Path();
-        path.setStrokeWidth(3);
+        polygon = new Polygon(startX, startY);
+        polygon.setStrokeWidth(3);
         
-        if (points == null) {
-            this.points = new ArrayList<>();
-            addMoveTo(startX, startY);
-        }
-        else {
-            this.points = points;
-            reconstruct();
+        if (points != null) {
+            reconstruct(points);
         }
         
-        this.fxShape = path;
+        this.fxShape = polygon;
         setRotation(rotation);
-        recomputeBounds();
     }
     
     /**
-     * Adds the first point of the polygon
-     *
-     * @param x The X coordinate of the point
-     * @param y The Y coordinate of the point
-     */    
-    public void addMoveTo(double x, double y) {
-        path.getElements().add(new MoveTo(x, y));
-        points.add(new Point2D(x, y));
-        if (x < smallerX) {
-            smallerX = x;
-        } else if (x > greaterX) {
-            greaterX  = x;
-        }
-        
-        if (y < smallerY) {
-            smallerY = y;
-        } else if (y > greaterY) {
-          greaterY = y;  
+     * Reconstructs the polygon from the current list of points.
+     * It is typically used when loading or cloning an existing polygon.
+     */   
+    private void reconstruct(List<Point2D> points) {
+        polygon.getPoints().clear();
+        for (Point2D point : points) {
+            polygon.getPoints().addAll(point.getX(), point.getY());
         }
     }
-    
+
     /**
-     * Adds a line to the polygon or closes the shape if the point is close to the starting point.
-     *
-     * @param x The X coordinate of the new point
-     * @param y The Y coordinate of the new point
-     * @return true if the shape was closed, false otherwise
+     * Adds the given point coordinates to the list of points of the polygon.
+     * Returns true if the polygon is closed and false if it's still open.
+     * @param point
+     * @return polygon is closed
      */
-    public boolean addLineTo(double x, double y) {
-        if (Math.abs(x - startX) <= 10 && Math.abs(y - startY) <= 10) {
-            path.getElements().add(new ClosePath());
-            recomputeBounds();
+    public boolean addPoint(Point2D point) {
+        Point2D first = new Point2D(polygon.getPoints().get(0), polygon.getPoints().get(1));
+        if (point.distance(first) < 10) {
             return true;
         }
         else {
-            path.getElements().add(new LineTo(x, y));
-            points.add(new Point2D(x, y));
+            polygon.getPoints().addAll(point.getX(), point.getY());
             return false;
         }
     }
     
     /**
-     * Reconstructs the polygon's {@link Path} from the current list of points.
-     * 
-     * This method clears the path and rebuilds it by creating a {@link MoveTo} element
-     * for the first point and {@link LineTo} elements for each subsequent point, 
-     * followed by a {@link ClosePath} to close the shape.
-     * 
-     * It is typically used when loading or cloning an existing polygon.
-     */   
-    private void reconstruct() {
-        
-        Point2D firstPoint = points.get(0);
-        path.getElements().add(new MoveTo(firstPoint.getX(), firstPoint.getY()));
-        
-        for (int i = 1; i < points.size(); i++) {
-            Point2D point = points.get(i);
-            path.getElements().add(new LineTo(point.getX(), point.getY()));
-        }
-        path.getElements().add(new ClosePath());
-    }
-    
-    /**
-     * Closes the polygon.
-     */
-    public void closeShape() {
-        path.getElements().add(new ClosePath());
-        recomputeBounds();
-    }
-    
-
-    /**
-     * Resizes the polygon proportionally based on new width and height,
-     * keeping the top-left corner fixed.
-     *
+     * Resizes the polygon proportionally based on new width and height.
      * @param newWidth  The new width
      * @param newHeight The new height
      */    
     @Override
     public void resize(double newWidth, double newHeight) {
-        double oldWidth = getWidth();
-        double oldHeight = getHeight();
-
-        if (oldWidth == 0 || oldHeight == 0) return;
-
-        double scaleX = newWidth / oldWidth;
-        double scaleY = newHeight / oldHeight;
-
-        // The top-left point remains fixed
-        Point2D ref = new Point2D(smallerX, smallerY);
-        List<Point2D> newPoints = new ArrayList<>();
-
-        path.getElements().clear();
-
-        for (int i = 0; i < points.size(); i++) {
-            Point2D p = points.get(i);
-            double newX = ref.getX() + (p.getX() - ref.getX()) * scaleX;
-            double newY = ref.getY() + (p.getY() - ref.getY()) * scaleY;
-            Point2D scaled = new Point2D(newX, newY);
-            newPoints.add(scaled);
-
-            if (i == 0) {
-                path.getElements().add(new MoveTo(newX, newY));
-            } else {
-                path.getElements().add(new LineTo(newX, newY));
-            }
-        }
-
-        path.getElements().add(new ClosePath());
-
-        points = newPoints;
         
-        recomputeBounds();
-}
+        List<Double> points = polygon.getPoints();
 
-    
-    /**
-     * Recomputes the bounding box coordinates based on the current points.
-     */
-    private void recomputeBounds() {
-        if (points == null || points.isEmpty()) {
-            smallerX = startX;
-            greaterX = startX;
-            smallerY = startY;
-            greaterY = startY;
-            return;
+        // Find current bounds
+        double minX = Double.MAX_VALUE;
+        double minY = Double.MAX_VALUE;
+        double maxX = Double.MIN_VALUE;
+        double maxY = Double.MIN_VALUE;
+
+        for (int i = 0; i < points.size(); i += 2) {
+            double x = points.get(i);
+            double y = points.get(i + 1);
+            minX = Math.min(minX, x);
+            minY = Math.min(minY, y);
+            maxX = Math.max(maxX, x);
+            maxY = Math.max(maxY, y);
         }
 
-        double minX = Double.POSITIVE_INFINITY;
-        double maxX = Double.NEGATIVE_INFINITY;
-        double minY = Double.POSITIVE_INFINITY;
-        double maxY = Double.NEGATIVE_INFINITY;
+        double currentWidth = maxX - minX;
+        double currentHeight = maxY - minY;
 
-        for (Point2D p : points) {
-            double x = p.getX();
-            double y = p.getY();
-
-            if (x < minX) minX = x;
-            if (x > maxX) maxX = x;
-            if (y < minY) minY = y;
-            if (y > maxY) maxY = y;
-            
+        if (currentWidth == 0 || currentHeight == 0) {
+            return; // Avoid division by zero
         }
 
-        smallerX = minX;
-        greaterX = maxX;
-        smallerY = minY;
-        greaterY = maxY;
+        double scaleX = newWidth / currentWidth;
+        double scaleY = newHeight / currentHeight;
+
+        // Scale points relative to top-left corner (minX, minY)
+        for (int i = 0; i < points.size(); i += 2) {
+            double x = points.get(i);
+            double y = points.get(i + 1);
+
+            double newX = minX + (x - minX) * scaleX;
+            double newY = minY + (y - minY) * scaleY;
+
+            points.set(i, newX);
+            points.set(i + 1, newY);
+        }
+
+        // Update startX and startY to new position (top-left)
+        this.startX = minX;
+        this.startY = minY;
     }
-
     
     /**
      * Clones the current shape, including its points and rotation.
-     *
-     * @return A new instance of {@link MyPolygon} identical to the current one
+     * @return A new instance of {@link MyPolygon} identical to the current one.
      */
     @Override
     public MyShape cloneShape() {
-        List<Point2D> clonedPoints = new ArrayList<>();
-        for(Point2D p : points) {
-            clonedPoints.add(new Point2D(p.getX(), p.getY()));
-        }
-        return new MyPolygon(startX, startY, clonedPoints, path.getRotate());
+        return new MyPolygon(startX, startY, convertToPoint2D(), getRotation());
     }
+    
     /**
-     * Returns the width of the polygon's bounding box.
-     *
+     * Converts the list of points of the polygon from (double, double) to Point2D.
+     * @return 
+     */
+    public List<Point2D> convertToPoint2D() {
+        List<Double> polygonPoints = polygon.getPoints();
+        List<Point2D> clonedCoords = new ArrayList<>();
+        for (int i = 0; i < polygonPoints.size(); i += 2) {
+            clonedCoords.add(new Point2D(polygonPoints.get(i), polygonPoints.get(i + 1)));
+        }
+        return clonedCoords;
+    }
+    
+    /**
+     * Returns the width of the polygon by computing maxX - minX.
      * @return The width
      */
     @Override
     public double getWidth() {
-       return greaterX - smallerX;
+       
+        List<Double> polygonPoints = polygon.getPoints();
+        
+        double minX = Double.MAX_VALUE;
+        double maxX = Double.MIN_VALUE;
+        
+        for (int i = 0; i < polygonPoints.size(); i += 2) {
+            double x = polygonPoints.get(i);
+            minX = Math.min(minX, x);
+            maxX = Math.max(maxX, x);
+        }
+        
+        return maxX - minX;
     }
 
     /**
-     * Returns the height of the polygon's bounding box.
-     *
+     * Returns the height of the polygon by computing maxY - minY.
      * @return The height
      */
     @Override
     public double getHeight() {
-        return greaterY - smallerY;
-    }
-    
-    /**
-     * Returns the list of points
-     * @return points
-     */
-    public List<Point2D> getPoints() {
-        return new ArrayList<>(points);
+        
+        List<Double> polygonPoints = polygon.getPoints();
+        
+        double minY = Double.MAX_VALUE;
+        double maxY = Double.MIN_VALUE;
+        
+        for (int i = 0; i < polygonPoints.size(); i += 2) {
+            double y = polygonPoints.get(i + 1);
+            minY = Math.min(minY, y);
+            maxY = Math.max(maxY, y);
+        }
+        
+        return maxY - minY;
     }
 
     /**
      * Moves the entire polygon to a new position based on the given coordinates.
-     *
      * @param x The new X coordinate
      * @param y The new Y coordinate
      */
     @Override
     public void moveTo(double x, double y) {
         
-        double dX = x - startX;
-        double dY = y - startY;
-        
-        int i = 0;
-        
-        for (PathElement elem : path.getElements()) {
-            if (elem instanceof MoveTo moveTo) {
-                moveTo.setX(moveTo.getX() + dX);
-                moveTo.setY(moveTo.getY() + dY);
-                Point2D p = points.get(i);
-                points.set(i, new Point2D(p.getX() + dX, p.getY() + dY));
-                i++;
-            } else if (elem instanceof LineTo lineTo) {
-                lineTo.setX(lineTo.getX() + dX);
-                lineTo.setY(lineTo.getY() + dY);
-                Point2D p = points.get(i);
-                points.set(i, new Point2D(p.getX() + dX, p.getY() + dY));
-                i++;
-            }            
-        }
-        startX += dX;
-        startY += dY;
+        List<Double> points = polygon.getPoints();
 
-        smallerX += dX;
-        greaterX += dX;
-        smallerY += dY;
-        greaterY += dY;
+        // First, find current top-left corner (bounding box)
+        double minX = Double.MAX_VALUE;
+        double minY = Double.MAX_VALUE;
+        for (int i = 0; i < points.size(); i += 2) {
+            minX = Math.min(minX, points.get(i));
+            minY = Math.min(minY, points.get(i + 1));
+        }
+
+        // Calculate offset
+        double offsetX = x - minX;
+        double offsetY = y - minY;
+
+        // Apply offset to all points
+        for (int i = 0; i < points.size(); i += 2) {
+            points.set(i, points.get(i) + offsetX);       // X
+            points.set(i + 1, points.get(i + 1) + offsetY); // Y
+        }
+        
+        // Updates stored starting points
+        this.startX = x;
+        this.startY = y;
     }
     
     /**
     * Serializes the polygon to a CSV format string.
-    *
     * @return A CSV string representing the polygon's data
     */
     @Override
     public String toCSV() {
         StringBuffer pointsList = new StringBuffer();
-        for(Point2D p : points) {
+        for(Point2D p : convertToPoint2D()) {
             pointsList.append(Double.toString(p.getX()));
             pointsList.append("~");
             pointsList.append(Double.toString(p.getY()));
             pointsList.append("/");
         }
         pointsList.deleteCharAt(pointsList.length() - 1);
-        return Shapes.POLYGON + ";" + startX + ";" + startY + ";" + getWidth() + ";" + getHeight() + ";" + path.getFill() + ";" + path.getStroke() + ";" + path.getRotate() + ";" + pointsList + ";null;null;null";
+        return Shapes.POLYGON + ";" + startX + ";" + startY + ";" + getWidth() + ";" + getHeight() + ";" + polygon.getFill() + ";" + polygon.getStroke() + ";" + polygon.getRotate() + ";" + pointsList + ";null;null;null";
     }
 
 }

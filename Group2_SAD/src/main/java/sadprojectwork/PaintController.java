@@ -16,6 +16,7 @@ import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -285,16 +286,6 @@ public class PaintController implements Initializable {
                 drawingPane.setPannable(false); // Disable panning
             }
         });
-        
-        // Closes a Polygon when the user unselect MyPolygon mode
-        modeProperty.addListener((obs, oldMode, newMode) -> {
-            if (oldMode == Shapes.POLYGON && currentShape.get() != null) {
-                MyPolygon myPolygon = (MyPolygon) ((FillColorDecorator) ((BorderColorDecorator) currentShape.get()).getDecoratedShape()).getDecoratedShape();
-                myPolygon.closeShape(); 
-                currentShape.set(null);
-            }
-        });
-
 
         // Prevents panning with right click
         drawingPane.addEventFilter(MouseEvent.MOUSE_DRAGGED, event -> {
@@ -480,7 +471,7 @@ public class PaintController implements Initializable {
                         }
                         else {
                             MyPolygon myPolygon = (MyPolygon) ((FillColorDecorator) ((BorderColorDecorator) currentShape.get()).getDecoratedShape()).getDecoratedShape();
-                            boolean isPolygonClosed = myPolygon.addLineTo(startX, startY);
+                            boolean isPolygonClosed = myPolygon.addPoint(new Point2D(startX, startY));
                             if (isPolygonClosed) {
                                 currentShape.set(null);
                             }

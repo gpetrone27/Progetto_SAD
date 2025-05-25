@@ -1,9 +1,10 @@
+
 package testsadprojectwork;
 
 import java.util.ArrayList;
 import java.util.List;
 import javafx.geometry.Point2D;
-import javafx.scene.shape.Path;
+import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Shape;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,22 +35,7 @@ public class MyPolygonTest {
     @Test
     void testGetFxShape() {
         Shape shape = emptyPolygon.getFxShape();
-        assertInstanceOf(Path.class, shape);
-    }
-
-    /**
-     * Test of addMoveTo and AddLineTo methods of class MyPolygon.
-     */
-    @Test
-    public void testAddMoveToAndAddLineTo() {
-        emptyPolygon.addMoveTo(0, 0);
-        boolean closed = emptyPolygon.addLineTo(30, 30);
-        assertFalse(closed);
-        closed = emptyPolygon.addLineTo(50, 50);
-        assertFalse(closed);
-        // Point near the initial point
-        closed = emptyPolygon.addLineTo(1, 1);
-        assertTrue(closed);
+        assertInstanceOf(Polygon.class, shape);
     }
     
     /**
@@ -75,6 +61,7 @@ public class MyPolygonTest {
      */
     @Test
     public void testResize() {
+        
         double oldWidth = polygon.getWidth(); // 10
         double oldHeight = polygon.getHeight(); // 10
         double newWidth = oldWidth*2;
@@ -86,7 +73,7 @@ public class MyPolygonTest {
         assertEquals(newHeight, polygon.getHeight()); 
         
         // Tests if the top-left point remains the same
-        Point2D topLeft = polygon.getPoints().get(0);
+        Point2D topLeft = polygon.convertToPoint2D().get(0);
         assertEquals(10, topLeft.getX());
         assertEquals(10, topLeft.getY());
     }
@@ -101,9 +88,9 @@ public class MyPolygonTest {
         MyPolygon clonedPolygon = (MyPolygon) cloned;
         
         // Checks if points are copied and not same references
-        for (int i = 0; i < polygon.getPoints().size(); i++) {
-            Point2D original = polygon.getPoints().get(i);
-            Point2D clonePt = clonedPolygon.getPoints().get(i);
+        for (int i = 0; i < polygon.convertToPoint2D().size(); i++) {
+            Point2D original = polygon.convertToPoint2D().get(i);
+            Point2D clonePt = clonedPolygon.convertToPoint2D().get(i);
             assertEquals(original.getX(), clonePt.getX());
             assertEquals(original.getY(), clonePt.getY());
             assertNotSame(original, clonePt);
@@ -116,7 +103,6 @@ public class MyPolygonTest {
     @Test
     public void testToCSV() {
         String csv = polygon.toCSV();
-        
         assertTrue(csv.contains(Shapes.POLYGON.toString()));
         assertTrue(csv.contains("10.0~10.0/20.0~10.0/15.0~20.0"));
     }

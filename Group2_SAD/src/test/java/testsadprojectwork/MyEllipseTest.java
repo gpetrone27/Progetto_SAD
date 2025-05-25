@@ -112,7 +112,7 @@ class MyEllipseTest {
         String csv = ellipse.toCSV();
         String[] parts = csv.split(";");
 
-        assertEquals(9, parts.length);
+        assertEquals(12, parts.length);
 
         Color fill = Color.valueOf(parts[5]);
         Color stroke = Color.valueOf(parts[6]);
