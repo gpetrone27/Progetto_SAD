@@ -146,7 +146,6 @@ public class PaintModel {
                 Color loadedFill = Color.valueOf(parts[5]);
                 Color loadedBorder = Color.valueOf(parts[6]);
                 double loadedRotation = Double.parseDouble(parts[7]);
-                
                 switch (loadedMode) {
                     case LINE -> {
                         BorderColorDecorator myLine = new BorderColorDecorator(new MyLine(loadedStartX, loadedStartY, loadedWidth, loadedHeight, loadedRotation), loadedBorder);

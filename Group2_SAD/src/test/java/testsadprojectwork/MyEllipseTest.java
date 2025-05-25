@@ -1,3 +1,4 @@
+
 package testsadprojectwork;
 
 import shapes.MyEllipse;
@@ -13,10 +14,10 @@ class MyEllipseTest {
 
     private MyEllipse ellipse;
 
-    // Set up a default ellipse centered at (50, 60) with radiusX=30 and radiusY=20
+    // Set up a default ellipse with top-left point in (50, 50) with width=30 and height=20
     @BeforeEach
     void setUp() {
-        ellipse = new MyEllipse(50, 60, 30, 20, 0);
+        ellipse = new MyEllipse(50, 50, 30, 20, 0);
     }
 
     // Verify that getFxShape returns a valid Ellipse with the correct initial values
@@ -28,7 +29,7 @@ class MyEllipseTest {
         Ellipse fx = (Ellipse) shape;
 
         assertEquals(65, fx.getCenterX());
-        assertEquals(70, fx.getCenterY());
+        assertEquals(60, fx.getCenterY());
         assertEquals(15, fx.getRadiusX());
         assertEquals(10, fx.getRadiusY());
     }
@@ -36,31 +37,33 @@ class MyEllipseTest {
     // Test resizing with positive radii - should adjust center and radii
     @Test
     void testResizePositive() {
-
-        ellipse.resize(30, 20);
+        
+        ellipse.resize(60, 40);
         Ellipse fx = (Ellipse) ellipse.getFxShape();
-
-        assertEquals(65, fx.getCenterX());
+        
+        assertEquals(80, fx.getCenterX());
         assertEquals(70, fx.getCenterY());
-        assertEquals(15, fx.getRadiusX());
-        assertEquals(10, fx.getRadiusY());
+        assertEquals(30, fx.getRadiusX());
+        assertEquals(20, fx.getRadiusY());
     }
 
     // Test resizing with negative values - should flip direction but use absolute radii
     @Test
     void testResizeNegative() {
-        ellipse.resize(-30, -40); // dovrebbe capovolgere ma usare valori assoluti
+        
+        ellipse.resize(-60, -40);
         Ellipse fx = (Ellipse) ellipse.getFxShape();
-
-        assertEquals(35, fx.getCenterX(), 1e-6); // 50 + (-30 / 2) = 50 - 15
-        assertEquals(40, fx.getCenterY(), 1e-6); // 60 + (-40 / 2) = 60 - 20
-        assertEquals(15, fx.getRadiusX(), 1e-6); // abs(-30 / 2)
+        
+        assertEquals(20, fx.getCenterX(), 1e-6); // 50 + (-60 / 2) = 50 - 30
+        assertEquals(30, fx.getCenterY(), 1e-6); // 50 + (-40 / 2) = 50 - 20
+        assertEquals(30, fx.getRadiusX(), 1e-6); // abs(-60 / 2)
         assertEquals(20, fx.getRadiusY(), 1e-6); // abs(-40 / 2)
     }
 
     // Test cloneShape returns a new MyEllipse with same data but independent
     @Test
     void testCloneShapeCreatesCopy() {
+        
         MyEllipse clone = (MyEllipse) ellipse.cloneShape();
 
         assertNotSame(clone, ellipse);
@@ -78,6 +81,7 @@ class MyEllipseTest {
     // Test moveTo sets the new center correctly
     @Test
     void testMoveTo() {
+        
         ellipse.moveTo(100, 200);  // sposta in (100, 200)
 
         Ellipse fx = (Ellipse) ellipse.getFxShape();
@@ -105,6 +109,7 @@ class MyEllipseTest {
     // Test the CSV format including color fields using Color.valueOf()
     @Test
     void testToCSVFormat() {
+        
         Ellipse fx = (Ellipse) ellipse.getFxShape();
         fx.setFill(Color.YELLOW);
         fx.setStroke(Color.BLUE);

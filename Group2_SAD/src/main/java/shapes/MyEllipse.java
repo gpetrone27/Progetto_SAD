@@ -81,7 +81,7 @@ public class MyEllipse extends MyShape {
      */
     @Override
     public MyShape cloneShape() {
-        return new MyEllipse(startX, startY, ellipse.getRadiusX(), ellipse.getRadiusY(), ellipse.getRotate());
+        return new MyEllipse(startX, startY, getWidth(), getHeight(), ellipse.getRotate());
     }
 
     /**

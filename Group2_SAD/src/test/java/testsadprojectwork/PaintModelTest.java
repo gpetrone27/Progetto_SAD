@@ -116,10 +116,10 @@ public class PaintModelTest {
 
         // Write three shapes to the file: a rectangle, a line, and an ellipse
         try (PrintWriter writer = new PrintWriter(tempFile)) {
-            writer.println("SHAPE;STARTX;STARTY;WIDTH;HEIGHT;FILL;BORDER");
-            writer.println("RECTANGLE;10.0;20.0;100.0;50.0;0xff0000ff;0x0000ffff");
-            writer.println("LINE;5.0;5.0;50.0;50.0;0x000000ff;0x00ff00ff");
-            writer.println("ELLIPSE;15.0;25.0;60.0;30.0;0x00ffffff;0xff00ffff");
+            writer.println("SHAPE;STARTX;STARTY;WIDTH;HEIGHT;FILL;BORDER;ROTATION;POINTS;FONT;SIZE");
+            writer.println("RECTANGLE;10.0;20.0;100.0;50.0;0xff0000ff;0x0000ffff;0;null;null;null");
+            writer.println("LINE;5.0;5.0;50.0;50.0;0x000000ff;0x00ff00ff;0;null;null;null");
+            writer.println("ELLIPSE;15.0;25.0;60.0;30.0;0x00ffffff;0xff00ffff;0;null;null;null");
         }
 
         // Load shapes from the file

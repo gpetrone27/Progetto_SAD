@@ -879,7 +879,7 @@ public class PaintControllerTest {
     }
    
    /**
-    * Tests that a selected rectangle is copy to clipboard.
+    * Tests that a selected rectangle is copied to clipboard.
     * 
     * @param TestFX robot: robot to simulate user interactions.
     */
@@ -1584,7 +1584,7 @@ public class PaintControllerTest {
         Color newBorder = Color.DARKBLUE;
 
         Platform.runLater(() -> {
-            MyText text = new MyText(startX, startY, content, fontFamily, fontSize, initialRotation);
+            BorderColorDecorator text = new BorderColorDecorator(new FillColorDecorator(new MyText(startX, startY, content, fontFamily, fontSize, initialRotation), Color.TRANSPARENT), Color.BLACK);
             text.getFxShape().setFill(Color.BLACK);
             text.getFxShape().setStroke(Color.RED);
             shapeRef[0] = text;

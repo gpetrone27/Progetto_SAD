@@ -627,8 +627,9 @@ public class PaintController implements Initializable {
         // Rotation
         rotationSlider.setValue(selectedShape.get().getRotation());
         
-        FillColorDecorator decoratedShape = (FillColorDecorator) ((BorderColorDecorator) selectedShape.get()).getDecoratedShape();
-        if (decoratedShape.getDecoratedShape() instanceof MyText selectedText) {
+        if (selectedShape.get().getFxShape().getClass() == Text.class) {
+
+            MyText selectedText = (MyText) ((FillColorDecorator) ((BorderColorDecorator) selectedShape.get()).getDecoratedShape()).getDecoratedShape();
             
             // Font
             fontsComboBoxSide.setValue(selectedText.getFontFamily());

@@ -126,7 +126,7 @@ class MyRectangleTest {
         String csv = rect.toCSV();
         String[] parts = csv.split(";");
 
-        assertEquals(9, parts.length);
+        assertEquals(12, parts.length);
 
         // Parse the string color representations back to Color objects
         Color fillColor = Color.valueOf(parts[5]);
