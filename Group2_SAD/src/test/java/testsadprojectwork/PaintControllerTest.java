@@ -8,6 +8,7 @@ import decorator.BorderColorDecorator;
 import decorator.FillColorDecorator;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import shapes.MyRectangle;
 import shapes.MyEllipse;
 import shapes.MyLine;
@@ -19,6 +20,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Slider;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Pane;
@@ -1431,6 +1433,54 @@ public class PaintControllerTest {
        assertEquals(0, remainingLines, "The grid should be unvisible now!");
    }
 
+    /**
+     * Tests the resizing of the grid via the slider.
+     *
+     * @param robot TestFX robot to simulate user interactions.
+     */
+    @Test
+    void testResizeGrid(FxRobot robot) {
+        Pane canvas = robot.lookup("#canvas").queryAs(Pane.class);
+        Slider gridSlider = robot.lookup("#gridSizeSlider").queryAs(Slider.class);
+
+        robot.clickOn("#gridButton");
+
+        // Initial spacing value (e.g. 0)
+        Platform.runLater(() -> gridSlider.setValue(10));
+        robot.sleep(500);
+
+        // Saves the X coordinates of vertical lines
+        List<Double> initialXCoords = canvas.getChildren().stream()
+            .filter(node -> node instanceof Line && "grid".equals(node.getUserData()))
+            .map(node -> (Line) node)
+            .filter(line -> line.getStartX() == line.getEndX()) // Vertical line
+            .map(Line::getStartX)
+            .sorted()
+            .collect(Collectors.toList());
+
+        assertTrue(initialXCoords.size() > 1);
+
+        double initialSpacing = initialXCoords.get(1) - initialXCoords.get(0);
+
+        // Changes grid spacing (e.g. 40)
+        Platform.runLater(() -> gridSlider.setValue(40));
+        robot.sleep(500);
+
+        List<Double> updatedXCoords = canvas.getChildren().stream()
+            .filter(node -> node instanceof Line && "grid".equals(node.getUserData()))
+            .map(node -> (Line) node)
+            .filter(line -> line.getStartX() == line.getEndX())
+            .map(Line::getStartX)
+            .sorted()
+            .collect(Collectors.toList());
+
+        assertTrue(updatedXCoords.size() > 1);
+
+        double updatedSpacing = updatedXCoords.get(1) - updatedXCoords.get(0);
+
+        assertNotEquals(initialSpacing, updatedSpacing);
+        assertEquals(40.0, updatedSpacing, 1.0);
+    }
 
     /**
      * Tests creation, selection, movement and resizing of a MyPolygon shape.
