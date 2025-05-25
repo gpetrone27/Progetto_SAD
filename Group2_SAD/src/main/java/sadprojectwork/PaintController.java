@@ -286,7 +286,15 @@ public class PaintController implements Initializable {
                 drawingPane.setPannable(false); // Disable panning
             }
         });
-
+         
+        // Closes a Polygon when the user unselect MyPolygon mode
+        modeProperty.addListener((obs, oldMode, newMode) -> {
+            if (oldMode == Shapes.POLYGON && currentShape.get() != null) {
+                MyPolygon myPolygon = (MyPolygon) ((FillColorDecorator) ((BorderColorDecorator) currentShape.get()).getDecoratedShape()).getDecoratedShape(); 
+                currentShape.set(null);
+            }
+        });
+        
         // Prevents panning with right click
         drawingPane.addEventFilter(MouseEvent.MOUSE_DRAGGED, event -> {
             if (event.isSecondaryButtonDown()) {
