@@ -36,6 +36,7 @@ import org.testfx.framework.junit5.Start;
 import org.testfx.api.FxRobot;
 import sadprojectwork.PaintController;
 import shapes.MyPolygon;
+import shapes.MyText;
 
 /**
  * Test class for the method in the controller, that uses 
@@ -1561,4 +1562,58 @@ public class PaintControllerTest {
         assertEquals(newBorder, shapeRef[0].getFxShape().getStroke(), "Polygon border color should be updated!");
     }
 
+    /**
+     * Tests creation, color change, movement and rotation of a MyText shape.
+     * @param robot FxRobot instance for UI simulation.
+     */
+    @Test
+    void testTextPlacementMoveColorAndRotation(FxRobot robot) {
+        MyShape[] shapeRef = new MyShape[1];
+
+        // Initial values
+        double startX = 100, startY = 150;
+        String content = "Hello World";
+        String fontFamily = "Arial";
+        double fontSize = 20;
+        double initialRotation = 0;
+
+        // Target values
+        double newX = 200, newY = 250;
+        double newRotation = 45;
+        Color newFill = Color.GREEN;
+        Color newBorder = Color.DARKBLUE;
+
+        Platform.runLater(() -> {
+            MyText text = new MyText(startX, startY, content, fontFamily, fontSize, initialRotation);
+            text.getFxShape().setFill(Color.BLACK);
+            text.getFxShape().setStroke(Color.RED);
+            shapeRef[0] = text;
+            controller.getModel().addShape(text);
+            controller.enableSelection(text);
+        });
+
+        robot.interact(() -> {});
+        robot.moveTo(shapeRef[0].getFxShape()).clickOn();
+
+        // Changes color
+        robot.interact(() -> {
+            Command colorCmd = new ChangeColorCommand(shapeRef[0], newFill, newBorder);
+            controller.getModel().execute(colorCmd);
+        });
+
+        assertEquals(newFill, shapeRef[0].getFxShape().getFill(), "Text fill color should be updated!");
+        assertEquals(newBorder, shapeRef[0].getFxShape().getStroke(), "Text border color should be updated!");
+
+        // Changes position
+        Platform.runLater(() -> shapeRef[0].moveTo(newX, newY));
+        robot.interact(() -> {});
+        assertEquals(newX, shapeRef[0].getStartX(), 0.001, "Text X should be updated after move!");
+        assertEquals(newY, shapeRef[0].getStartY(), 0.001, "Text Y should be updated after move!");
+
+        // Changes Rotation
+        Platform.runLater(() -> shapeRef[0].setRotation(newRotation));
+        robot.interact(() -> {});
+        assertEquals(newRotation, shapeRef[0].getRotation(), 0.001, "Text rotation should be updated!");
+    }
+    
 }
