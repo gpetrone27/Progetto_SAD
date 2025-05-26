@@ -134,9 +134,9 @@ public class PaintController implements Initializable {
     @FXML
     private MenuItem backMenuItem;
     @FXML
-    private TitledPane borderPanel;
+    private VBox borderPanel;
     @FXML
-    private TitledPane fillPanel;
+    private VBox fillPanel;
     @FXML
     private TitledPane propertiesPanel;
     @FXML
@@ -167,6 +167,10 @@ public class PaintController implements Initializable {
     private VBox shapesPanel;
     @FXML
     private VBox textPanel;
+    @FXML
+    private VBox defaultBorder;
+    @FXML
+    private VBox defaultFill;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -230,6 +234,24 @@ public class PaintController implements Initializable {
         // Binds the visible and managed property of the side panel to shapeSelected
         sidePanel.visibleProperty().bind(Bindings.createBooleanBinding(() -> selectedShape.get() != null, selectedShape));
         sidePanel.managedProperty().bind(Bindings.createBooleanBinding(() -> selectedShape.get() != null, selectedShape));
+        
+        // Binds the visible and managed property of the shape's border panel to shapeSelected
+        borderPanel.visibleProperty().bind(Bindings.createBooleanBinding(() -> selectedShape.get() != null, selectedShape));
+        borderPanel.managedProperty().bind(Bindings.createBooleanBinding(() -> selectedShape.get() != null, selectedShape));
+        defaultBorder.visibleProperty().bind(Bindings.createBooleanBinding(() -> selectedShape.get() == null, selectedShape));
+        defaultBorder.managedProperty().bind(Bindings.createBooleanBinding(() -> selectedShape.get() == null, selectedShape));
+        
+        // Binds the visible and managed property of the shape's fill panel to shapeSelected
+        fillPanel.visibleProperty().bind(Bindings.createBooleanBinding(() -> selectedShape.get() != null, selectedShape));
+        fillPanel.managedProperty().bind(Bindings.createBooleanBinding(() -> selectedShape.get() != null, selectedShape));
+        defaultFill.visibleProperty().bind(Bindings.createBooleanBinding(() -> selectedShape.get() == null, selectedShape));
+        defaultFill.managedProperty().bind(Bindings.createBooleanBinding(() -> selectedShape.get() == null, selectedShape));
+        
+        // Binds the visible and managed property of the shape's no fill button to shapeSelected
+        noFillButtonPanel.visibleProperty().bind(Bindings.createBooleanBinding(() -> selectedShape.get() != null, selectedShape));
+        noFillButtonPanel.managedProperty().bind(Bindings.createBooleanBinding(() -> selectedShape.get() != null, selectedShape));
+        noFillButton.visibleProperty().bind(Bindings.createBooleanBinding(() -> selectedShape.get() == null, selectedShape));
+        noFillButton.managedProperty().bind(Bindings.createBooleanBinding(() -> selectedShape.get() == null, selectedShape));
         
         // Binds the visible and managed property of the shapes panel to shapeSelected state
         shapesPanel.visibleProperty().bind(Bindings.createBooleanBinding(() -> selectedShape.get() != null && selectedShape.get().getFxShape().getClass() != Text.class, selectedShape));
@@ -828,7 +850,7 @@ public class PaintController implements Initializable {
         MyShape pastedShape = pasteCmd.getPastedShape();
         enableSelection(pastedShape);
         selectedShape.set(pastedShape);
-        highlightSelected(pastedShape);
+        selectShape(pastedShape);
     }
 
     /**
