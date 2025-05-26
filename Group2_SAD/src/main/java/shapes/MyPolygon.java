@@ -4,16 +4,16 @@ package shapes;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.geometry.Point2D;
-import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Polyline;
 
 /**
- * Represents a custom polygon shape using the JavaFX object Polygon.
+ * Represents a custom polygon shape using the JavaFX object Polyline.
  * The polygon supports basic transformations such as moving and resizing, and can be cloned or serialized to CSV.
  */
 public class MyPolygon extends MyShape {
     
     // Strongly typed reference to wrapped FX shape
-    private Polygon polygon;
+    private Polyline polygon;
   
     /**
      * Constructs a MyPolygon object.
@@ -26,7 +26,7 @@ public class MyPolygon extends MyShape {
         
         super(startX, startY);
         
-        polygon = new Polygon(startX, startY);
+        polygon = new Polyline(startX, startY);
         polygon.setStrokeWidth(3);
         
         if (points != null) {
@@ -57,12 +57,43 @@ public class MyPolygon extends MyShape {
     public boolean addPoint(Point2D point) {
         Point2D first = new Point2D(polygon.getPoints().get(0), polygon.getPoints().get(1));
         if (point.distance(first) < 10) {
+            closePolygon();
             return true;
         }
         else {
             polygon.getPoints().addAll(point.getX(), point.getY());
             return false;
         }
+    }
+    
+    /**
+     * Closes the polygon.
+     */
+    public void closePolygon() {
+        Point2D first = new Point2D(polygon.getPoints().get(0), polygon.getPoints().get(1));
+        polygon.getPoints().addAll(first.getX(), first.getY());
+        recomputeStartingPoint();
+    }
+    
+    /**
+     * Recomputes the starting point to the top-left corner of the bounding box.
+     */
+    public void recomputeStartingPoint() {
+        
+        List<Double> points = polygon.getPoints();
+
+        double minX = Double.MAX_VALUE;
+        double minY = Double.MAX_VALUE;
+
+        for (int i = 0; i < points.size(); i += 2) {
+            double x = points.get(i);
+            double y = points.get(i + 1);
+            minX = Math.min(minX, x);
+            minY = Math.min(minY, y);
+        }
+
+        this.startX = minX;
+        this.startY = minY;
     }
     
     /**

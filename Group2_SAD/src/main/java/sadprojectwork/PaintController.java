@@ -37,6 +37,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -62,8 +63,10 @@ public class PaintController implements Initializable {
 
     private double dragStartX, dragStartY;
     private double originalX, originalY;
-
-    private double lastMouseX, lastMouseY; // Last registered mouse coordinates
+    private double lastMouseX, lastMouseY;
+    
+    // First point of the polygon
+    Circle firstPoint;
     
     // Navigation: Grid
     private boolean gridActived = false;
@@ -291,6 +294,8 @@ public class PaintController implements Initializable {
         modeProperty.addListener((obs, oldMode, newMode) -> {
             if (oldMode == Shapes.POLYGON && currentShape.get() != null) {
                 MyPolygon myPolygon = (MyPolygon) ((FillColorDecorator) ((BorderColorDecorator) currentShape.get()).getDecoratedShape()).getDecoratedShape(); 
+                myPolygon.closePolygon();
+                canvas.getChildren().remove(firstPoint);
                 currentShape.set(null);
             }
         });
@@ -476,12 +481,22 @@ public class PaintController implements Initializable {
                             addShape(myPolygon);
                             enableSelection(myPolygon);
                             currentShape.set(myPolygon);
+                            firstPoint = new Circle(startX, startY, 5);
+                            firstPoint.setFill(Color.BLACK);
+                            DropShadow ds = new DropShadow();
+                            ds.setColor(Color.DODGERBLUE);
+                            ds.setRadius(10);
+                            firstPoint.setEffect(ds);
+                            canvas.getChildren().add(firstPoint);
                         }
                         else {
                             MyPolygon myPolygon = (MyPolygon) ((FillColorDecorator) ((BorderColorDecorator) currentShape.get()).getDecoratedShape()).getDecoratedShape();
+                            
                             boolean isPolygonClosed = myPolygon.addPoint(new Point2D(startX, startY));
                             if (isPolygonClosed) {
+                                myPolygon.recomputeStartingPoint();
                                 currentShape.set(null);
+                                canvas.getChildren().remove(firstPoint);
                             }
                         }
                     }
@@ -668,6 +683,7 @@ public class PaintController implements Initializable {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save drawing as CSV");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
+        fileChooser.setInitialDirectory(new File("src/main/resources/drawings"));
         File file = fileChooser.showSaveDialog(rootPane.getScene().getWindow());
 
         if (file != null) {
@@ -685,6 +701,7 @@ public class PaintController implements Initializable {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Load drawing from CSV");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
+        fileChooser.setInitialDirectory(new File("src/main/resources/drawings"));
         File file = fileChooser.showOpenDialog(rootPane.getScene().getWindow());
 
         if (file != null) {
