@@ -2,6 +2,7 @@
 
 <?import java.lang.String?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Group?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.ContextMenu?>
@@ -819,7 +820,11 @@
                   </ContextMenu>
                </contextMenu>
                <content>
-                  <Pane fx:id="canvas" prefHeight="5000.0" prefWidth="5000.0" />
+                  <Group>
+                     <children>
+                        <Pane fx:id="canvas" prefHeight="5000.0" prefWidth="5000.0" />
+                     </children>
+                  </Group>
                </content>
             </ScrollPane>
          </center>
