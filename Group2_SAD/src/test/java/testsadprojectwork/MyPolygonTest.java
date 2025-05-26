@@ -4,7 +4,7 @@ package testsadprojectwork;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.geometry.Point2D;
-import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Polyline;
 import javafx.scene.shape.Shape;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,7 +35,7 @@ public class MyPolygonTest {
     @Test
     void testGetFxShape() {
         Shape shape = emptyPolygon.getFxShape();
-        assertInstanceOf(Polygon.class, shape);
+        assertInstanceOf(Polyline.class, shape);
     }
     
     /**
