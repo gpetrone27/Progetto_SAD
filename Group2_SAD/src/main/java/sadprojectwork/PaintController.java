@@ -39,6 +39,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Scale;
@@ -209,7 +210,10 @@ public class PaintController implements Initializable {
      * Initializes the bindings of the application.
      */
     private void initBindings() {
-
+        
+        // Clips the canvas to the max dimensions
+        canvas.setClip(new Rectangle(5000, 5000));
+        
         // Updates the last position of the mouse, relative to the canvas, whenever it moves
         canvas.setOnMouseMoved(event -> {
             lastMouseX = event.getX();
