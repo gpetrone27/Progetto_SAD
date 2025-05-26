@@ -9,6 +9,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.ObjectProperty;
@@ -27,11 +28,11 @@ import javafx.scene.control.Separator;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
-import javafx.scene.control.TitledPane;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -41,6 +42,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Polyline;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -324,16 +326,6 @@ public class PaintController implements Initializable {
                 drawingPane.setPannable(false); // Disable panning
             }
         });
-         
-        // Closes a Polygon when the user unselect MyPolygon mode
-        modeProperty.addListener((obs, oldMode, newMode) -> {
-            if (oldMode == Shapes.POLYGON && currentShape.get() != null) {
-                MyPolygon myPolygon = (MyPolygon) ((FillColorDecorator) ((BorderColorDecorator) currentShape.get()).getDecoratedShape()).getDecoratedShape(); 
-                myPolygon.closePolygon();
-                canvas.getChildren().remove(firstPoint);
-                currentShape.set(null);
-            }
-        });
         
         // Prevents panning with right click
         drawingPane.addEventFilter(MouseEvent.MOUSE_DRAGGED, event -> {
@@ -377,6 +369,23 @@ public class PaintController implements Initializable {
         gridSizeSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
             gridCellsSize = newVal.doubleValue();
             redrawGrid();
+        });
+        
+        // Closes the active polygon if the user clicks on any part of the screen other than the drawing canvas
+        Platform.runLater(() -> {
+            rootPane.getScene().addEventFilter(MouseEvent.MOUSE_PRESSED, e -> {
+                if (modeProperty.get() == Shapes.POLYGON) {
+                    Point2D localClicked = drawingPane.sceneToLocal(e.getSceneX(), e.getSceneY());
+                    if (!drawingPane.contains(localClicked)) {
+                        closeActivePolygon();
+                    }
+                }
+            });
+            rootPane.getScene().addEventFilter(KeyEvent.KEY_PRESSED, e -> {
+                if (modeProperty.get() == Shapes.POLYGON) {
+                    closeActivePolygon();
+                }
+            });
         });
         
     }
@@ -521,10 +530,8 @@ public class PaintController implements Initializable {
                         }
                         else {
                             MyPolygon myPolygon = (MyPolygon) ((FillColorDecorator) ((BorderColorDecorator) currentShape.get()).getDecoratedShape()).getDecoratedShape();
-                            
                             boolean isPolygonClosed = myPolygon.addPoint(new Point2D(startX, startY));
                             if (isPolygonClosed) {
-                                myPolygon.recomputeStartingPoint();
                                 currentShape.set(null);
                                 canvas.getChildren().remove(firstPoint);
                             }
@@ -594,6 +601,18 @@ public class PaintController implements Initializable {
         });
     }
 
+    /**
+     * Finalizes the creation of the active polygon.
+     */
+    private void closeActivePolygon() {
+        if (currentShape.get() != null && currentShape.get().getFxShape().getClass() == Polyline.class) {
+            MyPolygon myPolygon = (MyPolygon) ((FillColorDecorator) ((BorderColorDecorator) currentShape.get()).getDecoratedShape()).getDecoratedShape();
+            myPolygon.closePolygon();
+            currentShape.set(null);
+            canvas.getChildren().remove(firstPoint);
+        }
+    }
+    
     /**
      * Redraws the canvas based on the model list of shapes.
      */
@@ -857,7 +876,6 @@ public class PaintController implements Initializable {
         model.execute(pasteCmd);
         MyShape pastedShape = pasteCmd.getPastedShape();
         enableSelection(pastedShape);
-        selectedShape.set(pastedShape);
         selectShape(pastedShape);
     }
 
