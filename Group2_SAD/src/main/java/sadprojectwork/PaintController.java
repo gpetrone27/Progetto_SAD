@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ListChangeListener;
@@ -22,6 +23,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Separator;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
@@ -139,8 +141,6 @@ public class PaintController implements Initializable {
     @FXML
     private VBox fillPanel;
     @FXML
-    private TitledPane propertiesPanel;
-    @FXML
     private ToggleButton gridButton;
     @FXML
     private Slider gridSizeSlider;
@@ -172,11 +172,14 @@ public class PaintController implements Initializable {
     private VBox defaultBorder;
     @FXML
     private VBox defaultFill;
+    @FXML
+    private Separator paletteSeparator;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         initButtonActions();
         initBindings();
+        initListeners();
         initButtonIcons();
         initCanvasEvents();
     }
@@ -211,59 +214,65 @@ public class PaintController implements Initializable {
      */
     private void initBindings() {
         
-        // Clips the canvas to the max dimensions
-        canvas.setClip(new Rectangle(5000, 5000));
+        BooleanBinding selectedBinding = Bindings.createBooleanBinding(() -> selectedShape.get() == null, selectedShape);
+        BooleanBinding textBinding = Bindings.createBooleanBinding(() -> selectedShape.get() != null && selectedShape.get().getFxShape().getClass() == Text.class, selectedShape);
+        BooleanBinding notTextBinding = Bindings.createBooleanBinding(() -> selectedShape.get() != null && selectedShape.get().getFxShape().getClass() != Text.class, selectedShape);
+        BooleanBinding lineBinding = Bindings.createBooleanBinding(() -> selectedShape.get() != null && selectedShape.get().getFxShape().getClass() == Line.class, selectedShape);
+        BooleanBinding pasteBinding = Bindings.or(Bindings.createBooleanBinding(() -> model.getClipboard() == null, model.clipboardProperty()), Bindings.createBooleanBinding(() -> modeProperty.get() != Shapes.CURSOR, modeProperty));
         
-        // Updates the last position of the mouse, relative to the canvas, whenever it moves
-        canvas.setOnMouseMoved(event -> {
-            lastMouseX = event.getX();
-            lastMouseY = event.getY();
-        });
+        // Hides the paste operation if the clipboard is empty or if the mode is not cursor
+        pasteMenuItem.disableProperty().bind(pasteBinding);
+        
+        // Disables the right click menu actions if no shape is selected
+        cutMenuItem.disableProperty().bind(selectedBinding);
+        copyMenuItem.disableProperty().bind(selectedBinding);
+        deleteMenuItem.disableProperty().bind(selectedBinding);
+        frontMenuItem.disableProperty().bind(selectedBinding);
+        backMenuItem.disableProperty().bind(selectedBinding);
 
+        // Hides the side panel if no shape is selected
+        sidePanel.visibleProperty().bind(selectedBinding.not());
+        sidePanel.managedProperty().bind(selectedBinding.not());
+        
+        // Hides/Shows the default/shape border color panel if a shape is selected or not
+        borderPanel.visibleProperty().bind(selectedBinding.not());
+        borderPanel.managedProperty().bind(selectedBinding.not());
+        defaultBorder.visibleProperty().bind(selectedBinding);
+        defaultBorder.managedProperty().bind(selectedBinding);
+        
+        // Hides/Shows the default/shape fill color panel if a shape different from a Line is selected or not
+        fillPanel.visibleProperty().bind(Bindings.and(selectedBinding.not(), lineBinding.not()));
+        fillPanel.managedProperty().bind(Bindings.and(selectedBinding.not(), lineBinding.not()));
+        defaultFill.visibleProperty().bind(selectedBinding);
+        defaultFill.managedProperty().bind(selectedBinding);
+        
+        // Hides/Shows the default/shape no fill button if a shape is selected or not
+        noFillButtonPanel.visibleProperty().bind(Bindings.and(selectedBinding.not(), lineBinding.not()));
+        noFillButtonPanel.managedProperty().bind(Bindings.and(selectedBinding.not(), lineBinding.not()));
+        noFillButton.visibleProperty().bind(selectedBinding);
+        noFillButton.managedProperty().bind(selectedBinding);
+        
+        // Hides the shapes dimensions panel if the selected shape is a Text
+        shapesPanel.visibleProperty().bind(notTextBinding);
+        shapesPanel.managedProperty().bind(notTextBinding);
+        textPanel.visibleProperty().bind(textBinding);
+        textPanel.managedProperty().bind(textBinding);
+        
+        // Hides the separator if the selected shape is a Line
+        paletteSeparator.visibleProperty().bind(lineBinding.not());
+        paletteSeparator.managedProperty().bind(lineBinding.not());
+
+    }
+    
+    /**
+     * Initializes the listeners of the application.
+     */
+    private void initListeners() {
+        
         // Adds a listener to update the canvas every time the model changes
         model.getShapes().addListener((ListChangeListener<MyShape>) change -> {
             redrawCanvas();
         });
-
-        // Binds the disable property of the right click menu items to shapeSelected
-        cutMenuItem.disableProperty().bind(Bindings.createBooleanBinding(() -> selectedShape.get() == null, selectedShape));
-        copyMenuItem.disableProperty().bind(Bindings.createBooleanBinding(() -> selectedShape.get() == null, selectedShape));
-        deleteMenuItem.disableProperty().bind(Bindings.createBooleanBinding(() -> selectedShape.get() == null, selectedShape));
-        frontMenuItem.disableProperty().bind(Bindings.createBooleanBinding(() -> selectedShape.get() == null, selectedShape));
-        backMenuItem.disableProperty().bind(Bindings.createBooleanBinding(() -> selectedShape.get() == null, selectedShape));
-
-        // Binds the disable property of the paste operation to the state of clipboard and the cursor selection
-        pasteMenuItem.disableProperty().bind(Bindings.or(Bindings.createBooleanBinding(() -> model.getClipboard() == null, model.clipboardProperty()), Bindings.createBooleanBinding(() -> modeProperty.get() != Shapes.CURSOR, modeProperty)));
-
-        // Binds the visible and managed property of the side panel to shapeSelected
-        sidePanel.visibleProperty().bind(Bindings.createBooleanBinding(() -> selectedShape.get() != null, selectedShape));
-        sidePanel.managedProperty().bind(Bindings.createBooleanBinding(() -> selectedShape.get() != null, selectedShape));
-        
-        // Binds the visible and managed property of the shape's border panel to shapeSelected
-        borderPanel.visibleProperty().bind(Bindings.createBooleanBinding(() -> selectedShape.get() != null, selectedShape));
-        borderPanel.managedProperty().bind(Bindings.createBooleanBinding(() -> selectedShape.get() != null, selectedShape));
-        defaultBorder.visibleProperty().bind(Bindings.createBooleanBinding(() -> selectedShape.get() == null, selectedShape));
-        defaultBorder.managedProperty().bind(Bindings.createBooleanBinding(() -> selectedShape.get() == null, selectedShape));
-        
-        // Binds the visible and managed property of the shape's fill panel to shapeSelected
-        fillPanel.visibleProperty().bind(Bindings.createBooleanBinding(() -> selectedShape.get() != null, selectedShape));
-        fillPanel.managedProperty().bind(Bindings.createBooleanBinding(() -> selectedShape.get() != null, selectedShape));
-        defaultFill.visibleProperty().bind(Bindings.createBooleanBinding(() -> selectedShape.get() == null, selectedShape));
-        defaultFill.managedProperty().bind(Bindings.createBooleanBinding(() -> selectedShape.get() == null, selectedShape));
-        
-        // Binds the visible and managed property of the shape's no fill button to shapeSelected
-        noFillButtonPanel.visibleProperty().bind(Bindings.createBooleanBinding(() -> selectedShape.get() != null, selectedShape));
-        noFillButtonPanel.managedProperty().bind(Bindings.createBooleanBinding(() -> selectedShape.get() != null, selectedShape));
-        noFillButton.visibleProperty().bind(Bindings.createBooleanBinding(() -> selectedShape.get() == null, selectedShape));
-        noFillButton.managedProperty().bind(Bindings.createBooleanBinding(() -> selectedShape.get() == null, selectedShape));
-        
-        // Binds the visible and managed property of the shapes panel to shapeSelected state
-        shapesPanel.visibleProperty().bind(Bindings.createBooleanBinding(() -> selectedShape.get() != null && selectedShape.get().getFxShape().getClass() != Text.class, selectedShape));
-        shapesPanel.managedProperty().bind(Bindings.createBooleanBinding(() -> selectedShape.get() != null && selectedShape.get().getFxShape().getClass() != Text.class, selectedShape));
-        
-        // Binds the visible and managed property of the text panel to shapeSelected state
-        textPanel.visibleProperty().bind(Bindings.createBooleanBinding(() -> selectedShape.get() != null && selectedShape.get().getFxShape().getClass() == Text.class, selectedShape));
-        textPanel.managedProperty().bind(Bindings.createBooleanBinding(() -> selectedShape.get() != null && selectedShape.get().getFxShape().getClass() == Text.class, selectedShape));
         
         // Prevents the user from unselecting colors
         borderColor.selectedToggleProperty().addListener((obs, oldToggle, newToggle) -> {
@@ -332,20 +341,6 @@ public class PaintController implements Initializable {
                 event.consume();
             }
         });
-        
-        // Hides the fill color section in the side panel if line is selected
-        fillPanel.visibleProperty().bind(Bindings.createBooleanBinding(
-            () -> {
-                return selectedShape.get() != null && selectedShape.get().getFxShape().getClass() != Line.class;
-            },
-            selectedShape
-        ));
-        fillPanel.managedProperty().bind(Bindings.createBooleanBinding(
-            () -> {
-                return selectedShape.get() != null && selectedShape.get().getFxShape().getClass() != Line.class;
-            },
-            selectedShape
-        ));
         
         // Sets text formatters to only accept numeric values in width and height fields
         widthField.setTextFormatter(new TextFormatter<>(change -> {
@@ -463,7 +458,16 @@ public class PaintController implements Initializable {
      * Initializes all the events related to the canvas.
      */
     private void initCanvasEvents() {
-
+ 
+        // Clips the canvas to the max dimensions
+        canvas.setClip(new Rectangle(5000, 5000));
+        
+        // Updates the last position of the mouse, relative to the canvas, whenever it moves
+        canvas.setOnMouseMoved(e -> {
+            lastMouseX = e.getX();
+            lastMouseY = e.getY();
+        });
+        
         canvas.setOnMousePressed(e -> {
 
             if (e.getButton() == MouseButton.PRIMARY) {
