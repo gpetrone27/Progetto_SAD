@@ -879,6 +879,26 @@
                         <Insets left="20.0" right="20.0" />
                      </padding>
                   </VBox>
+                  <VBox fx:id="linePanel" alignment="TOP_CENTER" spacing="10.0">
+                     <children>
+                        <GridPane>
+                           <columnConstraints>
+                              <ColumnConstraints hgrow="SOMETIMES" percentWidth="35.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" percentWidth="65.0" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints vgrow="SOMETIMES" />
+                           </rowConstraints>
+                           <children>
+                              <Label text="Length" />
+                              <TextField fx:id="lengthField" onAction="#resizeLength" GridPane.columnIndex="1" />
+                           </children>
+                        </GridPane>
+                     </children>
+                     <padding>
+                        <Insets left="20.0" right="20.0" />
+                     </padding>
+                  </VBox>
                   <VBox fx:id="textPanel" alignment="TOP_CENTER" spacing="10.0">
                      <children>
                         <GridPane>

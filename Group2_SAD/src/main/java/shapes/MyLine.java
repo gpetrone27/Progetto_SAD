@@ -63,14 +63,14 @@ public class MyLine extends MyShape {
     public void resizeLength(double newLength) {
         
         // Calculate current length
-        double dx = line.getEndX() - startX;
-        double dy = line.getEndY() - startY;
+        double dx = line.getEndX() - line.getStartX();
+        double dy = line.getEndY() - line.getStartY();
         double currentLength = Math.sqrt(dx * dx + dy * dy);
 
         if (currentLength == 0) {
             // No direction; default to horizontal right
-            line.setEndX(startX + newLength);
-            line.setEndY(startY);
+            line.setEndX(line.getStartX() + newLength);
+            line.setEndY(line.getStartY());
             return;
         }
 
@@ -79,8 +79,8 @@ public class MyLine extends MyShape {
         double uy = dy / currentLength;
 
         // Update end points of the line
-        line.setEndX(startX + ux * newLength);
-        line.setEndY(startY + uy * newLength);
+        line.setEndX(line.getStartX() + ux * newLength);
+        line.setEndY(line.getStartY() + uy * newLength);
     }
 
     /**

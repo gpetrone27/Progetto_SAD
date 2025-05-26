@@ -172,13 +172,17 @@ public class PaintController implements Initializable {
     @FXML
     private CheckBox keepProportions;
     @FXML
-    private Slider rotationSlider;
+    private VBox linePanel;
+    @FXML
+    private TextField lengthField;
     @FXML
     private VBox textPanel;
     @FXML
     private ComboBox<String> fontsComboBoxSide;
     @FXML
     private ComboBox<String> sizeComboBoxSide;
+    @FXML
+    private Slider rotationSlider;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -268,6 +272,10 @@ public class PaintController implements Initializable {
         // Shows the text properties panel if the selected shape is a Text
         textPanel.visibleProperty().bind(textBinding);
         textPanel.managedProperty().bind(textBinding);
+        
+        // Shows the line properties panel if the selected shape is a Line
+        linePanel.visibleProperty().bind(lineBinding);
+        linePanel.managedProperty().bind(lineBinding);
 
     }
     
@@ -339,11 +347,14 @@ public class PaintController implements Initializable {
             }
         });
         
-        // Sets text formatters to only accept numeric values in width and height fields
+        // Sets text formatters to only accept numeric values in dimensions fields
         widthField.setTextFormatter(new TextFormatter<>(change -> {
             return change.getControlNewText().matches("\\d*(\\.\\d*)?") ? change : null;
         }));
         heightField.setTextFormatter(new TextFormatter<>(change -> {
+            return change.getControlNewText().matches("\\d*(\\.\\d*)?") ? change : null;
+        }));
+        lengthField.setTextFormatter(new TextFormatter<>(change -> {
             return change.getControlNewText().matches("\\d*(\\.\\d*)?") ? change : null;
         }));
         
@@ -698,8 +709,8 @@ public class PaintController implements Initializable {
         }
         
         // Width and height fields
-        widthField.setText(Double.toString(shape.getWidth()));
-        heightField.setText(Double.toString(shape.getHeight()));
+        widthField.setText(Double.toString(Math.round(shape.getWidth() * 100.0) / 100.0));
+        heightField.setText(Double.toString(Math.round(shape.getHeight() * 100.0) / 100.0));
         
         // Rotation
         rotationSlider.setValue(selectedShape.get().getRotation());
@@ -713,6 +724,14 @@ public class PaintController implements Initializable {
             
             // Size
             sizeComboBoxSide.setValue(Integer.toString((int) selectedText.getSize()));
+        }
+        
+        if (selectedShape.get().getFxShape().getClass() == Line.class) {
+            
+            MyLine selectedLine = (MyLine) ((BorderColorDecorator) selectedShape.get()).getDecoratedShape();
+            
+            // Length
+            lengthField.setText(Double.toString(Math.round(selectedLine.getLength() * 100.0) / 100.0));
         }
     }
 
@@ -946,8 +965,8 @@ public class PaintController implements Initializable {
         model.execute(resizeCmd);
         
         // Update width and height fields
-        widthField.setText(Double.toString(selectedShape.get().getWidth()));
-        heightField.setText(Double.toString(selectedShape.get().getHeight()));
+        widthField.setText(Double.toString(Math.round(selectedShape.get().getWidth() * 100.0) / 100.0));
+        heightField.setText(Double.toString(Math.round(selectedShape.get().getHeight() * 100.0) / 100.0));
     }
 
     /**
@@ -975,8 +994,23 @@ public class PaintController implements Initializable {
         model.execute(resizeCmd);
         
         // Update width and height fields
-        widthField.setText(Double.toString(selectedShape.get().getWidth()));
-        heightField.setText(Double.toString(selectedShape.get().getHeight()));
+        widthField.setText(Double.toString(Math.round(selectedShape.get().getWidth() * 100.0) / 100.0));
+        heightField.setText(Double.toString(Math.round(selectedShape.get().getHeight() * 100.0) / 100.0));
+    }
+
+    /**
+     * Resizes the selected line when the length field is changed.
+     * @param event 
+     */
+    @FXML
+    private void resizeLength(ActionEvent event) {
+        
+        // Resizes the selected line with the chosen length
+        MyLine selectedLine = (MyLine) ((BorderColorDecorator) selectedShape.get()).getDecoratedShape();
+        selectedLine.resizeLength(Double.parseDouble(lengthField.getText()));
+        
+        // Update length field
+        lengthField.setText(Double.toString(Math.round(selectedLine.getLength() * 100.0) / 100.0));
     }
 
     /**
