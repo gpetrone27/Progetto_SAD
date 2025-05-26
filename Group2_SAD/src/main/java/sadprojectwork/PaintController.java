@@ -21,6 +21,7 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
@@ -105,15 +106,31 @@ public class PaintController implements Initializable {
     @FXML
     private ToggleGroup borderColor;
     @FXML
-    private ToggleGroup fillColor;
+    private ToggleGroup borderColorPanel;
     @FXML
-    private ToggleButton noFillButton;
+    private ToggleGroup fillColor;
     @FXML
     private ToggleGroup fillColorPanel;
     @FXML
+    private ComboBox<String> fontsComboBox;
+    @FXML
+    private ComboBox<String> sizeComboBox;
+    @FXML
+    private TextField displayTextField;
+    @FXML
+    private VBox defaultBorder;
+    @FXML
+    private VBox borderPanel;
+    @FXML
+    private VBox defaultFill;
+    @FXML
+    private VBox fillPanel;
+    @FXML
+    private ToggleButton noFillButton;
+    @FXML
     private ToggleButton noFillButtonPanel;
     @FXML
-    private ToggleGroup borderColorPanel;
+    private Separator paletteSeparator;
     @FXML
     private ToggleButton cursorButton;
     @FXML
@@ -139,10 +156,6 @@ public class PaintController implements Initializable {
     @FXML
     private MenuItem backMenuItem;
     @FXML
-    private VBox borderPanel;
-    @FXML
-    private VBox fillPanel;
-    @FXML
     private ToggleButton gridButton;
     @FXML
     private Slider gridSizeSlider;
@@ -151,31 +164,21 @@ public class PaintController implements Initializable {
     @FXML
     private Button zoomOutButton;
     @FXML
+    private VBox shapesPanel;
+    @FXML
     private TextField widthField;
     @FXML
     private TextField heightField;
     @FXML
+    private CheckBox keepProportions;
+    @FXML
     private Slider rotationSlider;
     @FXML
-    private ComboBox<String> fontsComboBox;
-    @FXML
-    private ComboBox<String> sizeComboBox;
+    private VBox textPanel;
     @FXML
     private ComboBox<String> fontsComboBoxSide;
     @FXML
     private ComboBox<String> sizeComboBoxSide;
-    @FXML
-    private TextField displayTextField;
-    @FXML
-    private VBox shapesPanel;
-    @FXML
-    private VBox textPanel;
-    @FXML
-    private VBox defaultBorder;
-    @FXML
-    private VBox defaultFill;
-    @FXML
-    private Separator paletteSeparator;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -218,7 +221,7 @@ public class PaintController implements Initializable {
         
         BooleanBinding selectedBinding = Bindings.createBooleanBinding(() -> selectedShape.get() == null, selectedShape);
         BooleanBinding textBinding = Bindings.createBooleanBinding(() -> selectedShape.get() != null && selectedShape.get().getFxShape().getClass() == Text.class, selectedShape);
-        BooleanBinding notTextBinding = Bindings.createBooleanBinding(() -> selectedShape.get() != null && selectedShape.get().getFxShape().getClass() != Text.class, selectedShape);
+        BooleanBinding notSimpleShapeBinding = Bindings.createBooleanBinding(() -> selectedShape.get() != null && selectedShape.get().getFxShape().getClass() != Text.class && selectedShape.get().getFxShape().getClass() != Line.class, selectedShape);
         BooleanBinding lineBinding = Bindings.createBooleanBinding(() -> selectedShape.get() != null && selectedShape.get().getFxShape().getClass() == Line.class, selectedShape);
         BooleanBinding pasteBinding = Bindings.or(Bindings.createBooleanBinding(() -> model.getClipboard() == null, model.clipboardProperty()), Bindings.createBooleanBinding(() -> modeProperty.get() != Shapes.CURSOR, modeProperty));
         
@@ -254,15 +257,17 @@ public class PaintController implements Initializable {
         noFillButton.visibleProperty().bind(selectedBinding);
         noFillButton.managedProperty().bind(selectedBinding);
         
-        // Hides the shapes dimensions panel if the selected shape is a Text
-        shapesPanel.visibleProperty().bind(notTextBinding);
-        shapesPanel.managedProperty().bind(notTextBinding);
-        textPanel.visibleProperty().bind(textBinding);
-        textPanel.managedProperty().bind(textBinding);
-        
         // Hides the separator if the selected shape is a Line
         paletteSeparator.visibleProperty().bind(lineBinding.not());
         paletteSeparator.managedProperty().bind(lineBinding.not());
+        
+        // Hides the shapes dimensions panel if the selected shape is a Text or a Line
+        shapesPanel.visibleProperty().bind(notSimpleShapeBinding);
+        shapesPanel.managedProperty().bind(notSimpleShapeBinding);
+        
+        // Shows the text properties panel if the selected shape is a Text
+        textPanel.visibleProperty().bind(textBinding);
+        textPanel.managedProperty().bind(textBinding);
 
     }
     
@@ -922,8 +927,27 @@ public class PaintController implements Initializable {
      */
     @FXML
     private void resizeWidth(ActionEvent event) {
-        Command resizeCmd = new ResizeCommand(selectedShape.get(), Double.parseDouble(widthField.getText()), selectedShape.get().getHeight());
+        
+        Command resizeCmd;
+        
+        double oldWidth = selectedShape.get().getWidth();
+        double oldHeight = selectedShape.get().getHeight();
+        
+        double aspectRatio = oldWidth / oldHeight;
+        
+        double newWidth = Double.parseDouble(widthField.getText());
+        double newHeight = oldHeight;
+        
+        if (keepProportions.isSelected()) {
+            newHeight = newWidth / aspectRatio;
+        }
+        
+        resizeCmd = new ResizeCommand(selectedShape.get(), newWidth, newHeight);
         model.execute(resizeCmd);
+        
+        // Update width and height fields
+        widthField.setText(Double.toString(selectedShape.get().getWidth()));
+        heightField.setText(Double.toString(selectedShape.get().getHeight()));
     }
 
     /**
@@ -932,8 +956,27 @@ public class PaintController implements Initializable {
      */
     @FXML
     private void resizeHeight(ActionEvent event) {
-        Command resizeCmd = new ResizeCommand(selectedShape.get(), selectedShape.get().getWidth(), Double.parseDouble(heightField.getText()));
+        
+        Command resizeCmd;
+        
+        double oldWidth = selectedShape.get().getWidth();
+        double oldHeight = selectedShape.get().getHeight();
+        
+        double aspectRatio = oldWidth / oldHeight;
+        
+        double newWidth = oldWidth;
+        double newHeight = Double.parseDouble(heightField.getText());
+        
+        if (keepProportions.isSelected()) {
+            newWidth = newHeight * aspectRatio;
+        }
+        
+        resizeCmd = new ResizeCommand(selectedShape.get(), newWidth, newHeight);
         model.execute(resizeCmd);
+        
+        // Update width and height fields
+        widthField.setText(Double.toString(selectedShape.get().getWidth()));
+        heightField.setText(Double.toString(selectedShape.get().getHeight()));
     }
 
     /**
