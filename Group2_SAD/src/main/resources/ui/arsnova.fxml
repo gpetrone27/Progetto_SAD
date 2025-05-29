@@ -817,6 +817,26 @@
                            </accelerator></MenuItem>
                         <MenuItem fx:id="frontMenuItem" disable="true" mnemonicParsing="false" onAction="#bringToFront" text="Bring to the front" />
                         <MenuItem fx:id="backMenuItem" disable="true" mnemonicParsing="false" onAction="#bringToBack" text="Bring to the back" />
+                        <MenuItem fx:id="mirrorHorMenuItem" disable="true" mnemonicParsing="false" onAction="#mirrorHorizontally" text="Mirror horizontally">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="BACK_SPACE" control="UP" meta="UP" shift="UP" shortcut="UP" />
+                           </accelerator>
+                        </MenuItem>
+                        <MenuItem fx:id="mirrorVerMenuItem" disable="true" mnemonicParsing="false" onAction="#mirrorVertically" text="Mirror vertically">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="BACK_SPACE" control="UP" meta="UP" shift="UP" shortcut="UP" />
+                           </accelerator>
+                        </MenuItem>
+                        <MenuItem fx:id="groupMenuItem" disable="true" mnemonicParsing="false" onAction="#groupSelected" text="Group">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="BACK_SPACE" control="UP" meta="UP" shift="UP" shortcut="UP" />
+                           </accelerator>
+                        </MenuItem>
+                        <MenuItem fx:id="ungroupMenuItem" disable="true" mnemonicParsing="false" onAction="#ungroupSelected" text="Ungroup">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="BACK_SPACE" control="UP" meta="UP" shift="UP" shortcut="UP" />
+                           </accelerator>
+                        </MenuItem>
                     </items>
                   </ContextMenu>
                </contextMenu>
@@ -932,7 +952,7 @@
                         <Insets left="20.0" right="20.0" />
                      </padding>
                   </VBox>
-                  <Separator prefWidth="200.0">
+                  <Separator fx:id="panelSeparator" prefWidth="200.0">
                      <VBox.margin>
                         <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
                      </VBox.margin>
