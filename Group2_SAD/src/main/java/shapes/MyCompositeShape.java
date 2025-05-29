@@ -85,11 +85,6 @@ public class MyCompositeShape extends MyShape {
             child.moveTo(newChildX, newChildY);
         }
 
-        // Aggiorna dimensioni interne e posizione
-        this.width = newWidth;
-        this.height = newHeight;
-
-        // Ricalcola i bounds per sicurezza (puoi anche omettere se sicuro)
         calculateBounds();
     }
 
