@@ -152,7 +152,7 @@ public class MyCompositeShape extends MyShape {
     
     @Override
     public double getRotation() {
-        return 0; 
+        return 0;
     }
     
     @Override

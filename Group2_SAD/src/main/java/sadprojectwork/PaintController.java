@@ -948,6 +948,7 @@ public class PaintController implements Initializable {
      */
     @FXML
     private void changeBorderColor(ActionEvent event) {
+        // TO DO controllo composite shape all'interno del for, chiama i change a tutte le shape
         ToggleButton colorButton = (ToggleButton) event.getSource();
         Paint selectedColor = colorButton.getBackground().getFills().get(0).getFill();
         for (MyShape s : selectedShapes) {
@@ -962,6 +963,7 @@ public class PaintController implements Initializable {
      */
     @FXML
     private void changeFillColor(ActionEvent event) {
+        // TO DO
         ToggleButton colorButton = (ToggleButton) event.getSource();
         Paint selectedColor = colorButton.getBackground().getFills().get(0).getFill();
         for (MyShape s : selectedShapes) {
@@ -972,6 +974,7 @@ public class PaintController implements Initializable {
 
     @FXML
     private void changeToNoFill(ActionEvent event) {
+        // TO DO
         for (MyShape s : selectedShapes) {
             Command changeColor = new ChangeColorCommand(s, Color.TRANSPARENT, null);
             model.execute(changeColor);  
@@ -1332,6 +1335,7 @@ public class PaintController implements Initializable {
             }    
             model.addShape(group);
             enableSelection(group);
+            selectedShapes.setAll(group);
         }
     }
 
@@ -1344,6 +1348,7 @@ public class PaintController implements Initializable {
                 enableSelection(shape);
             }
             group.clear();
+            selectedShapes.set(FXCollections.observableArrayList());
         }
     }
 
