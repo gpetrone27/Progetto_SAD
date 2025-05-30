@@ -96,9 +96,6 @@ public class PaintController implements Initializable {
     // Rotation
     private double initialRotation;
     
-    // Composite
-    private MyCompositeShape group = new MyCompositeShape(0, 0);
-    
     @FXML
     private AnchorPane rootPane;
     @FXML
@@ -698,16 +695,30 @@ public class PaintController implements Initializable {
                 });
             }
         }
-        else if (shape != null) {
+        else {
             shape.getFxShape().setOnMouseClicked(event -> {
                 if (modeProperty.get() == Shapes.CURSOR && event.getButton() != MouseButton.SECONDARY) {
-                    if (event.isControlDown()) {
-                        if (selectedShapes.contains(shape)) {
-                            selectedShapes.remove(shape);
+                    
+                    // Checks if a group is selected
+                    boolean containsGroup = false;
+                    for (MyShape s : selectedShapes) {
+                        if (s instanceof MyCompositeShape) {
+                            containsGroup = true;
+                        }
+                    }
+                    
+                    if (!containsGroup) {
+                        if (event.isControlDown()) {
+                            if (selectedShapes.contains(shape)) {
+                                selectedShapes.remove(shape);
+                            }
+                            else {
+                                selectedShapes.add(shape);
+                            }
                         }
                         else {
-                            selectedShapes.add(shape);
-                        }
+                            selectedShapes.setAll(shape);
+                        }  
                     }
                     else {
                         selectedShapes.setAll(shape);
@@ -775,7 +786,7 @@ public class PaintController implements Initializable {
             if (shape instanceof MyCompositeShape) {
                 // TO DO: Choose how to select fill and border colors
             }
-            else if (shape != null) {
+            else {
                 
                 // Border color
                 Color shapeBorderColor = (Color) shape.getFxShape().getStroke();
@@ -1313,6 +1324,7 @@ public class PaintController implements Initializable {
     @FXML
     private void groupSelected(ActionEvent event) {
         if(selectedShapes.size() > 1) {
+            MyCompositeShape group = new MyCompositeShape(0, 0);
             for (MyShape shape : selectedShapes) {
                 group.addShape(shape);
                 model.removeShape(shape);
@@ -1325,12 +1337,14 @@ public class PaintController implements Initializable {
 
     @FXML
     private void ungroupSelected(ActionEvent event) {
-        model.removeShape(group);
-        for (MyShape shape : group.getShapes()) {
-            model.addShape(shape);
-            enableSelection(shape);
+        if (selectedShapes.size() == 1 && selectedShapes.get(0) instanceof MyCompositeShape group) {
+            model.removeShape(group);
+            for (MyShape shape : group.getShapes()) {
+                model.addShape(shape);
+                enableSelection(shape);
+            }
+            group.clear();
         }
-        group.clear();
     }
 
 }
