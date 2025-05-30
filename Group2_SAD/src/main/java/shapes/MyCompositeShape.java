@@ -66,9 +66,9 @@ public class MyCompositeShape extends MyShape {
 
     @Override
     public void resize(double newWidth, double newHeight) {
-        // Evita divisione per zero
+        // Avoids division by zero
         if (width == 0 || height == 0) {
-            // Se dimensioni attuali sono zero, non ridimensionare
+            // If current sizes are zero, do not resize
             return;
         }
 
@@ -76,7 +76,7 @@ public class MyCompositeShape extends MyShape {
         double scaleY = newHeight / height;
 
         for (MyShape child : children) {
-            // Offset del figlio rispetto al punto fisso composito
+            // Child offset with respect to the composite fixed point
             double offsetX = child.getStartX() - startX;
             double offsetY = child.getStartY() - startY;
 
@@ -84,11 +84,11 @@ public class MyCompositeShape extends MyShape {
             double newChildX = startX + offsetX * scaleX;
             double newChildY = startY + offsetY * scaleY;
 
-            // Nuove dimensioni scalate
+            // New proportional position
             double newChildWidth = child.getWidth() * scaleX;
             double newChildHeight = child.getHeight() * scaleY;
 
-            // Ridimensiona e sposta il figlio
+            // Resize and move the child
             child.resize(newChildWidth, newChildHeight);
             child.moveTo(newChildX, newChildY);
         }
