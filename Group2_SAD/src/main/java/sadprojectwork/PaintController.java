@@ -237,9 +237,10 @@ public class PaintController implements Initializable {
     private void initBindings() {
         
         BooleanBinding selectedBinding = Bindings.createBooleanBinding(() -> selectedShapes.isEmpty(), selectedShapes);
-        BooleanBinding oneSelectedBinding = Bindings.createBooleanBinding(() -> selectedShapes.size() == 1 && !(selectedShapes.get(0) instanceof MyCompositeShape), selectedShapes);
+        BooleanBinding oneSelectedBinding = Bindings.createBooleanBinding(() -> selectedShapes.size() == 1, selectedShapes);
         BooleanBinding textBinding = Bindings.createBooleanBinding(() -> selectedShapes.size() == 1 && !(selectedShapes.get(0) instanceof MyCompositeShape) && selectedShapes.get(0).getFxShape().getClass() == Text.class, selectedShapes);
         BooleanBinding notSimpleShapeBinding = Bindings.createBooleanBinding(() -> selectedShapes.size() == 1 && !(selectedShapes.get(0) instanceof MyCompositeShape) && selectedShapes.get(0).getFxShape().getClass() != Text.class && selectedShapes.get(0).getFxShape().getClass() != Line.class, selectedShapes);
+        BooleanBinding compositeBinding = Bindings.createBooleanBinding(() -> selectedShapes.size() == 1 && selectedShapes.get(0) instanceof MyCompositeShape, selectedShapes);
         BooleanBinding lineBinding = Bindings.createBooleanBinding(() -> selectedShapes.size() == 1 && !(selectedShapes.get(0) instanceof MyCompositeShape) && selectedShapes.get(0).getFxShape().getClass() == Line.class, selectedShapes);
         BooleanBinding pasteBinding = Bindings.or(Bindings.createBooleanBinding(() -> model.getClipboard() == null, model.clipboardProperty()), Bindings.createBooleanBinding(() -> modeProperty.get() != Shapes.CURSOR, modeProperty));
         
@@ -288,8 +289,8 @@ public class PaintController implements Initializable {
         panelSeparator.managedProperty().bind(oneSelectedBinding);
         
         // Hides the shapes dimensions panel if the selected shape is a Text or a Line
-        shapesPanel.visibleProperty().bind(notSimpleShapeBinding);
-        shapesPanel.managedProperty().bind(notSimpleShapeBinding);
+        shapesPanel.visibleProperty().bind(Bindings.or(compositeBinding, notSimpleShapeBinding));
+        shapesPanel.managedProperty().bind(Bindings.or(compositeBinding, notSimpleShapeBinding));
         
         // Shows the text properties panel if the selected shape is a Text
         textPanel.visibleProperty().bind(textBinding);
@@ -1332,6 +1333,7 @@ public class PaintController implements Initializable {
             }    
             model.addShape(group);
             enableSelection(group);
+            selectedShapes.setAll(group);
         }
     }
 
@@ -1344,6 +1346,7 @@ public class PaintController implements Initializable {
                 enableSelection(shape);
             }
             group.clear();
+            selectedShapes.set(FXCollections.observableArrayList());
         }
     }
 
