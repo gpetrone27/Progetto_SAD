@@ -241,9 +241,9 @@ public class PaintController implements Initializable {
         
         BooleanBinding selectedBinding = Bindings.createBooleanBinding(() -> selectedShapes.isEmpty(), selectedShapes);
         BooleanBinding oneSelectedBinding = Bindings.createBooleanBinding(() -> selectedShapes.size() == 1, selectedShapes);
-        BooleanBinding textBinding = Bindings.createBooleanBinding(() -> selectedShapes.size() == 1 && selectedShapes.get(0).getFxShape().getClass() == Text.class, selectedShapes);
-        BooleanBinding notSimpleShapeBinding = Bindings.createBooleanBinding(() -> selectedShapes.size() == 1 && selectedShapes.get(0).getFxShape().getClass() != Text.class && selectedShapes.get(0).getFxShape().getClass() != Line.class, selectedShapes);
-        BooleanBinding lineBinding = Bindings.createBooleanBinding(() -> selectedShapes.size() == 1 && selectedShapes.get(0).getFxShape().getClass() == Line.class, selectedShapes);
+        BooleanBinding textBinding = Bindings.createBooleanBinding(() -> selectedShapes.size() == 1 && selectedShapes.get(0) instanceof MyText, selectedShapes);
+        BooleanBinding notSimpleShapeBinding = Bindings.createBooleanBinding(() -> selectedShapes.size() == 1 && !(selectedShapes.get(0) instanceof MyText) && !(selectedShapes.get(0) instanceof MyLine), selectedShapes);
+        BooleanBinding lineBinding = Bindings.createBooleanBinding(() -> selectedShapes.size() == 1 && selectedShapes.get(0) instanceof MyLine, selectedShapes);
         BooleanBinding pasteBinding = Bindings.or(Bindings.createBooleanBinding(() -> model.getClipboard() == null, model.clipboardProperty()), Bindings.createBooleanBinding(() -> modeProperty.get() != Shapes.CURSOR, modeProperty));
         
         // Hides the paste operation if the clipboard is empty or if the mode is not cursor
@@ -686,23 +686,37 @@ public class PaintController implements Initializable {
      * @param shape
      */
     public void enableSelection(MyShape shape) {
-        shape.getFxShape().setOnMouseClicked(event -> {
-            if (modeProperty.get() == Shapes.CURSOR && event.getButton() != MouseButton.SECONDARY) {
-                if (event.isControlDown()) {
-                    if (selectedShapes.contains(shape)) {
-                        selectedShapes.remove(shape);
+        
+        if (shape instanceof MyCompositeShape cs) {
+            for (MyShape s : cs.getShapes()) {
+                s.getFxShape().setOnMouseClicked(event -> {
+                    if (modeProperty.get() == Shapes.CURSOR && event.getButton() != MouseButton.SECONDARY) {
+                        selectedShapes.setAll(cs);
+                        highlightSelected();
+                    }
+                    event.consume();
+                });
+            }
+        }
+        else if (shape != null) {
+            shape.getFxShape().setOnMouseClicked(event -> {
+                if (modeProperty.get() == Shapes.CURSOR && event.getButton() != MouseButton.SECONDARY) {
+                    if (event.isControlDown()) {
+                        if (selectedShapes.contains(shape)) {
+                            selectedShapes.remove(shape);
+                        }
+                        else {
+                            selectedShapes.add(shape);
+                        }
                     }
                     else {
-                        selectedShapes.add(shape);
+                        selectedShapes.setAll(shape);
                     }
+                    highlightSelected();  
                 }
-                else {
-                    selectedShapes.setAll(shape);
-                }
-                highlightSelected();  
-            }
-            event.consume();
-        });
+                event.consume();
+            }); 
+        }
     }
 
     /**
@@ -711,7 +725,14 @@ public class PaintController implements Initializable {
     public void clearSelection() {
         selectedShapes.set(FXCollections.observableArrayList());
         for (MyShape s : model.getShapes()) {
-            s.getFxShape().setEffect(null); // Reset effects
+            if (s instanceof MyCompositeShape cs) {
+                for (MyShape shape : cs.getShapes()) {
+                    shape.getFxShape().setEffect(null);
+                }
+            }
+            else if (s != null) {
+                s.getFxShape().setEffect(null);  
+            }
         }
     }
 
@@ -725,41 +746,80 @@ public class PaintController implements Initializable {
 
         // Removes the effect from all shapes
         for (MyShape s : model.getShapes()) {
-            s.getFxShape().setEffect(null); // Reset effects
+            if (s instanceof MyCompositeShape cs) {
+                for (MyShape shape : cs.getShapes()) {
+                    shape.getFxShape().setEffect(null);
+                }
+            }
+            else if (s != null) {
+                s.getFxShape().setEffect(null);  
+            }
         }
 
         // Adds the effect to the selected shapes
         for (MyShape s : selectedShapes) {
-            s.getFxShape().setEffect(new DropShadow(10, Color.DODGERBLUE));
+            if (s instanceof MyCompositeShape cs) {
+                for (MyShape shape : cs.getShapes()) {
+                    shape.getFxShape().setEffect(new DropShadow(10, Color.DODGERBLUE));
+                }
+            }
+            else if (s != null) {
+                s.getFxShape().setEffect(new DropShadow(10, Color.DODGERBLUE));
+            }
         }
         
         if (selectedShapes.size() == 1) {
             
             MyShape shape = selectedShapes.get(0);
             
-            // Border color
-            Color shapeBorderColor = (Color) shape.getFxShape().getStroke();
-            for (Toggle toggle : borderColorPanel.getToggles()) {
-                ToggleButton btn = (ToggleButton) toggle;
-                Color btnColor = (Color) btn.getBackground().getFills().get(0).getFill();
-                if (btnColor.equals(shapeBorderColor)) {
-                    borderColorPanel.selectToggle(btn);
-                    break;
-                }
+            if (shape instanceof MyCompositeShape) {
+                // TO DO: Choose how to select fill and border colors
             }
+            else if (shape != null) {
+                
+                // Border color
+                Color shapeBorderColor = (Color) shape.getFxShape().getStroke();
+                for (Toggle toggle : borderColorPanel.getToggles()) {
+                    ToggleButton btn = (ToggleButton) toggle;
+                    Color btnColor = (Color) btn.getBackground().getFills().get(0).getFill();
+                    if (btnColor.equals(shapeBorderColor)) {
+                        borderColorPanel.selectToggle(btn);
+                        break;
+                    }
+                }
 
-            // Fill color
-            Color shapeFillColor = (Color) shape.getFxShape().getFill();
-            for (Toggle toggle : fillColorPanel.getToggles()) {
-                ToggleButton btn = (ToggleButton) toggle;
-                Color btnColor = (Color) btn.getBackground().getFills().get(0).getFill();
-                if (btnColor.equals(shapeFillColor)) {
-                    fillColorPanel.selectToggle(btn);
-                    break;
+                // Fill color
+                Color shapeFillColor = (Color) shape.getFxShape().getFill();
+                for (Toggle toggle : fillColorPanel.getToggles()) {
+                    ToggleButton btn = (ToggleButton) toggle;
+                    Color btnColor = (Color) btn.getBackground().getFills().get(0).getFill();
+                    if (btnColor.equals(shapeFillColor)) {
+                        fillColorPanel.selectToggle(btn);
+                        break;
+                    }
                 }
-            }
-            if (selectedShapes.get(0).getFxShape().getFill() == Color.TRANSPARENT) {
-                fillColorPanel.selectToggle(noFillButtonPanel);
+                if (selectedShapes.get(0).getFxShape().getFill() == Color.TRANSPARENT) {
+                    fillColorPanel.selectToggle(noFillButtonPanel);
+                } 
+                
+                if (selectedShapes.get(0).getFxShape().getClass() == Text.class) {
+
+                    MyText selectedText = (MyText) ((FillColorDecorator) ((BorderColorDecorator) selectedShapes.get(0)).getDecoratedShape()).getDecoratedShape();
+
+                    // Font
+                    fontsComboBoxSide.setValue(selectedText.getFontFamily());
+
+                    // Size
+                    sizeComboBoxSide.setValue(Integer.toString((int) selectedText.getSize()));
+                }
+
+                if (selectedShapes.get(0).getFxShape().getClass() == Line.class) {
+
+                    MyLine selectedLine = (MyLine) ((BorderColorDecorator) selectedShapes.get(0)).getDecoratedShape();
+
+                    // Length
+                    lengthField.setText(Double.toString(Math.round(selectedLine.getLength() * 100.0) / 100.0));
+                }
             }
 
             // Width and height fields
@@ -768,25 +828,6 @@ public class PaintController implements Initializable {
 
             // Rotation
             rotationSlider.setValue(selectedShapes.get(0).getRotation());
-
-            if (selectedShapes.get(0).getFxShape().getClass() == Text.class) {
-
-                MyText selectedText = (MyText) ((FillColorDecorator) ((BorderColorDecorator) selectedShapes.get(0)).getDecoratedShape()).getDecoratedShape();
-
-                // Font
-                fontsComboBoxSide.setValue(selectedText.getFontFamily());
-
-                // Size
-                sizeComboBoxSide.setValue(Integer.toString((int) selectedText.getSize()));
-            }
-
-            if (selectedShapes.get(0).getFxShape().getClass() == Line.class) {
-
-                MyLine selectedLine = (MyLine) ((BorderColorDecorator) selectedShapes.get(0)).getDecoratedShape();
-
-                // Length
-                lengthField.setText(Double.toString(Math.round(selectedLine.getLength() * 100.0) / 100.0));
-            }
         }
     }
 
