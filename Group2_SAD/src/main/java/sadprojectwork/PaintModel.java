@@ -113,7 +113,6 @@ public class PaintModel {
      * @param file 
      */
     public void saveDrawing(File file) {
-        
         try (PrintWriter writer = new PrintWriter(file)) {
             writer.println("SHAPE;STARTX;STARTY;WIDTH;HEIGHT;FILL;BORDER;ROTATION;POINTS;TEXT;FONT;SIZE");
             for (MyShape shape : shapes) {

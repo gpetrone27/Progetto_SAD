@@ -20,6 +20,9 @@ public abstract class MyShape {
     protected double width;
     protected double height;
     
+    private boolean mirroredHorizontally = false;
+    private boolean mirroredVertically = false;
+    
     public MyShape(double startX, double startY) {
         this.startX = startX;
         this.startY = startY;
@@ -85,6 +88,22 @@ public abstract class MyShape {
     
     public void setRotation (double rotation) {
         getFxShape().setRotate(rotation);
+    }
+    
+    public boolean isMirroredHorizontally() {
+        return mirroredHorizontally;
+    }
+
+    public void setMirroredHorizontally(boolean val) {
+        mirroredHorizontally = val;
+    }
+
+    public boolean isMirroredVertically() {
+        return mirroredVertically;
+    }
+
+    public void setMirroredVertically(boolean val) {
+        mirroredVertically = val;
     }
     
     /**

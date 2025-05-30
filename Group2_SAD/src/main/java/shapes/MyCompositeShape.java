@@ -152,16 +152,20 @@ public class MyCompositeShape extends MyShape {
     
     @Override
     public double getRotation() {
-        return 0; 
+        return children.get(0).getRotation();
     }
     
     @Override
     public String toCSV() {
-        StringBuilder builder = new StringBuilder("COMPOSITE;");
+        StringBuffer buffer = new StringBuffer();
         for (MyShape shape : children) {
-            builder.append(shape.toCSV()).append("|");
+            buffer.append(shape.toCSV()).append("\n");
         }
-        return builder.toString();
+        
+        if (buffer.length() > 0) {
+            buffer.setLength(buffer.length() - 1); // removes the last '\n'
+        }
+        return buffer.toString();
     }
     
 }

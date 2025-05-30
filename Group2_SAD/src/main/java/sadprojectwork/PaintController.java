@@ -948,7 +948,7 @@ public class PaintController implements Initializable {
             if (s instanceof MyCompositeShape cs) {
                 for (MyShape shape : cs.getShapes()) {
                     Command changeColor = new ChangeColorCommand(shape, null, (Color) selectedColor);
-                    model.execute(changeColor);
+                    model.execute(changeColor);       
                 }
             }
             else {
@@ -966,32 +966,32 @@ public class PaintController implements Initializable {
     private void changeFillColor(ActionEvent event) {
         ToggleButton colorButton = (ToggleButton) event.getSource();
         Paint selectedColor = colorButton.getBackground().getFills().get(0).getFill();
-        for (MyShape s : selectedShapes) {
+        for (MyShape s : selectedShapes) {            
             if (s instanceof MyCompositeShape cs) {
                 for (MyShape shape : cs.getShapes()) {
-                    Command changeColor = new ChangeColorCommand(shape, (Color) selectedColor, null);
-                    model.execute(changeColor);
+            Command changeColor = new ChangeColorCommand(shape, (Color) selectedColor, null);
+                    model.execute(changeColor);       
                 }
             }
             else {
                 Command changeColor = new ChangeColorCommand(s, (Color) selectedColor, null);
-                model.execute(changeColor);
+                model.execute(changeColor); 
             }
         }
     }
 
     @FXML
     private void changeToNoFill(ActionEvent event) {
-        for (MyShape s : selectedShapes) {
+        for (MyShape s : selectedShapes) {            
             if (s instanceof MyCompositeShape cs) {
                 for (MyShape shape : cs.getShapes()) {
                     Command changeColor = new ChangeColorCommand(shape, Color.TRANSPARENT, null);
-                    model.execute(changeColor);
+                    model.execute(changeColor);        
                 }
             }
             else {
                 Command changeColor = new ChangeColorCommand(s, Color.TRANSPARENT, null);
-                model.execute(changeColor);
+                model.execute(changeColor);  
             }
         }
     }
@@ -1321,12 +1321,18 @@ public class PaintController implements Initializable {
 
     @FXML
     private void mirrorHorizontally(ActionEvent event) {
-        // TO DO
+        if(selectedShapes.size() == 1){
+            Command mirrHCmd = new MirrorCommand(selectedShapes.get(0), true);
+            model.execute(mirrHCmd);
+        }
     }
 
     @FXML
     private void mirrorVertically(ActionEvent event) {
-        // TO DO
+        if(selectedShapes.size() == 1){
+            Command mirrVCmd = new MirrorCommand(selectedShapes.get(0), false);
+            model.execute(mirrVCmd);
+        }
     }
 
     @FXML
@@ -1336,7 +1342,6 @@ public class PaintController implements Initializable {
             for (MyShape shape : selectedShapes) {
                 group.addShape(shape);
                 model.removeShape(shape);
-                System.out.println(shape.toCSV());
             }    
             model.addShape(group);
             enableSelection(group);
