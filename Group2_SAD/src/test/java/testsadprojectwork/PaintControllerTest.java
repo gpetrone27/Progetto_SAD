@@ -127,8 +127,7 @@ public class PaintControllerTest {
     @Test
     void testLineSelected(FxRobot robot) {
         Platform.runLater(() -> {
-            MyShape line = new MyLine(385, 290, 30, 20, 0);
-            line.getFxShape().setStroke(Color.BLACK);
+            MyShape line = new BorderColorDecorator(new MyLine(385, 290, 30, 20, 0), Color.BLACK);
             controller.getModel().addShape(line);
             controller.enableSelection(line);
         });
@@ -270,8 +269,7 @@ public class PaintControllerTest {
         MyShape[] shapeRef = new MyShape[1];
 
         Platform.runLater(() -> {
-            MyShape line = new MyLine(385, 290, 30, 20, 0);
-            line.getFxShape().setStroke(Color.PURPLE);
+            MyShape line = new BorderColorDecorator(new MyLine(385, 290, 30, 20, 0), Color.PURPLE);
             shapeRef[0] = line;
             controller.getModel().addShape(line);
             controller.enableSelection(line);
@@ -299,8 +297,7 @@ public class PaintControllerTest {
         MyShape[] shapeRef = new MyShape[1];
 
         Platform.runLater(() -> {
-            MyShape line = new MyLine(385, 290, 30, 20, 0);
-            line.getFxShape().setStroke(Color.ORANGE);
+            MyShape line = new BorderColorDecorator(new MyLine(385, 290, 30, 20, 0), Color.ORANGE);
             shapeRef[0] = line;
             controller.getModel().addShape(line);
             controller.enableSelection(line);
@@ -389,8 +386,7 @@ public class PaintControllerTest {
         double newX = 120, newY = 130;
 
         Platform.runLater(() -> {
-            MyShape line = new MyLine(oldX, oldY, 60, 40, 0);
-            line.getFxShape().setStroke(Color.PINK);
+            MyShape line = new BorderColorDecorator(new MyLine(oldX, oldY, 60, 40, 0), Color.PINK);
             shapeRef[0] = line;
             controller.getModel().addShape(line);
             controller.enableSelection(line);
@@ -645,8 +641,7 @@ public class PaintControllerTest {
         MyShape[] shapeRef = new MyShape[1];
 
         Platform.runLater(() -> {
-            MyShape line = new MyLine(385, 290, 30, 20, 0);
-            line.getFxShape().setStroke(Color.PURPLE);
+            MyShape line = new BorderColorDecorator(new MyLine(385, 290, 30, 20, 0), Color.PURPLE);
             shapeRef[0] = line;
             controller.getModel().addShape(line);
             controller.enableSelection(line);
@@ -831,8 +826,7 @@ public class PaintControllerTest {
        MyShape[] shapeRef = new MyShape[1];
 
        Platform.runLater(() -> {
-           MyShape line = new MyLine(385, 290, 30, 20, 0);
-           line.getFxShape().setStroke(Color.ORANGE);
+            MyShape line = new BorderColorDecorator(new MyLine(385, 290, 30, 20, 0), Color.ORANGE);
            shapeRef[0] = line;
            controller.getModel().addShape(line);
            controller.enableSelection(line);
@@ -942,8 +936,7 @@ public class PaintControllerTest {
         MyShape[] shapeRef = new MyShape[1];
 
         Platform.runLater(() -> {
-            MyShape line = new MyLine(385, 290, 30, 20, 0);
-            line.getFxShape().setStroke(Color.YELLOW);
+            MyShape line = new BorderColorDecorator(new MyLine(385, 290, 30, 20, 0), Color.YELLOW);
             shapeRef[0] = line;
             controller.getModel().addShape(line);
             controller.enableSelection(line);
@@ -1057,8 +1050,7 @@ public class PaintControllerTest {
        MyShape[] shapeRef = new MyShape[1];
 
        Platform.runLater(() -> {
-           MyShape line = new BorderColorDecorator(
-                                new MyLine(385, 290, 30, 20, 0), Color.GREEN);
+           MyShape line = new BorderColorDecorator(new MyLine(385, 290, 30, 20, 0), Color.GREEN);
            shapeRef[0] = line;
            controller.getModel().addShape(line);
            controller.enableSelection(line);
@@ -1153,8 +1145,7 @@ public class PaintControllerTest {
                     new FillColorDecorator(
                             new MyRectangle(385, 290, 30, 20, 0), Color.BLUE), Color.LIGHTBLUE);
 
-            MyShape line = new MyLine(385, 296, 30, 20, 0);
-            line.getFxShape().setStroke(Color.RED);
+            MyShape line = new BorderColorDecorator(new MyLine(385, 296, 30, 20, 0), Color.RED);
            
             rectRef[0] = rectangle;
             lineRef[0] = line;
@@ -1192,8 +1183,7 @@ public class PaintControllerTest {
                     new FillColorDecorator(
                             new MyRectangle(385, 290, 30, 20, 0), Color.PINK), Color.LIGHTPINK);
 
-            MyShape line = new MyLine(385, 296, 30, 20, 0);
-            line.getFxShape().setStroke(Color.PURPLE);
+            MyShape line = new BorderColorDecorator(new MyLine(385, 296, 30, 20, 0), Color.PURPLE);
            
             rectRef[0] = rectangle;
             lineRef[0] = line;
@@ -1230,8 +1220,8 @@ public class PaintControllerTest {
             MyShape rectangle = new BorderColorDecorator(
                     new FillColorDecorator(
                             new MyRectangle(385, 290, 30, 20, 0), Color.BLUE), Color.LIGHTBLUE);
-            MyShape line = new MyLine(385, 296, 30, 20, 0);
-            line.getFxShape().setStroke(Color.RED);
+            
+            MyShape line = new BorderColorDecorator(new MyLine(385, 296, 30, 20, 0), Color.RED);
 
             rectRef[0] = rectangle;
             lineRef[0] = line;
@@ -1265,8 +1255,8 @@ public class PaintControllerTest {
             MyShape rectangle = new BorderColorDecorator(
                     new FillColorDecorator(
                             new MyRectangle(385, 290, 30, 20, 0), Color.PINK), Color.LIGHTPINK);
-            MyShape line = new MyLine(385, 296, 30, 20, 0);
-            line.getFxShape().setStroke(Color.PURPLE);
+            
+            MyShape line = new BorderColorDecorator(new MyLine(385, 296, 30, 20, 0), Color.PURPLE);
 
             rectRef[0] = rectangle;
             lineRef[0] = line;

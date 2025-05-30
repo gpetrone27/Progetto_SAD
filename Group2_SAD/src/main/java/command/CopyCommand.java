@@ -5,11 +5,11 @@ import sadprojectwork.PaintModel;
 import shapes.MyShape;
 
 /**
-* Implements the Command interface to copy a shape.
-* When executed, saves a copy of the selected shape to the clipboard,
-* including “decorations” via clone.
-* When undone, empties the clipboard.
-*/
+ * Implements the Command interface to copy a shape.
+ * When executed, saves a copy of the selected shape to the clipboard,
+ * including “decorations” via clone.
+ * When undone, empties the clipboard.
+ */
 public class CopyCommand implements Command {
     
     private PaintModel model;

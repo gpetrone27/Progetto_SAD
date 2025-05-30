@@ -94,7 +94,7 @@ public class PaintController implements Initializable {
     private double textSize = 24;
     
     // Rotation
-    private double initialRotation;
+    private List<Double> initialRotations = new ArrayList<>();
     
     @FXML
     private AnchorPane rootPane;
@@ -237,6 +237,7 @@ public class PaintController implements Initializable {
     private void initBindings() {
         
         BooleanBinding selectedBinding = Bindings.createBooleanBinding(() -> selectedShapes.isEmpty(), selectedShapes);
+        BooleanBinding exactlyOneSelectedBinding = Bindings.createBooleanBinding(() -> selectedShapes.size() != 1, selectedShapes);
         BooleanBinding oneSelectedBinding = Bindings.createBooleanBinding(() -> selectedShapes.size() == 1, selectedShapes);
         BooleanBinding textBinding = Bindings.createBooleanBinding(() -> selectedShapes.size() == 1 && !(selectedShapes.get(0) instanceof MyCompositeShape) && selectedShapes.get(0).getFxShape().getClass() == Text.class, selectedShapes);
         BooleanBinding notSimpleShapeBinding = Bindings.createBooleanBinding(() -> selectedShapes.size() == 1 && !(selectedShapes.get(0) instanceof MyCompositeShape) && selectedShapes.get(0).getFxShape().getClass() != Text.class && selectedShapes.get(0).getFxShape().getClass() != Line.class, selectedShapes);
@@ -248,8 +249,8 @@ public class PaintController implements Initializable {
         pasteMenuItem.disableProperty().bind(pasteBinding);
         
         // Disables the right click menu actions if no shape is selected
-        cutMenuItem.disableProperty().bind(selectedBinding);
-        copyMenuItem.disableProperty().bind(selectedBinding);
+        cutMenuItem.disableProperty().bind(exactlyOneSelectedBinding);
+        copyMenuItem.disableProperty().bind(exactlyOneSelectedBinding);
         deleteMenuItem.disableProperty().bind(selectedBinding);
         frontMenuItem.disableProperty().bind(selectedBinding);
         backMenuItem.disableProperty().bind(selectedBinding);
@@ -382,34 +383,26 @@ public class PaintController implements Initializable {
         }));
         
         rotationSlider.setOnMousePressed(e -> {
-            if(selectedShapes.size() == 1) {
-                initialRotation = selectedShapes.get(0).getRotation();
-            }
-            else {
-                // UPDATE: Rotate multiple selected shapes
+            initialRotations.clear();
+            for (MyShape s : selectedShapes) {
+                initialRotations.add(s.getRotation());
             }
         });
         
         rotationSlider.setOnMouseReleased(e -> {
-            if(selectedShapes.size() == 1) {
-                double finalRotation = selectedShapes.get(0).getRotation();
-                if(finalRotation != initialRotation){
-                    RotationCommand cmd = new RotationCommand(selectedShapes.get(0), initialRotation, finalRotation);
+            for (int i = 0; i < selectedShapes.size(); i++) {
+                double finalRotation = selectedShapes.get(i).getRotation();
+                if (finalRotation != initialRotations.get(i)) {
+                    RotationCommand cmd = new RotationCommand(selectedShapes.get(i), initialRotations.get(i), finalRotation);
                     model.execute(cmd);
                 }
-            }
-            else {
-                // UPDATE: Rotate multiple selected shapes
             }
         });
         
         // Rotates the selected shape while the slider is being dragged
         rotationSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
-            if (selectedShapes.size() == 1) {
-                selectedShapes.get(0).setRotation(newVal.doubleValue());
-            }
-            else {
-                // UPDATE: Rotate multiple selected shapes
+            for (MyShape s : selectedShapes) {
+                s.setRotation(newVal.doubleValue());
             }
         });
         
@@ -735,7 +728,7 @@ public class PaintController implements Initializable {
      * Deactivates the current selection and clears all effects.
      */
     public void clearSelection() {
-        selectedShapes.set(FXCollections.observableArrayList());
+        selectedShapes.clear();
         for (MyShape s : model.getShapes()) {
             if (s instanceof MyCompositeShape cs) {
                 for (MyShape shape : cs.getShapes()) {
@@ -850,7 +843,7 @@ public class PaintController implements Initializable {
     @FXML
     private void newDrawing(ActionEvent event) {
         model.clear();
-        selectedShapes.set(FXCollections.observableArrayList());
+        selectedShapes.clear();
         currentShape.set(null);
     }
 
@@ -952,8 +945,16 @@ public class PaintController implements Initializable {
         ToggleButton colorButton = (ToggleButton) event.getSource();
         Paint selectedColor = colorButton.getBackground().getFills().get(0).getFill();
         for (MyShape s : selectedShapes) {
-            Command changeColor = new ChangeColorCommand(s, null, (Color) selectedColor);
-            model.execute(changeColor);
+            if (s instanceof MyCompositeShape cs) {
+                for (MyShape shape : cs.getShapes()) {
+                    Command changeColor = new ChangeColorCommand(shape, null, (Color) selectedColor);
+                    model.execute(changeColor);
+                }
+            }
+            else {
+                Command changeColor = new ChangeColorCommand(s, null, (Color) selectedColor);
+                model.execute(changeColor);
+            }
         }
     }
 
@@ -966,16 +967,32 @@ public class PaintController implements Initializable {
         ToggleButton colorButton = (ToggleButton) event.getSource();
         Paint selectedColor = colorButton.getBackground().getFills().get(0).getFill();
         for (MyShape s : selectedShapes) {
-            Command changeColor = new ChangeColorCommand(s, (Color) selectedColor, null);
-            model.execute(changeColor); 
+            if (s instanceof MyCompositeShape cs) {
+                for (MyShape shape : cs.getShapes()) {
+                    Command changeColor = new ChangeColorCommand(shape, (Color) selectedColor, null);
+                    model.execute(changeColor);
+                }
+            }
+            else {
+                Command changeColor = new ChangeColorCommand(s, (Color) selectedColor, null);
+                model.execute(changeColor);
+            }
         }
     }
 
     @FXML
     private void changeToNoFill(ActionEvent event) {
         for (MyShape s : selectedShapes) {
-            Command changeColor = new ChangeColorCommand(s, Color.TRANSPARENT, null);
-            model.execute(changeColor);  
+            if (s instanceof MyCompositeShape cs) {
+                for (MyShape shape : cs.getShapes()) {
+                    Command changeColor = new ChangeColorCommand(shape, Color.TRANSPARENT, null);
+                    model.execute(changeColor);
+                }
+            }
+            else {
+                Command changeColor = new ChangeColorCommand(s, Color.TRANSPARENT, null);
+                model.execute(changeColor);
+            }
         }
     }
 
@@ -985,16 +1002,11 @@ public class PaintController implements Initializable {
      */
     @FXML
     public void cutShape(ActionEvent event) {
-        if (!selectedShapes.isEmpty()) {
-            if (selectedShapes.size() == 1) {
-                Command cutCmd = new CutCommand(model, selectedShapes.get(0));
-                model.execute(cutCmd);
-            }
-            else {
-                // TO DO: Create a list of shapes and cut it if multiple shapes are selected
-            }
-            selectedShapes.set(FXCollections.observableArrayList());
+        if (selectedShapes.size() == 1) {
+            Command cutCmd = new CutCommand(model, selectedShapes.get(0));
+            model.execute(cutCmd);
         }
+        selectedShapes.clear();
     }
 
     /**
@@ -1003,14 +1015,9 @@ public class PaintController implements Initializable {
      */
     @FXML
     public void copyShape(ActionEvent event) {
-        if (!selectedShapes.isEmpty()) {
-            if (selectedShapes.size() == 1) {
-                Command copyCmd = new CopyCommand(model, selectedShapes.get(0));
-                model.execute(copyCmd);
-            }
-            else {
-                // TO DO: Create a list of shapes and copy it if multiple shapes are selected
-            }
+        if (selectedShapes.size() == 1) {
+            Command copyCmd = new CopyCommand(model, selectedShapes.get(0));
+            model.execute(copyCmd);
         }
     }
 
@@ -1038,7 +1045,7 @@ public class PaintController implements Initializable {
                 Command deleteCmd = new DeleteCommand(model, s);
                 model.execute(deleteCmd);
             }
-            selectedShapes.set(FXCollections.observableArrayList());
+            selectedShapes.clear();
         }
     }
     
@@ -1346,7 +1353,7 @@ public class PaintController implements Initializable {
                 enableSelection(shape);
             }
             group.clear();
-            selectedShapes.set(FXCollections.observableArrayList());
+            selectedShapes.clear();
         }
     }
 

@@ -5,11 +5,11 @@ import sadprojectwork.PaintModel;
 import shapes.MyShape;
 
 /**
-* Implements the Command interface to cut a shape.
-* When executed, removes the selected shape from the canvas and from the model,
-* saving it into the clipboard.
-* When undone, restores the shape to its original position.
-*/
+ * Implements the Command interface to cut a shape.
+ * When executed, removes the selected shape from the canvas and from the model,
+ * saving it into the clipboard.
+ * When undone, restores the shape to its original position.
+ */
 public class CutCommand implements Command {
     
     private PaintModel model;
