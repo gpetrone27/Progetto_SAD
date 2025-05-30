@@ -240,10 +240,10 @@ public class PaintController implements Initializable {
     private void initBindings() {
         
         BooleanBinding selectedBinding = Bindings.createBooleanBinding(() -> selectedShapes.isEmpty(), selectedShapes);
-        BooleanBinding oneSelectedBinding = Bindings.createBooleanBinding(() -> selectedShapes.size() == 1, selectedShapes);
-        BooleanBinding textBinding = Bindings.createBooleanBinding(() -> selectedShapes.size() == 1 && selectedShapes.get(0) instanceof MyText, selectedShapes);
-        BooleanBinding notSimpleShapeBinding = Bindings.createBooleanBinding(() -> selectedShapes.size() == 1 && !(selectedShapes.get(0) instanceof MyText) && !(selectedShapes.get(0) instanceof MyLine), selectedShapes);
-        BooleanBinding lineBinding = Bindings.createBooleanBinding(() -> selectedShapes.size() == 1 && selectedShapes.get(0) instanceof MyLine, selectedShapes);
+        BooleanBinding oneSelectedBinding = Bindings.createBooleanBinding(() -> selectedShapes.size() == 1 && !(selectedShapes.get(0) instanceof MyCompositeShape), selectedShapes);
+        BooleanBinding textBinding = Bindings.createBooleanBinding(() -> selectedShapes.size() == 1 && !(selectedShapes.get(0) instanceof MyCompositeShape) && selectedShapes.get(0).getFxShape().getClass() == Text.class, selectedShapes);
+        BooleanBinding notSimpleShapeBinding = Bindings.createBooleanBinding(() -> selectedShapes.size() == 1 && !(selectedShapes.get(0) instanceof MyCompositeShape) && selectedShapes.get(0).getFxShape().getClass() != Text.class && selectedShapes.get(0).getFxShape().getClass() != Line.class, selectedShapes);
+        BooleanBinding lineBinding = Bindings.createBooleanBinding(() -> selectedShapes.size() == 1 && !(selectedShapes.get(0) instanceof MyCompositeShape) && selectedShapes.get(0).getFxShape().getClass() == Line.class, selectedShapes);
         BooleanBinding pasteBinding = Bindings.or(Bindings.createBooleanBinding(() -> model.getClipboard() == null, model.clipboardProperty()), Bindings.createBooleanBinding(() -> modeProperty.get() != Shapes.CURSOR, modeProperty));
         
         // Hides the paste operation if the clipboard is empty or if the mode is not cursor
