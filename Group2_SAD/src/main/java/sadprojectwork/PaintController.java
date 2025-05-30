@@ -949,12 +949,19 @@ public class PaintController implements Initializable {
      */
     @FXML
     private void changeBorderColor(ActionEvent event) {
-        // TO DO controllo composite shape all'interno del for, chiama i change a tutte le shape
         ToggleButton colorButton = (ToggleButton) event.getSource();
         Paint selectedColor = colorButton.getBackground().getFills().get(0).getFill();
         for (MyShape s : selectedShapes) {
-            Command changeColor = new ChangeColorCommand(s, null, (Color) selectedColor);
-            model.execute(changeColor);
+            if (s instanceof MyCompositeShape cs) {
+                for (MyShape shape : cs.getShapes()) {
+                    Command changeColor = new ChangeColorCommand(shape, null, (Color) selectedColor);
+                    model.execute(changeColor);       
+                }
+            }
+            else {
+                Command changeColor = new ChangeColorCommand(s, null, (Color) selectedColor);
+                model.execute(changeColor);
+            }
         }
     }
 
@@ -964,21 +971,35 @@ public class PaintController implements Initializable {
      */
     @FXML
     private void changeFillColor(ActionEvent event) {
-        // TO DO
         ToggleButton colorButton = (ToggleButton) event.getSource();
         Paint selectedColor = colorButton.getBackground().getFills().get(0).getFill();
-        for (MyShape s : selectedShapes) {
-            Command changeColor = new ChangeColorCommand(s, (Color) selectedColor, null);
-            model.execute(changeColor); 
+        for (MyShape s : selectedShapes) {            
+            if (s instanceof MyCompositeShape cs) {
+                for (MyShape shape : cs.getShapes()) {
+            Command changeColor = new ChangeColorCommand(shape, (Color) selectedColor, null);
+                    model.execute(changeColor);       
+                }
+            }
+            else {
+                Command changeColor = new ChangeColorCommand(s, (Color) selectedColor, null);
+                model.execute(changeColor); 
+            }
         }
     }
 
     @FXML
     private void changeToNoFill(ActionEvent event) {
-        // TO DO
-        for (MyShape s : selectedShapes) {
-            Command changeColor = new ChangeColorCommand(s, Color.TRANSPARENT, null);
-            model.execute(changeColor);  
+        for (MyShape s : selectedShapes) {            
+            if (s instanceof MyCompositeShape cs) {
+                for (MyShape shape : cs.getShapes()) {
+                    Command changeColor = new ChangeColorCommand(shape, Color.TRANSPARENT, null);
+                    model.execute(changeColor);        
+                }
+            }
+            else {
+                Command changeColor = new ChangeColorCommand(s, Color.TRANSPARENT, null);
+                model.execute(changeColor);  
+            }
         }
     }
 
