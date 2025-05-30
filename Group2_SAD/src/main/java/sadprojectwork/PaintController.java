@@ -1319,6 +1319,10 @@ public class PaintController implements Initializable {
         return canvas;
     }
 
+    /**
+     * Mirrors the selected shapes horizontally.
+     * @param event
+     */
     @FXML
     private void mirrorHorizontally(ActionEvent event) {
         for (MyShape s : selectedShapes) {
@@ -1327,6 +1331,10 @@ public class PaintController implements Initializable {
         }
     }
 
+    /**
+     * Mirrors the selected shapes vertically.
+     * @param event
+     */
     @FXML
     private void mirrorVertically(ActionEvent event) {
         for (MyShape s : selectedShapes) {

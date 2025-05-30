@@ -7,59 +7,50 @@ import javafx.scene.transform.Scale;
 import shapes.MyShape;
 
 /**
- *
- *
- * 
+ * Implements the Command interface to mirror a shape.
+ * When executed, mirrors the shape horizontally or vertically, depending on the constructor parameter. 
+ * The mirroring flips the shape along the specified axis.
+ * When undone, When undone, the command applies the same mirroring operation again, 
+ * since mirroring is its own inverse (involutory operation), effectively restoring the shape to its original state.
  */
 public class MirrorCommand implements Command {
-    private final MyShape shape;
-    private final boolean horizontal;  // true = mirror horizontally, false = vertically
-    private Scale appliedScale = null;
+    private final MyShape shapeToMirror;
+    private final boolean horizontal;
 
-    public MirrorCommand(MyShape shape, boolean horizontal) {
-        this.shape = shape;
+    /**
+    * Creates a mirror command.
+    * @param shapeToMirror: shape to mirror
+    * @param horizontal: true if the mirror must be horizontal; false instead.
+    */
+    public MirrorCommand(MyShape shapeToMirror, boolean horizontal) {
+        this.shapeToMirror = shapeToMirror;
         this.horizontal = horizontal;
     }
 
+    /**
+     * Performs mirroring on the shape.
+     * If horizontal is true, applies horizontal mirroring,
+     * vertical mirroring instead.
+     */
     @Override
     public void execute() {
-        
-        Shape fxShape = shape.getFxShape();
-
-        fxShape.getTransforms().removeIf(t -> t instanceof Scale && (
-            ((Scale)t).getX() == -1 || ((Scale)t).getY() == -1));
-
-        Bounds bounds = fxShape.getBoundsInParent();
-        double pivotX = bounds.getMinX() + bounds.getWidth() / 2.0;
-        double pivotY = bounds.getMinY() + bounds.getHeight() / 2.0;
-
         if (horizontal) {
-            appliedScale = new Scale(-1, 1, pivotX, pivotY);
-            shape.setMirroredHorizontally(true);
-            shape.setMirroredVertically(false);
+            shapeToMirror.mirrorHorizontally();
         } else {
-            appliedScale = new Scale(1, -1, pivotX, pivotY);
-            shape.setMirroredVertically(true);
-            shape.setMirroredHorizontally(false);
+            shapeToMirror.mirrorVertically();
         }
-
-        fxShape.getTransforms().add(appliedScale);
     }
 
+    /**
+     * Undoes the applied mirroring, repeating the same operation, 
+     * since the mirroring is involutional (its own inverse).
+     */
     @Override
     public void undo() {
-        
-        if (appliedScale == null) return;
-
-        Shape fxShape = shape.getFxShape();
-        fxShape.getTransforms().remove(appliedScale);
-
         if (horizontal) {
-            shape.setMirroredHorizontally(false);
+            shapeToMirror.mirrorHorizontally();
         } else {
-            shape.setMirroredVertically(false);
+            shapeToMirror.mirrorVertically();
         }
-
-        appliedScale = null;
     }
 }
