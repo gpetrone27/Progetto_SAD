@@ -1321,16 +1321,16 @@ public class PaintController implements Initializable {
 
     @FXML
     private void mirrorHorizontally(ActionEvent event) {
-        if(selectedShapes.size() == 1){
-            Command mirrHCmd = new MirrorCommand(selectedShapes.get(0), true);
+        for (MyShape s : selectedShapes) {
+            Command mirrHCmd = new MirrorCommand(s, true);
             model.execute(mirrHCmd);
         }
     }
 
     @FXML
     private void mirrorVertically(ActionEvent event) {
-        if(selectedShapes.size() == 1){
-            Command mirrVCmd = new MirrorCommand(selectedShapes.get(0), false);
+        for (MyShape s : selectedShapes) {
+            Command mirrVCmd = new MirrorCommand(s, false);
             model.execute(mirrVCmd);
         }
     }
