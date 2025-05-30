@@ -1607,7 +1607,7 @@ public class PaintControllerTest {
     }
     
     /**
-     * Tests that a selected ellipse is mirrored horizontally.
+     * Tests that a selected shape is mirrored horizontally.
      * @param robot TestFX robot to simulate user interactions.
      */
     @Test
@@ -1672,7 +1672,7 @@ public class PaintControllerTest {
     } 
 
     /**
-     * Tests that a selected ellipse is mirrored vertically.
+     * Tests that a selected shape is mirrored vertically.
      * @param robot TestFX robot to simulate user interactions.
      */
     @Test
