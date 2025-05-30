@@ -65,7 +65,7 @@ public class PaintController implements Initializable {
 
     private ObjectProperty<Shapes> modeProperty = new SimpleObjectProperty<>(Shapes.CURSOR);
     private ObjectProperty<MyShape> currentShape = new SimpleObjectProperty<>(null);
-    private ListProperty<MyShape> selectedShapes = new SimpleListProperty<>(FXCollections.observableArrayList());
+    public ListProperty<MyShape> selectedShapes = new SimpleListProperty<>(FXCollections.observableArrayList());
 
     private Double startX = null;
     private Double startY = null;
@@ -1324,7 +1324,7 @@ public class PaintController implements Initializable {
      * @param event
      */
     @FXML
-    private void mirrorHorizontally(ActionEvent event) {
+    public void mirrorHorizontally(ActionEvent event) {
         for (MyShape s : selectedShapes) {
             Command mirrHCmd = new MirrorCommand(s, true);
             model.execute(mirrHCmd);
@@ -1336,7 +1336,7 @@ public class PaintController implements Initializable {
      * @param event
      */
     @FXML
-    private void mirrorVertically(ActionEvent event) {
+    public void mirrorVertically(ActionEvent event) {
         for (MyShape s : selectedShapes) {
             Command mirrVCmd = new MirrorCommand(s, false);
             model.execute(mirrVCmd);

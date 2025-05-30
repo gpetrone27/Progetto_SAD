@@ -1606,4 +1606,136 @@ public class PaintControllerTest {
         assertEquals(newRotation, shapeRef[0].getRotation(), 0.001, "Text rotation should be updated!");
     }
     
+    /**
+     * Tests that a selected ellipse is mirrored horizontally.
+     * @param robot TestFX robot to simulate user interactions.
+     */
+    @Test
+    void testMirrorHorizontally(FxRobot robot) {
+        MyShape[] shapeRef = new MyShape[1];
+
+        Platform.runLater(() -> {
+            List<Point2D> points = new ArrayList<>();
+            points.add(new Point2D(10, 10));
+            points.add(new Point2D(30, 10));
+            points.add(new Point2D(20, 30));
+            points.add(points.get(0));
+
+            MyPolygon triangle = new MyPolygon(365, 270, points, 0);
+            triangle.getFxShape().setFill(Color.LIGHTPINK);
+            triangle.getFxShape().setStroke(Color.BLUE);
+            shapeRef[0] = triangle;
+
+            controller.getModel().addShape(triangle);
+            controller.enableSelection(triangle);
+        });
+        robot.interact(() -> {});
+        robot.moveTo(shapeRef[0].getFxShape()).clickOn();
+
+        robot.interact(() -> controller.mirrorHorizontally(new ActionEvent()));
+
+        assertTrue(shapeRef[0].getScaleX() < 0, "Shape must be mirrored horizontally!");
+    }
+
+    /**
+     * Tests undo functionality for horizontal mirror.
+     * @param robot TestFX robot to simulate user interactions.
+     */
+    @Test
+    void testUndoMirrorHorizontally(FxRobot robot) throws Exception {
+        MyShape[] shapeRef = new MyShape[1];
+
+        Platform.runLater(() -> {
+            List<Point2D> points = new ArrayList<>();
+            points.add(new Point2D(10, 10));
+            points.add(new Point2D(30, 10));
+            points.add(new Point2D(20, 30));
+            points.add(points.get(0));
+
+            MyPolygon triangle = new MyPolygon(365, 270, points, 0);
+            triangle.getFxShape().setFill(Color.LIGHTPINK);
+            triangle.getFxShape().setStroke(Color.BLUE);
+            shapeRef[0] = triangle;
+
+            controller.getModel().addShape(triangle);
+            controller.enableSelection(triangle);
+        });
+
+        robot.interact(() -> {});
+        robot.moveTo(shapeRef[0].getFxShape()).clickOn();
+
+        robot.interact(() -> controller.mirrorHorizontally(new ActionEvent()));
+
+        robot.interact(() -> controller.undoOperation(new ActionEvent()));
+        
+        assertTrue(shapeRef[0].getScaleX() > 0, "Undo must restore scaleX positive!");
+    } 
+
+    /**
+     * Tests that a selected ellipse is mirrored vertically.
+     * @param robot TestFX robot to simulate user interactions.
+     */
+    @Test
+    void testMirrorVertically(FxRobot robot) throws Exception {
+        MyShape[] shapeRef = new MyShape[1];
+
+        Platform.runLater(() -> {
+            List<Point2D> points = new ArrayList<>();
+            points.add(new Point2D(10, 10));
+            points.add(new Point2D(30, 10));
+            points.add(new Point2D(20, 30));
+            points.add(points.get(0));
+
+            MyPolygon triangle = new MyPolygon(365, 270, points, 0);
+            triangle.getFxShape().setFill(Color.LIGHTPINK);
+            triangle.getFxShape().setStroke(Color.BLUE);
+            shapeRef[0] = triangle;
+
+            controller.getModel().addShape(triangle);
+            controller.enableSelection(triangle);
+        });
+
+        robot.interact(() -> {});
+        robot.moveTo(shapeRef[0].getFxShape()).clickOn();
+
+        robot.interact(() -> controller.mirrorVertically(new ActionEvent()));
+
+        assertTrue(shapeRef[0].getScaleY() < 0, "Shape must be mirrored vertically!");
+    }
+
+    /**
+     * Tests undo functionality for vertical mirror.
+     * @param robot TestFX robot to simulate user interactions.
+     */
+    @Test
+    void testUndoMirrorVertically(FxRobot robot) throws Exception {
+        MyShape[] shapeRef = new MyShape[1];
+
+        Platform.runLater(() -> {
+            List<Point2D> points = new ArrayList<>();
+            points.add(new Point2D(10, 10));
+            points.add(new Point2D(30, 10));
+            points.add(new Point2D(20, 30));
+            points.add(points.get(0));
+
+            MyPolygon triangle = new MyPolygon(365, 270, points, 0);
+            triangle.getFxShape().setFill(Color.LIGHTPINK);
+            triangle.getFxShape().setStroke(Color.BLUE);
+            shapeRef[0] = triangle;
+
+            controller.getModel().addShape(triangle);
+            controller.enableSelection(triangle);
+        });
+
+        robot.interact(() -> {});
+        robot.moveTo(shapeRef[0].getFxShape()).clickOn();
+
+        robot.interact(() -> controller.mirrorVertically(new ActionEvent()));
+
+        robot.interact(() -> controller.undoOperation(new ActionEvent()));
+
+        assertTrue(shapeRef[0].getScaleY() > 0, "Undo must restore scaleY positive!");
+    }
+    
 }
+
