@@ -827,16 +827,8 @@
                               <KeyCodeCombination alt="UP" code="BACK_SPACE" control="UP" meta="UP" shift="UP" shortcut="UP" />
                            </accelerator>
                         </MenuItem>
-                        <MenuItem fx:id="groupMenuItem" disable="true" mnemonicParsing="false" onAction="#groupSelected" text="Group">
-                           <accelerator>
-                              <KeyCodeCombination alt="UP" code="BACK_SPACE" control="UP" meta="UP" shift="UP" shortcut="UP" />
-                           </accelerator>
-                        </MenuItem>
-                        <MenuItem fx:id="ungroupMenuItem" disable="true" mnemonicParsing="false" onAction="#ungroupSelected" text="Ungroup">
-                           <accelerator>
-                              <KeyCodeCombination alt="UP" code="BACK_SPACE" control="UP" meta="UP" shift="UP" shortcut="UP" />
-                           </accelerator>
-                        </MenuItem>
+                        <MenuItem fx:id="groupMenuItem" disable="true" mnemonicParsing="false" onAction="#groupSelected" text="Group" />
+                        <MenuItem fx:id="ungroupMenuItem" disable="true" mnemonicParsing="false" onAction="#ungroupSelected" text="Ungroup" />
                     </items>
                   </ContextMenu>
                </contextMenu>

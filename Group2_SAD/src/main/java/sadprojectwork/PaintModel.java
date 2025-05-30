@@ -113,7 +113,6 @@ public class PaintModel {
      * @param file 
      */
     public void saveDrawing(File file) {
-        // TO DO: Se instanceof è un Composite, chiama il toCSV per tutte le shape del composite
         try (PrintWriter writer = new PrintWriter(file)) {
             writer.println("SHAPE;STARTX;STARTY;WIDTH;HEIGHT;FILL;BORDER;ROTATION;POINTS;TEXT;FONT;SIZE");
             for (MyShape shape : shapes) {
