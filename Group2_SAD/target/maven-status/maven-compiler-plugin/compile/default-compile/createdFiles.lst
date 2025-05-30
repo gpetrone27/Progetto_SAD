@@ -6,6 +6,7 @@ decorator\ShapeDecorator.class
 sadprojectwork\PaintModel$1.class
 shapes\MyEllipse.class
 command\Command.class
+sadprojectwork\PaintApp.class
 command\BringToFrontCommand.class
 command\RotationCommand.class
 shapes\MyRectangle.class
@@ -21,5 +22,7 @@ command\PasteCommand.class
 decorator\FillColorDecorator.class
 shapes\MyLine.class
 shapes\Shapes.class
+sadprojectwork\PaintController.class
+shapes\MyCompositeShape.class
 shapes\MyPolygon.class
 sadprojectwork\PaintController$1.class

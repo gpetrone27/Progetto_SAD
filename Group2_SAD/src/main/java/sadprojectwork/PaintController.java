@@ -96,6 +96,9 @@ public class PaintController implements Initializable {
     // Rotation
     private double initialRotation;
     
+    // Composite
+    private MyCompositeShape group = new MyCompositeShape(0, 0);
+    
     @FXML
     private AnchorPane rootPane;
     @FXML
@@ -613,7 +616,7 @@ public class PaintController implements Initializable {
                     e.consume();
                 }
             }
-            
+                    
             // Preview of the shape while the user is creating it
             else {
                 if (modeProperty.get() != Shapes.POLYGON && modeProperty.get() != Shapes.TEXT) {
@@ -666,7 +669,14 @@ public class PaintController implements Initializable {
     private void redrawCanvas() {
         canvas.getChildren().clear();
         for (MyShape shapeToAdd : model.getShapes()) {
-            canvas.getChildren().add(shapeToAdd.getFxShape());
+            if (shapeToAdd instanceof MyCompositeShape cs) {
+                for(MyShape s : cs.getShapes()) {
+                    canvas.getChildren().add(s.getFxShape());
+                }
+            }
+            else {
+                canvas.getChildren().add(shapeToAdd.getFxShape());
+            }
         }
         redrawGrid();
     }
@@ -1261,12 +1271,25 @@ public class PaintController implements Initializable {
 
     @FXML
     private void groupSelected(ActionEvent event) {
-        // TO DO
+        if(selectedShapes.size() > 1) {
+            for (MyShape shape : selectedShapes) {
+                group.addShape(shape);
+                model.removeShape(shape);
+                System.out.println(shape.toCSV());
+            }    
+            model.addShape(group);
+            enableSelection(group);
+        }
     }
 
     @FXML
     private void ungroupSelected(ActionEvent event) {
-        // TO DO
+        model.removeShape(group);
+        for (MyShape shape : group.getShapes()) {
+            model.addShape(shape);
+            enableSelection(shape);
+        }
+        group.clear();
     }
-    
+
 }

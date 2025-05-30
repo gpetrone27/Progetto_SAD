@@ -55,6 +55,14 @@ public class MyCompositeShape extends MyShape {
         width = maxX - minX;
         height = maxY - minY;
     }
+    
+    public boolean isEmpty() {
+        return children.isEmpty();
+    }
+    
+    public void clear() {
+        children.clear();
+    }
 
     @Override
     public void resize(double newWidth, double newHeight) {
