@@ -3,6 +3,7 @@ package sadprojectwork;
 
 import command.*;
 import decorator.*;
+import factory.ShapeFactoryManager;
 import shapes.*;
 import java.io.File;
 import java.net.URL;
@@ -95,6 +96,9 @@ public class PaintController implements Initializable {
     
     // Rotation
     private List<Double> initialRotations = new ArrayList<>();
+    
+    private ShapeFactoryManager factoryManager = new ShapeFactoryManager();
+
     
     @FXML
     private AnchorPane rootPane;
@@ -538,26 +542,30 @@ public class PaintController implements Initializable {
                 // Draws the shape if any of them is selected
                 switch(modeProperty.get()) {
                     case LINE -> {
-                        BorderColorDecorator myLine = new BorderColorDecorator(new MyLine(startX, startY, 0, 0, 0), borderHex);
+                        MyShape shape = factoryManager.createShape(Shapes.LINE, startX, startY, 0, 0, 0);
+                        BorderColorDecorator myLine = new BorderColorDecorator(shape, borderHex);
                         addShape(myLine);
                         enableSelection(myLine);
                         currentShape.set(myLine);
                     }
                     case RECTANGLE -> {
-                        BorderColorDecorator myRectangle = new BorderColorDecorator(new FillColorDecorator(new MyRectangle(startX, startY, 0, 0, 0), fillHex), borderHex);
+                        MyShape shape = factoryManager.createShape(Shapes.RECTANGLE, startX, startY, 0, 0, 0);
+                        BorderColorDecorator myRectangle = new BorderColorDecorator(new FillColorDecorator(shape, fillHex), borderHex);
                         addShape(myRectangle);
                         enableSelection(myRectangle);
                         currentShape.set(myRectangle);
                     }
                     case ELLIPSE -> {
-                        BorderColorDecorator myEllipse = new BorderColorDecorator(new FillColorDecorator(new MyEllipse(startX, startY, 0, 0, 0), fillHex), borderHex);
+                        MyShape shape = factoryManager.createShape(Shapes.ELLIPSE, startX, startY, 0, 0, 0);
+                        BorderColorDecorator myEllipse = new BorderColorDecorator(new FillColorDecorator(shape, fillHex), borderHex);
                         addShape(myEllipse);
                         enableSelection(myEllipse);
                         currentShape.set(myEllipse);
                     }
                     case POLYGON -> {
                         if (currentShape.get() == null) {
-                            BorderColorDecorator myPolygon = new BorderColorDecorator(new FillColorDecorator(new MyPolygon(startX, startY, null, 0), fillHex), borderHex);
+                            MyShape shape = factoryManager.createShape(Shapes.POLYGON, startX, startY, 0, 0, 0);
+                            BorderColorDecorator myPolygon = new BorderColorDecorator(new FillColorDecorator(shape, fillHex), borderHex);
                             addShape(myPolygon);
                             enableSelection(myPolygon);
                             currentShape.set(myPolygon);
@@ -580,7 +588,14 @@ public class PaintController implements Initializable {
                     }
                     case TEXT -> {
                         if (!displayTextField.getText().equals("")) {
-                            BorderColorDecorator myText = new BorderColorDecorator(new FillColorDecorator(new MyText(startX, startY, displayTextField.getText(), fontsComboBox.getValue(), Double.parseDouble(sizeComboBox.getValue()), 0), fillHex), borderHex);
+                            MyShape shape = factoryManager.createShape(Shapes.TEXT, startX, startY, 0, 0, 0);
+                            if (shape instanceof MyText myText) {
+                                myText.setFontFamily(fontsComboBox.getValue());
+                                myText.setSize(Double.parseDouble(sizeComboBox.getValue()));
+                                // Imposta testo specifico
+                                myText.setText(displayTextField.getText());
+                            }
+                            BorderColorDecorator myText = new BorderColorDecorator(new FillColorDecorator(shape, fillHex), borderHex);
                             addShape(myText);
                             enableSelection(myText);
                         }

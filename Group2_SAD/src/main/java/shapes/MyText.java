@@ -99,4 +99,12 @@ public class MyText extends MyShape {
         return Shapes.TEXT + ";" + startX + ";" + startY + ";" + getWidth() + ";" + getHeight() + ";" + getFxShape().getFill() + ";" + getFxShape().getStroke() + ";" + getFxShape().getRotate() + ";null;" + text.getText() + ";" + getFontFamily() + ";" + getSize();
     }
     
+    public String getText() {
+        return text.getText();
+    }
+
+    public void setText(String newText) {
+        text.setText(newText);
+    }
+
 }
