@@ -48,8 +48,8 @@ class CopyCommandTest {
 
         assertNotNull(clipboardShape, "Clipboard should not be null after copy!");
         assertNotSame(line, clipboardShape, "Clipboard shape should be a different instance!");
-        assertEquals(line.getScaleX(), clipboardShape.getScaleX());
-        assertEquals(line.getScaleY(), clipboardShape.getScaleY());
+        assertEquals(line.getStartX(), clipboardShape.getStartX());
+        assertEquals(line.getStartY(), clipboardShape.getStartY());
         assertEquals(line.getWidth(), clipboardShape.getWidth());
         assertEquals(line.getHeight(), clipboardShape.getHeight());
         assertEquals(line.getRotation(), clipboardShape.getRotation());
