@@ -83,7 +83,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.8</version>
                 <configuration>
-                    <mainClass>sadprojectwork.PaintApp</mainClass>
+                    <mainClass>sadprojectwork.mvc.PaintApp</mainClass>
                 </configuration>
             </plugin>
             
