@@ -1630,22 +1630,26 @@ public class PaintControllerTest {
     void testMirrorHorizontally(FxRobot robot) {
         MyShape[] shapeRef = new MyShape[1];
 
-        Platform.runLater(() -> {
-            List<Point2D> points = new ArrayList<>();
-            points.add(new Point2D(10, 10));
-            points.add(new Point2D(30, 10));
-            points.add(new Point2D(20, 30));
-            points.add(points.get(0));
+        robot.interact(() -> {
+            MyShape triangle = factoryManager.createShape(Shapes.POLYGON, 0, 0, 0, 0, 0);
+            
+            MyPolygon trianglePolygon = (MyPolygon) triangle;
 
-            MyPolygon triangle = new MyPolygon(365, 270, points, 0);
-            triangle.getFxShape().setFill(Color.LIGHTPINK);
-            triangle.getFxShape().setStroke(Color.BLUE);
-            shapeRef[0] = triangle;
+            trianglePolygon.addPoint(new Point2D(0, 0));
+            trianglePolygon.addPoint(new Point2D(60, 20));
+            trianglePolygon.addPoint(new Point2D(20, 60));
+            trianglePolygon.closePolygon();
+            
+            MyShape triangleDecorator = new BorderColorDecorator(
+                                new FillColorDecorator(trianglePolygon, Color.LIGHTBLUE),
+                                Color.BLUE);
 
-            controller.getModel().addShape(triangle);
-            controller.enableSelection(triangle);
+            controller.getModel().addShape(triangleDecorator);
+            controller.enableSelection(triangleDecorator);
+
+            shapeRef[0] = triangleDecorator;
         });
-        robot.interact(() -> {});
+
         robot.moveTo(shapeRef[0].getFxShape()).clickOn();
 
         robot.interact(() -> controller.mirrorHorizontally(new ActionEvent()));
@@ -1661,20 +1665,24 @@ public class PaintControllerTest {
     void testUndoMirrorHorizontally(FxRobot robot) throws Exception {
         MyShape[] shapeRef = new MyShape[1];
 
-        Platform.runLater(() -> {
-            List<Point2D> points = new ArrayList<>();
-            points.add(new Point2D(10, 10));
-            points.add(new Point2D(30, 10));
-            points.add(new Point2D(20, 30));
-            points.add(points.get(0));
+        robot.interact(() -> {
+            MyShape triangle = factoryManager.createShape(Shapes.POLYGON, 0, 0, 0, 0, 0);
+            
+            MyPolygon trianglePolygon = (MyPolygon) triangle;
 
-            MyPolygon triangle = new MyPolygon(365, 270, points, 0);
-            triangle.getFxShape().setFill(Color.LIGHTPINK);
-            triangle.getFxShape().setStroke(Color.BLUE);
-            shapeRef[0] = triangle;
+            trianglePolygon.addPoint(new Point2D(0, 0));
+            trianglePolygon.addPoint(new Point2D(60, 20));
+            trianglePolygon.addPoint(new Point2D(20, 60));
+            trianglePolygon.closePolygon();
+            
+            MyShape triangleDecorator = new BorderColorDecorator(
+                                new FillColorDecorator(trianglePolygon, Color.LIGHTBLUE),
+                                Color.BLUE);
 
-            controller.getModel().addShape(triangle);
-            controller.enableSelection(triangle);
+            controller.getModel().addShape(triangleDecorator);
+            controller.enableSelection(triangleDecorator);
+
+            shapeRef[0] = triangleDecorator;
         });
 
         robot.interact(() -> {});
@@ -1695,20 +1703,24 @@ public class PaintControllerTest {
     void testMirrorVertically(FxRobot robot) throws Exception {
         MyShape[] shapeRef = new MyShape[1];
 
-        Platform.runLater(() -> {
-            List<Point2D> points = new ArrayList<>();
-            points.add(new Point2D(10, 10));
-            points.add(new Point2D(30, 10));
-            points.add(new Point2D(20, 30));
-            points.add(points.get(0));
+        robot.interact(() -> {
+            MyShape triangle = factoryManager.createShape(Shapes.POLYGON, 0, 0, 0, 0, 0);
+            
+            MyPolygon trianglePolygon = (MyPolygon) triangle;
 
-            MyPolygon triangle = new MyPolygon(365, 270, points, 0);
-            triangle.getFxShape().setFill(Color.LIGHTPINK);
-            triangle.getFxShape().setStroke(Color.BLUE);
-            shapeRef[0] = triangle;
+            trianglePolygon.addPoint(new Point2D(0, 0));
+            trianglePolygon.addPoint(new Point2D(60, 20));
+            trianglePolygon.addPoint(new Point2D(20, 60));
+            trianglePolygon.closePolygon();
+            
+            MyShape triangleDecorator = new BorderColorDecorator(
+                                new FillColorDecorator(trianglePolygon, Color.LIGHTBLUE),
+                                Color.BLUE);
 
-            controller.getModel().addShape(triangle);
-            controller.enableSelection(triangle);
+            controller.getModel().addShape(triangleDecorator);
+            controller.enableSelection(triangleDecorator);
+
+            shapeRef[0] = triangleDecorator;
         });
 
         robot.interact(() -> {});
@@ -1727,20 +1739,24 @@ public class PaintControllerTest {
     void testUndoMirrorVertically(FxRobot robot) throws Exception {
         MyShape[] shapeRef = new MyShape[1];
 
-        Platform.runLater(() -> {
-            List<Point2D> points = new ArrayList<>();
-            points.add(new Point2D(10, 10));
-            points.add(new Point2D(30, 10));
-            points.add(new Point2D(20, 30));
-            points.add(points.get(0));
+        robot.interact(() -> {
+            MyShape triangle = factoryManager.createShape(Shapes.POLYGON, 0, 0, 0, 0, 0);
+            
+            MyPolygon trianglePolygon = (MyPolygon) triangle;
 
-            MyPolygon triangle = new MyPolygon(365, 270, points, 0);
-            triangle.getFxShape().setFill(Color.LIGHTPINK);
-            triangle.getFxShape().setStroke(Color.BLUE);
-            shapeRef[0] = triangle;
+            trianglePolygon.addPoint(new Point2D(0, 0));
+            trianglePolygon.addPoint(new Point2D(60, 20));
+            trianglePolygon.addPoint(new Point2D(20, 60));
+            trianglePolygon.closePolygon();
+            
+            MyShape triangleDecorator = new BorderColorDecorator(
+                                new FillColorDecorator(trianglePolygon, Color.LIGHTBLUE),
+                                Color.BLUE);
 
-            controller.getModel().addShape(triangle);
-            controller.enableSelection(triangle);
+            controller.getModel().addShape(triangleDecorator);
+            controller.enableSelection(triangleDecorator);
+
+            shapeRef[0] = triangleDecorator;
         });
 
         robot.interact(() -> {});
