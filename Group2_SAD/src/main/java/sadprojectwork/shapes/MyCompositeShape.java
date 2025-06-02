@@ -232,4 +232,18 @@ public class MyCompositeShape extends MyShape {
         return buffer.toString();
     }
     
+    @Override
+    public void mirrorHorizontally() {
+        for (MyShape shape : children) {
+            shape.mirrorHorizontally();
+        }
+    }
+
+    @Override
+    public void mirrorVertically() {
+        for (MyShape shape : children) {
+            shape.mirrorVertically();
+        }
+    }
+    
 }
