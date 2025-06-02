@@ -234,16 +234,40 @@ public class MyCompositeShape extends MyShape {
     
     @Override
     public void mirrorHorizontally() {
+        double centerX = startX + width / 2;
+
         for (MyShape shape : children) {
-            shape.mirrorHorizontally();
+            double shapeCenterX = shape.getStartX() + shape.getWidth() / 2;
+            double distanceFromCenter = shapeCenterX - centerX;
+
+            // Nuova posizione riflessa rispetto al centro del composite
+            double newShapeCenterX = centerX - distanceFromCenter;
+            double newStartX = newShapeCenterX - shape.getWidth() / 2;
+
+            shape.moveTo(newStartX, shape.getStartY());
+            shape.mirrorHorizontally(); // applica il flip interno
         }
+
+        calculateBounds(); // aggiorna le dimensioni
     }
 
     @Override
     public void mirrorVertically() {
+        double centerY = startY + height / 2;
+
         for (MyShape shape : children) {
-            shape.mirrorVertically();
+            double shapeCenterY = shape.getStartY() + shape.getHeight() / 2;
+            double distanceFromCenter = shapeCenterY - centerY;
+
+            // Nuova posizione riflessa rispetto al centro del composite
+            double newShapeCenterY = centerY - distanceFromCenter;
+            double newStartY = newShapeCenterY - shape.getHeight() / 2;
+
+            shape.moveTo(shape.getStartX(), newStartY);
+            shape.mirrorVertically(); // applica il flip interno
         }
+
+        calculateBounds(); // aggiorna le dimensioni
     }
     
 }
