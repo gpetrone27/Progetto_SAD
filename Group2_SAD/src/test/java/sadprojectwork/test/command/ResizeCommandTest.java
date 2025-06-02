@@ -1,3 +1,4 @@
+
 package sadprojectwork.test.command;
 
 import sadprojectwork.command.ResizeCommand;

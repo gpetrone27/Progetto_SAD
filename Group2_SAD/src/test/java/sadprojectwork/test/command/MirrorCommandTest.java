@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package sadprojectwork.test.command;
 
 import java.util.Arrays;
@@ -9,7 +6,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import sadprojectwork.command.MirrorCommand;
 import sadprojectwork.shapes.MyPolygon;
-import sadprojectwork.shapes.*;
 
 import java.util.List;
 import javafx.geometry.Point2D;
@@ -50,15 +46,15 @@ class MirrorCommandTest {
      */
     @Test
     void testHorizontalMirrorExecuteAndUndo() {
-        List<Point2D> originalPoints = List.copyOf(triangle.convertToPoint2D());
+        double originalScaleX = triangle.getFxShape().getScaleX();
 
         horizontalMirrorCommand.execute();
-        List<Point2D> mirroredOnce = List.copyOf(triangle.convertToPoint2D());
-        assertNotEquals(originalPoints, mirroredOnce, "Points should change after first mirroring!");
+        double newScaleX = triangle.getFxShape().getScaleX();
+        assertNotEquals(originalScaleX, newScaleX, "Scale should change after first mirror!");
 
         horizontalMirrorCommand.undo();
-        List<Point2D> restored = triangle.convertToPoint2D();
-        assertEquals(originalPoints, restored, "Points should return to original after undo (second mirror)!");
+        double restored = triangle.getFxShape().getScaleX();
+        assertEquals(originalScaleX, restored, "Scale should return to original after undo (second mirror)!");
     }
 
     /**
@@ -66,14 +62,14 @@ class MirrorCommandTest {
      */
     @Test
     void testVerticalMirrorExecuteAndUndo() {
-        List<Point2D> originalPoints = List.copyOf(triangle.convertToPoint2D());
+        double originalScaleY = triangle.getFxShape().getScaleY();
 
         verticalMirrorCommand.execute();
-        List<Point2D> mirroredOnce = List.copyOf(triangle.convertToPoint2D());
-        assertNotEquals(originalPoints, mirroredOnce, "Points should change after first mirroring!");
+        double newScaleY = triangle.getFxShape().getScaleY();
+        assertNotEquals(originalScaleY, newScaleY, "Scale should change after first mirror!");
 
         verticalMirrorCommand.undo();
-        List<Point2D> restored = triangle.convertToPoint2D();
-        assertEquals(originalPoints, restored, "Points should return to original after undo (second mirror)!");
+        double restored = triangle.getFxShape().getScaleY();
+        assertEquals(originalScaleY, restored, "Scale should return to original after undo (second mirror)!");
     }
 }

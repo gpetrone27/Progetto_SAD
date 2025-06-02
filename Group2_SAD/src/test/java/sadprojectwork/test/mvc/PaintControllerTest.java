@@ -1152,18 +1152,18 @@ public class PaintControllerTest {
 
         robot.interact(() -> {
             MyShape rectangle = factoryManager.createShape(Shapes.RECTANGLE, 385, 290, 30, 20, 0);
-            rectangle = new BorderColorDecorator(rectangle, Color.BLUE);
-            rectangle = new FillColorDecorator(rectangle, Color.LIGHTBLUE);
+            rectangle = new BorderColorDecorator(new FillColorDecorator(rectangle, Color.LIGHTBLUE), Color.LIGHTBLUE);
             
-            MyShape line = factoryManager.createShape(Shapes.LINE, 385, 290, 30, 20, 0);
+            MyShape line = factoryManager.createShape(Shapes.LINE, 385, 296, 30, 20, 0);
             line = new BorderColorDecorator(line, Color.RED);
             
             rectRef[0] = rectangle;
             lineRef[0] = line;
 
             controller.getModel().addShape(rectangle);
-            controller.getModel().addShape(line);
             controller.enableSelection(rectangle);
+            controller.getModel().addShape(line);
+            controller.enableSelection(line);
         });
 
         robot.moveTo(rectRef[0].getFxShape()).clickOn();
@@ -1191,16 +1191,16 @@ public class PaintControllerTest {
 
         robot.interact(() -> {
             MyShape rectangle = factoryManager.createShape(Shapes.RECTANGLE, 385, 290, 30, 20, 0);
-            rectangle = new BorderColorDecorator(rectangle, Color.PINK);
-            rectangle = new FillColorDecorator(rectangle, Color.LIGHTPINK);
+            rectangle = new BorderColorDecorator(new FillColorDecorator(rectangle, Color.LIGHTPINK), Color.LIGHTPINK);
             
-            MyShape line = factoryManager.createShape(Shapes.LINE, 385, 290, 30, 20, 0);
+            MyShape line = factoryManager.createShape(Shapes.LINE, 385, 296, 30, 20, 0);
             line = new BorderColorDecorator(line, Color.PURPLE);
             
             rectRef[0] = rectangle;
             lineRef[0] = line;
 
             controller.getModel().addShape(rectangle);
+            controller.enableSelection(rectangle);
             controller.getModel().addShape(line);
             controller.enableSelection(line);
         });

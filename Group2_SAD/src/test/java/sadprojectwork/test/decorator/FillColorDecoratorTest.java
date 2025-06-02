@@ -1,3 +1,4 @@
+
 package sadprojectwork.test.decorator;
 
 import sadprojectwork.decorator.FillColorDecorator;
