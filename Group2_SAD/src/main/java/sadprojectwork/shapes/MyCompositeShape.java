@@ -232,6 +232,12 @@ public class MyCompositeShape extends MyShape {
         return buffer.toString();
     }
     
+    /**
+     * Mirrors the composite shape horizontally with respect to its vertical center axis
+     * This operation reflects each child shape across the vertical axis that passes
+     * through the center of the composite's bounding box, and then applies a horizontal
+     * flip to maintain visual consistency (by inverting its internal X scale).
+     */
     @Override
     public void mirrorHorizontally() {
         double centerX = startX + width / 2;
@@ -240,17 +246,23 @@ public class MyCompositeShape extends MyShape {
             double shapeCenterX = shape.getStartX() + shape.getWidth() / 2;
             double distanceFromCenter = shapeCenterX - centerX;
 
-            // Nuova posizione riflessa rispetto al centro del composite
+            // New reflected position with respect to the centre of the composite
             double newShapeCenterX = centerX - distanceFromCenter;
             double newStartX = newShapeCenterX - shape.getWidth() / 2;
 
             shape.moveTo(newStartX, shape.getStartY());
-            shape.mirrorHorizontally(); // applica il flip interno
+            shape.mirrorHorizontally(); // applies the internal flip
         }
 
-        calculateBounds(); // aggiorna le dimensioni
+        calculateBounds(); // recalculates bounds
     }
-
+    
+    /**
+     * Mirrors the composite shape vertically with respect to its horizontal center axis
+     * This operation reflects each child shape across the horizontal axis that passes
+     * through the center of the composite's bounding box, and then applies a vertical
+     * flip to maintain visual consistency (by inverting its internal Y scale).
+     */
     @Override
     public void mirrorVertically() {
         double centerY = startY + height / 2;
@@ -259,15 +271,15 @@ public class MyCompositeShape extends MyShape {
             double shapeCenterY = shape.getStartY() + shape.getHeight() / 2;
             double distanceFromCenter = shapeCenterY - centerY;
 
-            // Nuova posizione riflessa rispetto al centro del composite
+            // New reflected position with respect to the centre of the composite            
             double newShapeCenterY = centerY - distanceFromCenter;
             double newStartY = newShapeCenterY - shape.getHeight() / 2;
 
             shape.moveTo(shape.getStartX(), newStartY);
-            shape.mirrorVertically(); // applica il flip interno
+            shape.mirrorVertically(); // applies the internal flip
         }
 
-        calculateBounds(); // aggiorna le dimensioni
+        calculateBounds(); // recalculates bounds
     }
     
 }
