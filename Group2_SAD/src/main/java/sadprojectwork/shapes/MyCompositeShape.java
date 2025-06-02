@@ -10,14 +10,34 @@ import javafx.scene.shape.Shape;
  */
 public class MyCompositeShape extends MyShape {
     
+    // List of children of the composite shape
     protected List<MyShape> children;
-
+    
+    // Rotation of the composite shape
+    double rotation;
+    
     public MyCompositeShape(double startX, double startY) {
         super(startX, startY);
         children  = new ArrayList<>();
         this.fxShape = null; // there is no fxShape
     }
       
+    private List<OriginalShapeInfo> basePositions = new ArrayList<>();
+    private boolean initialized = false;
+    
+    private static class OriginalShapeInfo {
+        
+        MyShape shape;
+        double startX;
+        double startY;
+        
+        OriginalShapeInfo(MyShape shape, double startX, double startY) {
+            this.shape = shape;
+            this.startX = startX;
+            this.startY = startY;
+        }
+    }
+    
     /**
      * Adds a shape to the composite and updates the bounding box
      * @param shape
@@ -49,6 +69,10 @@ public class MyCompositeShape extends MyShape {
      * Computes the bounding box of the composite shape based on its children.
      */
     private void calculateBounds() {
+        
+        basePositions.clear();
+        initialized = false;
+        
         if (children.isEmpty()) {
             startX = 0;
             startY = 0;
@@ -99,8 +123,8 @@ public class MyCompositeShape extends MyShape {
             return;
         }
 
-        double scaleX = newWidth / width;
-        double scaleY = newHeight / height;
+        double rScaleX = newWidth / width;
+        double rScaleY = newHeight / height;
 
         for (MyShape child : children) {
             // Child offset with respect to the composite fixed point
@@ -108,12 +132,12 @@ public class MyCompositeShape extends MyShape {
             double offsetY = child.getStartY() - startY;
 
             // Nuova posizione proporzionale
-            double newChildX = startX + offsetX * scaleX;
-            double newChildY = startY + offsetY * scaleY;
+            double newChildX = startX + offsetX * rScaleX;
+            double newChildY = startY + offsetY * rScaleY;
 
             // New proportional position
-            double newChildWidth = child.getWidth() * scaleX;
-            double newChildHeight = child.getHeight() * scaleY;
+            double newChildWidth = child.getWidth() * rScaleX;
+            double newChildHeight = child.getHeight() * rScaleY;
 
             // Resize and move the child
             child.resize(newChildWidth, newChildHeight);
@@ -195,41 +219,63 @@ public class MyCompositeShape extends MyShape {
     }
 
     /**
-     * Sets the rotation for all child shapes.
+     * Rotates the whole shape by computing the centroid vector rotation.
      * @param rotation the rotation angle in degrees
      */
     @Override
     public void setRotation(double rotation) {
-        for (MyShape shape : children) {
-            shape.setRotation(rotation);
+        
+        this.rotation = rotation;
+
+        if (!initialized) {
+            basePositions.clear();
+            for (MyShape shape : children) {
+                basePositions.add(new OriginalShapeInfo(shape, shape.getStartX(), shape.getStartY()));
+            }
+            initialized = true;
+        }
+        
+        // Center of the bounding box
+        double centerX = startX + width / 2;
+        double centerY = startY + height / 2;
+
+        double radians = Math.toRadians(rotation);
+
+        for (OriginalShapeInfo base : basePositions) {
+            
+            // Center
+            double shapeCenterX = base.startX + base.shape.getWidth() / 2;
+            double shapeCenterY = base.startY + base.shape.getHeight() / 2;
+
+            // Center vector
+            double dx = shapeCenterX - centerX;
+            double dy = shapeCenterY - centerY;
+
+            // Center vector rotation
+            double rotatedX = dx * Math.cos(radians) - dy * Math.sin(radians);
+            double rotatedY = dx * Math.sin(radians) + dy * Math.cos(radians);
+
+            // New center after rotation
+            double newCenterX = centerX + rotatedX;
+            double newCenterY = centerY + rotatedY;
+
+            // New starting position
+            double newStartX = newCenterX - base.shape.getWidth() / 2;
+            double newStartY = newCenterY - base.shape.getHeight() / 2;
+
+            base.shape.moveTo(newStartX, newStartY);
+            base.shape.setRotation(rotation);
+            
         }
     }
-  
+    
     /**
-     * Returns the rotation of the first child shape
-     * All children share the same rotation
+     * Returns the rotation of the composite shape.
      * @return the rotation angle in degrees
      */
     @Override
     public double getRotation() {
-        return children.get(0).getRotation();
-    }
-    
-    /**
-     * Exports the composite shape as a CSV string by concatenating child shapes
-     * @return the CSV representation of all child shapes
-     */    
-    @Override
-    public String toCSV() {
-        StringBuffer buffer = new StringBuffer();
-        for (MyShape shape : children) {
-            buffer.append(shape.toCSV()).append("\n");
-        }
-        
-        if (buffer.length() > 0) {
-            buffer.setLength(buffer.length() - 1); // removes the last '\n'
-        }
-        return buffer.toString();
+        return rotation;
     }
     
     /**
@@ -240,18 +286,21 @@ public class MyCompositeShape extends MyShape {
      */
     @Override
     public void mirrorHorizontally() {
+        
         double centerX = startX + width / 2;
 
         for (MyShape shape : children) {
+
             double shapeCenterX = shape.getStartX() + shape.getWidth() / 2;
-            double distanceFromCenter = shapeCenterX - centerX;
+            double dx = shapeCenterX - centerX;
 
             // New reflected position with respect to the centre of the composite
-            double newShapeCenterX = centerX - distanceFromCenter;
+            double newShapeCenterX = centerX - dx;
             double newStartX = newShapeCenterX - shape.getWidth() / 2;
 
             shape.moveTo(newStartX, shape.getStartY());
             shape.mirrorHorizontally(); // applies the internal flip
+            
         }
 
         calculateBounds(); // recalculates bounds
@@ -265,21 +314,43 @@ public class MyCompositeShape extends MyShape {
      */
     @Override
     public void mirrorVertically() {
+        
         double centerY = startY + height / 2;
 
         for (MyShape shape : children) {
+            
             double shapeCenterY = shape.getStartY() + shape.getHeight() / 2;
-            double distanceFromCenter = shapeCenterY - centerY;
+            double dy = shapeCenterY - centerY;
 
             // New reflected position with respect to the centre of the composite            
-            double newShapeCenterY = centerY - distanceFromCenter;
+            double newShapeCenterY = centerY - dy;
             double newStartY = newShapeCenterY - shape.getHeight() / 2;
 
             shape.moveTo(shape.getStartX(), newStartY);
             shape.mirrorVertically(); // applies the internal flip
+            
         }
 
         calculateBounds(); // recalculates bounds
+    }
+    
+    /**
+     * Exports the composite shape as a CSV string by concatenating child shapes
+     * @return the CSV representation of all child shapes
+     */    
+    @Override
+    public String toCSV() {
+        
+        StringBuffer buffer = new StringBuffer();
+        
+        for (MyShape shape : children) {
+            buffer.append(shape.toCSV()).append("\n");
+        }
+        if (buffer.length() > 0) {
+            buffer.setLength(buffer.length() - 1); // removes the last '\n'
+        }
+        
+        return buffer.toString();
     }
     
 }
