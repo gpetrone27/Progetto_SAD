@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package sadprojectwork.factory;
 
 import java.util.ArrayList;
@@ -11,11 +7,7 @@ import javafx.geometry.Point2D;
 import sadprojectwork.shapes.MyPolygon;
 import sadprojectwork.shapes.MyShape;
 
-/**
- *
- * @author gianl
- */
-public class PolygonFactory implements ShapeFactory{
+class PolygonFactory implements ShapeFactory{
     
     @Override
     public MyShape create(double x, double y, double width, double height, double rotation) {

@@ -1,9 +1,6 @@
 
 package sadprojectwork.command;
 
-import javafx.geometry.Bounds;
-import javafx.scene.shape.Shape;
-import javafx.scene.transform.Scale;
 import sadprojectwork.shapes.MyShape;
 
 /**

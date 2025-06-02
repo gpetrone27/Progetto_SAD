@@ -26,6 +26,7 @@ import sadprojectwork.factory.ShapeFactoryManager;
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
@@ -1376,20 +1377,39 @@ public class PaintController implements Initializable {
         }
     }
 
+    /**
+     * Groups the selected shapes into a single MyCompositeShape,
+     * preserving z-index order and updating the selection.
+     * @param event 
+     */
     @FXML
     private void groupSelected(ActionEvent event) {
         if(selectedShapes.size() > 1) {
+
+            // Sorts the shapes according to their z-index
+            List<MyShape> ordered = new ArrayList<>(selectedShapes);
+            ordered.sort(Comparator.comparingInt(shape -> model.getShapes().indexOf(shape)));
+            // Z-index of the first shape in the ordered list
+            int insertIndex = model.getShapes().indexOf(ordered.get(0));
+        
             MyCompositeShape group = new MyCompositeShape(0, 0);
-            for (MyShape shape : selectedShapes) {
+            for (MyShape shape : ordered) {
                 group.addShape(shape);
                 model.removeShape(shape);
             }    
-            model.addShape(group);
+        
+            // Adds the composite shape in the z-index 
+            model.getShapes().add(insertIndex, group);
             enableSelection(group);
             selectedShapes.setAll(group);
         }
     }
-
+    
+    /**
+    * Ungroups the selected MyCompositeShape, restoring its individual shapes
+    * to the model and updating the selection.
+    * @param event 
+    */
     @FXML
     private void ungroupSelected(ActionEvent event) {
         if (selectedShapes.size() == 1 && selectedShapes.get(0) instanceof MyCompositeShape group) {

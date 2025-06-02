@@ -28,13 +28,18 @@ public class ResizeCommand implements Command {
         this.newHeight = newHeight;
     }
 
-    // Executes the resize by applying the new dimensions to the shape
+
+    /**
+     * Resizes the shape to the new dimensions.
+     */
     @Override
     public void execute() {
         shape.resize(newWidth, newHeight);
     }
 
-    // Undoes the resize by restoring the previous dimensions
+    /**
+     * Restores the shape's previous dimensions.
+     */    
     @Override
     public void undo() {
         shape.resize(oldWidth, oldHeight);

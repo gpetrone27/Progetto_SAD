@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package sadprojectwork.factory;
 
 import java.util.HashMap;
@@ -10,10 +6,6 @@ import java.util.Map;
 import sadprojectwork.shapes.MyShape;
 import sadprojectwork.shapes.Shapes;
 
-/**
- *
- * @author gianl
- */
 public class ShapeFactoryManager {
 
     private final Map<Shapes, ShapeFactory> registry = new HashMap<>();
