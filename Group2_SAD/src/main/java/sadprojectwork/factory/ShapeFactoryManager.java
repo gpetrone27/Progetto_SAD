@@ -18,11 +18,11 @@ public class ShapeFactoryManager {
         registry.put(Shapes.TEXT, new TextFactory());
     }
 
-    public MyShape createShape(Shapes type, double x, double y, double width, double height, double rotation) {
+    public MyShape createShape(Shapes type, double x, double y, double width, double height, double rotation, boolean isMirroredH, boolean isMirroredV) {
         ShapeFactory factory = registry.get(type);
         if (factory == null) {
             throw new IllegalArgumentException("Nessuna factory registrata per: " + type);
         }
-        return factory.create(x, y, width, height, rotation);
+        return factory.create(x, y, width, height, rotation, isMirroredH, isMirroredV);
     }
 }

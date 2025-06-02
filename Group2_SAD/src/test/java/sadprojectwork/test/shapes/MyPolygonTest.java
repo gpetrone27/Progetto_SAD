@@ -24,9 +24,9 @@ public class MyPolygonTest {
         points.add(new Point2D(10, 10));
         points.add(new Point2D(20, 10));
         points.add(new Point2D(15, 20));
-        emptyPolygon = new MyPolygon(0, 0, null, 0);
+        emptyPolygon = new MyPolygon(0, 0, null, 0, false, false);
         // Polygon with three points,with width = 10 and height = 10
-        polygon = new MyPolygon(0, 0, points, 0);
+        polygon = new MyPolygon(0, 0, points, 0, false, false);
     }
     
     /**

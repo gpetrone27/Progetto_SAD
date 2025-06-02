@@ -23,7 +23,7 @@ import sadprojectwork.mvc.PaintModel;
 public class PaintModelTest {
 
     private PaintModel model = new PaintModel();
-    private AddShapeCommand addCmd = new AddShapeCommand(model, new MyLine(10, 20, 30, 40, 0));
+    private AddShapeCommand addCmd = new AddShapeCommand(model, new MyLine(10, 20, 30, 40, 0, false, false));
 
     public PaintModelTest() {
     }
@@ -88,7 +88,7 @@ public class PaintModelTest {
         // Create a decorated rectangle with fill and border color
         MyShape shape = new BorderColorDecorator(
                 new FillColorDecorator(
-                        new MyRectangle(10, 20, 100, 50, 0), Color.RED),
+                        new MyRectangle(10, 20, 100, 50, 0, false, false), Color.RED),
                 Color.BLUE);
 
         // Add the shape to the model

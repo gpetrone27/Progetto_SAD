@@ -19,8 +19,10 @@ public class MyEllipse extends MyShape {
      * @param width
      * @param height 
      * @param rotation 
+     * @param isMirroredH 
+     * @param isMirroredV 
      */
-    public MyEllipse(double startX, double startY, double width, double height, double rotation) {
+    public MyEllipse(double startX, double startY, double width, double height, double rotation, boolean isMirroredH, boolean isMirroredV) {
         
         // MyShape constructor
         super(startX, startY);
@@ -45,6 +47,8 @@ public class MyEllipse extends MyShape {
         ellipse.setStrokeWidth(3); // Temporary: set border width to 3
         this.fxShape = ellipse;
         setRotation(rotation);
+        if (isMirroredH) mirrorHorizontally();
+        if (isMirroredV) mirrorVertically();
     }
 
     /**
@@ -87,7 +91,7 @@ public class MyEllipse extends MyShape {
      */
     @Override
     public MyShape cloneShape() {
-        return new MyEllipse(startX, startY, getWidth(), getHeight(), ellipse.getRotate());
+        return new MyEllipse(startX, startY, getWidth(), getHeight(), ellipse.getRotate(), isMirroredHorizontally(), isMirroredVertically());
     }
 
     /**

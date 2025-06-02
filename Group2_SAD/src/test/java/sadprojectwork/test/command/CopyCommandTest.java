@@ -28,7 +28,7 @@ class CopyCommandTest {
     void setUp() {
         model = new PaintModel();
         
-        line = new MyLine(10, 20, 30, 40, 0);
+        line = new MyLine(10, 20, 30, 40, 0, false, false);
         line.getFxShape().setStroke(Color.VIOLET);
 
         command = new CopyCommand(model, line);

@@ -19,13 +19,17 @@ public class MyRectangle extends MyShape {
      * @param width
      * @param height 
      * @param rotation 
+     * @param isMirroredH 
+     * @param isMirroredV 
      */
-    public MyRectangle(double startX, double startY, double width, double height, double rotation) {
+    public MyRectangle(double startX, double startY, double width, double height, double rotation, boolean isMirroredH, boolean isMirroredV) {
         super(startX, startY);
         rectangle = new Rectangle(startX, startY, width, height);
         rectangle.setStrokeWidth(3); // Temporary: set border width to 3
         this.fxShape = rectangle;
         setRotation(rotation);
+        if (isMirroredH) mirrorHorizontally();
+        if (isMirroredV) mirrorVertically();
     }
 
     /**
@@ -78,7 +82,7 @@ public class MyRectangle extends MyShape {
      */
     @Override
     public MyShape cloneShape() {
-        return new MyRectangle(startX, startY, rectangle.getWidth(), rectangle.getHeight(), rectangle.getRotate());
+        return new MyRectangle(startX, startY, rectangle.getWidth(), rectangle.getHeight(), rectangle.getRotate(), isMirroredHorizontally(), isMirroredVertically());
     }
 
     /**

@@ -21,8 +21,10 @@ public class MyPolygon extends MyShape {
      * @param startY    The initial Y coordinate
      * @param points    The list of polygon points (can be null to start an empty polygon)
      * @param rotation  The initial rotation of the polygon
+     * @param isMirroredH
+     * @param isMirroredV
      */
-    public MyPolygon(double startX, double startY, List<Point2D> points, double rotation) {
+    public MyPolygon(double startX, double startY, List<Point2D> points, double rotation, boolean isMirroredH, boolean isMirroredV) {
         
         super(startX, startY);
         
@@ -35,6 +37,8 @@ public class MyPolygon extends MyShape {
         
         this.fxShape = polygon;
         setRotation(rotation);
+        if (isMirroredH) mirrorHorizontally();
+        if (isMirroredV) mirrorVertically();
     }
     
     /**
@@ -132,16 +136,16 @@ public class MyPolygon extends MyShape {
             return; // Avoid division by zero
         }
 
-        double scaleX = newWidth / currentWidth;
-        double scaleY = newHeight / currentHeight;
+        double rScaleX = newWidth / currentWidth;
+        double rScaleY = newHeight / currentHeight;
 
         // Scale points relative to top-left corner (minX, minY)
         for (int i = 0; i < points.size(); i += 2) {
             double x = points.get(i);
             double y = points.get(i + 1);
 
-            double newX = minX + (x - minX) * scaleX;
-            double newY = minY + (y - minY) * scaleY;
+            double newX = minX + (x - minX) * rScaleX;
+            double newY = minY + (y - minY) * rScaleY;
 
             points.set(i, newX);
             points.set(i + 1, newY);
@@ -158,7 +162,7 @@ public class MyPolygon extends MyShape {
      */
     @Override
     public MyShape cloneShape() {
-        return new MyPolygon(startX, startY, convertToPoint2D(), getRotation());
+        return new MyPolygon(startX, startY, convertToPoint2D(), getRotation(), isMirroredHorizontally(), isMirroredVertically());
     }
     
     /**
@@ -263,7 +267,7 @@ public class MyPolygon extends MyShape {
             pointsList.append("/");
         }
         pointsList.deleteCharAt(pointsList.length() - 1);
-        return Shapes.POLYGON + ";" + startX + ";" + startY + ";" + getWidth() + ";" + getHeight() + ";" + polygon.getFill() + ";" + polygon.getStroke() + ";" + polygon.getRotate() + ";" + pointsList + ";null;null;null";
+        return Shapes.POLYGON + ";" + startX + ";" + startY + ";" + getWidth() + ";" + getHeight() + ";" + polygon.getFill() + ";" + polygon.getStroke() + ";" + polygon.getRotate() + ";" + isMirroredHorizontally() + ";" + isMirroredVertically() + ";" + pointsList + ";null;null;null";
     }
 
 }

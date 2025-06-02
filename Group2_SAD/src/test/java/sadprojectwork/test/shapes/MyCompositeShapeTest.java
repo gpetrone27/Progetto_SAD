@@ -18,8 +18,8 @@ public class MyCompositeShapeTest {
     @BeforeEach
     public void setUp() {
         composite = new MyCompositeShape(0, 0);
-        shape1 = new MyRectangle(10, 10, 20, 20, 0);
-        shape2 = new MyEllipse(40, 40, 10, 10, 45);
+        shape1 = new MyRectangle(10, 10, 20, 20, 0, false, false);
+        shape2 = new MyEllipse(40, 40, 10, 10, 45, false, false);
     }
     
     /**

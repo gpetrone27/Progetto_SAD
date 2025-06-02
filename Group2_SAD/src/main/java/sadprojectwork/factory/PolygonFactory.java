@@ -10,10 +10,10 @@ import sadprojectwork.shapes.MyShape;
 class PolygonFactory implements ShapeFactory{
     
     @Override
-    public MyShape create(double x, double y, double width, double height, double rotation) {
+    public MyShape create(double x, double y, double width, double height, double rotation, boolean isMirroredH, boolean isMirroredV) {
         List<Point2D> points = new ArrayList<>();
         points.add(new Point2D(x, y));
-        return new MyPolygon(x, y, points, rotation);
+        return new MyPolygon(x, y, points, rotation, isMirroredH, isMirroredV);
     }
     
 }

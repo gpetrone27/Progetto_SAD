@@ -20,13 +20,17 @@ public class MyLine extends MyShape {
      * @param width
      * @param height 
      * @param rotation 
+     * @param isMirroredH 
+     * @param isMirroredV 
      */
-    public MyLine(double startX, double startY, double width, double height, double rotation) {
+    public MyLine(double startX, double startY, double width, double height, double rotation, boolean isMirroredH, boolean isMirroredV) {
         super(startX, startY);
         line = new Line(startX, startY, startX + width, startY + height);
         line.setStrokeWidth(3);
         this.fxShape = line;
         setRotation(rotation);
+        if (isMirroredH) mirrorHorizontally();
+        if (isMirroredV) mirrorVertically();
     }
 
     // Returns the JavaFX shape object to be added to the pane
@@ -89,7 +93,7 @@ public class MyLine extends MyShape {
      */
     @Override
     public MyShape cloneShape() {
-        return new MyLine(startX, startY, getWidth(), getHeight(), line.getRotate());
+        return new MyLine(startX, startY, getWidth(), getHeight(), line.getRotate(), isMirroredHorizontally(), isMirroredVertically());
     }
 
     /**
@@ -140,6 +144,6 @@ public class MyLine extends MyShape {
 
     @Override
     public String toCSV() {
-        return Shapes.LINE + ";" + startX + ";" + startY + ";" + getWidth() + ";" + getHeight() + ";" + fxShape.getStroke() + ";" + fxShape.getStroke() + ";" + fxShape.getRotate() + ";null;null;null;null";
+        return Shapes.LINE + ";" + startX + ";" + startY + ";" + getWidth() + ";" + getHeight() + ";" + fxShape.getStroke() + ";" + fxShape.getStroke() + ";" + fxShape.getRotate() + ";" + isMirroredHorizontally() + ";" + isMirroredVertically() + ";null;null;null;null";
     }
 }

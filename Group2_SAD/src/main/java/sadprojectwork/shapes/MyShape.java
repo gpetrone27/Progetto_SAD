@@ -20,6 +20,7 @@ public abstract class MyShape {
     protected double width;
     protected double height;
     
+    // Scale of the shape
     protected double scaleX = 1.0;
     protected double scaleY = 1.0;
     
@@ -89,10 +90,24 @@ public abstract class MyShape {
     public void setRotation (double rotation) {
         getFxShape().setRotate(rotation);
     }
+
+    /**
+     * Mirror horizontally by reversing the X scale.
+     */
+    public void mirrorHorizontally() {
+        applyScaleX(-1);
+    }
+
+    /**
+     * Mirror vertically by reversing the Y scale.
+     */
+    public void mirrorVertically() {
+        applyScaleY(-1);
+    }
     
     /**
-     * Applies a multiplicative factor to the current horizontal scale and updates the scaleX 
-     * property of the associated JavaFX node.
+     * Applies a multiplicative factor to the current horizontal scale and
+     * updates the scaleX property of the associated JavaFX node.
      * @param factor 
      */
     public void applyScaleX(double factor) {
@@ -101,8 +116,8 @@ public abstract class MyShape {
     }
 
     /**
-     * Applies a multiplicative factor to the current vertical scale and updates the scaleY 
-     * property of the associated JavaFX node.
+     * Applies a multiplicative factor to the current vertical scale and
+     * updates the scaleY property of the associated JavaFX node.
      * @param factor 
      */
     public void applyScaleY(double factor) {
@@ -125,27 +140,29 @@ public abstract class MyShape {
     public double getScaleY() {
         return scaleY;
     }
-
+    
     /**
-     * Mirror horizontally by reversing the X scale.
+     * Returns the state of the horizontal mirror.
+     * @return 
      */
-    public void mirrorHorizontally() {
-        applyScaleX(-1);
-    }
-
-    /**
-     * Mirror vertically by reversing the Y scale.
-     */
-    public void mirrorVertically() {
-        applyScaleY(-1);
+    public boolean isMirroredHorizontally() {
+        return fxShape.getScaleX() == -1.0;
     }
     
     /**
-     * Returns a String in CSV format containing all the shapes fields
+     * Returns the state of the vertical mirror.
+     * @return 
+     */
+    public boolean isMirroredVertically() {
+        return fxShape.getScaleY() == -1.0;
+    }
+    
+    /**
+     * Returns a String in CSV format containing all the shapes fields.
      * @return 
      */
     public String toCSV() {
-        return ";" + getStartX() + ";" + getStartY() + ";" + getWidth() + ";" + getHeight() + ";" + getFxShape().getFill() + ";" + getFxShape().getStroke() + ";" + getFxShape().getRotate() + ";null;null;null;null";
+        return ";" + getStartX() + ";" + getStartY() + ";" + getWidth() + ";" + getHeight() + ";" + getFxShape().getFill() + ";" + getFxShape().getStroke() + ";" + getFxShape().getRotate() + ";" + isMirroredHorizontally() + ";" + isMirroredVertically() + ";null;null;null;null";
     }
 
 }

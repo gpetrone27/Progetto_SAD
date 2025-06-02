@@ -13,12 +13,14 @@ public class MyText extends MyShape {
     // Strongly typed reference to wrapped FX shape
     private Text text;
     
-    public MyText(double startX, double startY, String displayText, String fontFamily, double size, double rotation) {
+    public MyText(double startX, double startY, String displayText, String fontFamily, double size, double rotation, boolean isMirroredH, boolean isMirroredV) {
         super(startX, startY);
         text = new Text(startX, startY, displayText);
         text.setFont(Font.font(fontFamily, size));
         this.fxShape = text;
         setRotation(rotation);
+        if (isMirroredH) mirrorHorizontally();
+        if (isMirroredV) mirrorVertically();
         
         width = getWidth();
         height = getHeight();
@@ -68,7 +70,7 @@ public class MyText extends MyShape {
     
     @Override
     public MyShape cloneShape() {
-        return new MyText(getStartX(), getStartY(), text.getText(), getFontFamily(), getSize(), text.getRotate());
+        return new MyText(getStartX(), getStartY(), text.getText(), getFontFamily(), getSize(), text.getRotate(), isMirroredHorizontally(), isMirroredVertically());
     }
 
     @Override
@@ -96,7 +98,7 @@ public class MyText extends MyShape {
     
     @Override
     public String toCSV() {
-        return Shapes.TEXT + ";" + startX + ";" + startY + ";" + getWidth() + ";" + getHeight() + ";" + getFxShape().getFill() + ";" + getFxShape().getStroke() + ";" + getFxShape().getRotate() + ";null;" + text.getText() + ";" + getFontFamily() + ";" + getSize();
+        return Shapes.TEXT + ";" + startX + ";" + startY + ";" + getWidth() + ";" + getHeight() + ";" + getFxShape().getFill() + ";" + getFxShape().getStroke() + ";" + getFxShape().getRotate() + ";" + isMirroredHorizontally() + ";" + isMirroredVertically() + ";null;" + text.getText() + ";" + getFontFamily() + ";" + getSize();
     }
     
     public String getText() {

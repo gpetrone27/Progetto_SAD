@@ -121,7 +121,7 @@ public class PaintModel {
      */
     public void saveDrawing(File file) {
         try (PrintWriter writer = new PrintWriter(file)) {
-            writer.println("SHAPE;STARTX;STARTY;WIDTH;HEIGHT;FILL;BORDER;ROTATION;POINTS;TEXT;FONT;SIZE");
+            writer.println("SHAPE;STARTX;STARTY;WIDTH;HEIGHT;FILL;BORDER;ROTATION;MIRRORH;MIRRORV;POINTS;TEXT;FONT;SIZE");
             for (MyShape shape : shapes) {
                 writer.println(shape.toCSV());
             }
@@ -152,22 +152,24 @@ public class PaintModel {
                 Color loadedFill = Color.valueOf(parts[5]);
                 Color loadedBorder = Color.valueOf(parts[6]);
                 double loadedRotation = Double.parseDouble(parts[7]);
+                boolean isMirroredHor = Boolean.parseBoolean(parts[8]);
+                boolean isMirroredVer = Boolean.parseBoolean(parts[9]);
                 switch (loadedMode) {
                     case LINE -> {
-                        BorderColorDecorator myLine = new BorderColorDecorator(new MyLine(loadedStartX, loadedStartY, loadedWidth, loadedHeight, loadedRotation), loadedBorder);
+                        BorderColorDecorator myLine = new BorderColorDecorator(new MyLine(loadedStartX, loadedStartY, loadedWidth, loadedHeight, loadedRotation, isMirroredHor, isMirroredVer), loadedBorder);
                         loadedShapes.add(myLine);
                     }
                     case RECTANGLE -> {
-                        BorderColorDecorator myRectangle = new BorderColorDecorator(new FillColorDecorator(new MyRectangle(loadedStartX, loadedStartY, loadedWidth, loadedHeight, loadedRotation), loadedFill), loadedBorder);
+                        BorderColorDecorator myRectangle = new BorderColorDecorator(new FillColorDecorator(new MyRectangle(loadedStartX, loadedStartY, loadedWidth, loadedHeight, loadedRotation, isMirroredHor, isMirroredVer), loadedFill), loadedBorder);
                         loadedShapes.add(myRectangle);
                     }
                     case ELLIPSE -> {
-                        BorderColorDecorator myEllipse = new BorderColorDecorator(new FillColorDecorator(new MyEllipse(loadedStartX, loadedStartY, loadedWidth, loadedHeight, loadedRotation), loadedFill), loadedBorder);
+                        BorderColorDecorator myEllipse = new BorderColorDecorator(new FillColorDecorator(new MyEllipse(loadedStartX, loadedStartY, loadedWidth, loadedHeight, loadedRotation, isMirroredHor, isMirroredVer), loadedFill), loadedBorder);
                         loadedShapes.add(myEllipse);
                     }
                     case POLYGON -> {
                         List<Point2D> points = new ArrayList<>();
-                        String listOfPoints = parts[8]; // "x1~y1/x2~y2/.../xn~yn"
+                        String listOfPoints = parts[10]; // "x1~y1/x2~y2/.../xn~yn"
                         // Parse listOfPoints: format "x1~y1/x2~y2/.../xn~yn"
                         if (!listOfPoints.equals("null")) {
                             String[] pointPairs = listOfPoints.split("/");
@@ -178,15 +180,15 @@ public class PaintModel {
                                 points.add(new Point2D(x, y));
                             }
                         }
-                        BorderColorDecorator myPolygon = new BorderColorDecorator(new FillColorDecorator(new MyPolygon(loadedStartX, loadedStartY, points, loadedRotation), loadedFill), loadedBorder);
+                        BorderColorDecorator myPolygon = new BorderColorDecorator(new FillColorDecorator(new MyPolygon(loadedStartX, loadedStartY, points, loadedRotation, isMirroredHor, isMirroredVer), loadedFill), loadedBorder);
                         loadedShapes.add(myPolygon);
                     }
                     case TEXT -> {
-                        String loadedText = parts[9];
-                        String loadedFont = parts[10];
+                        String loadedText = parts[11];
+                        String loadedFont = parts[12];
                         double loadedSize = 0;
-                        if (parts[11] != null) loadedSize = Double.parseDouble(parts[11]);
-                        BorderColorDecorator myText = new BorderColorDecorator(new FillColorDecorator(new MyText(loadedStartX, loadedStartY,  loadedText, loadedFont,loadedSize, loadedRotation), loadedFill), loadedBorder);
+                        if (parts[11] != null) loadedSize = Double.parseDouble(parts[13]);
+                        BorderColorDecorator myText = new BorderColorDecorator(new FillColorDecorator(new MyText(loadedStartX, loadedStartY,  loadedText, loadedFont,loadedSize, loadedRotation, isMirroredHor, isMirroredVer), loadedFill), loadedBorder);
                         loadedShapes.add(myText);
                     }
                 }

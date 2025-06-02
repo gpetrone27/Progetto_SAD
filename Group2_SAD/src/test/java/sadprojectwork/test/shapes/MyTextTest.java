@@ -12,7 +12,7 @@ public class MyTextTest {
     
     @BeforeEach
     public void setUp() {
-        text = new MyText(50, 100, "Hello world", "Arial", 16, 0);
+        text = new MyText(50, 100, "Hello world", "Arial", 16, 0, false, false);
     }
   
     /**
@@ -103,12 +103,14 @@ public class MyTextTest {
         assertEquals("50.0", csv[1]);
         assertEquals("100.0", csv[2]);
         assertEquals(Double.toString(text.getWidth()), csv[3]);
-        assertEquals(Double.toString(text.getHeight()), csv[4]);  
+        assertEquals(Double.toString(text.getHeight()), csv[4]);
         assertEquals("0.0", csv[7]);
-        assertEquals("null", csv[8]); 
-        assertEquals("Hello world", csv[9]);
-        assertEquals("Arial", csv[10]);
-        assertEquals("16.0", csv[11]);
+        assertEquals("false", csv[8]);
+        assertEquals("false", csv[9]);
+        assertEquals("null", csv[10]); 
+        assertEquals("Hello world", csv[11]);
+        assertEquals("Arial", csv[12]);
+        assertEquals("16.0", csv[13]);
     }
     
 }

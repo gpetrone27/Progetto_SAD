@@ -18,7 +18,7 @@ class MyLineTest {
     @BeforeEach
     void setUp() {
         // Initialize a line from (0,0) to (3,4) – length should be 5
-        line = new MyLine(0, 0, 3, 4, 0);
+        line = new MyLine(0, 0, 3, 4, 0, false, false);
     }
 
     @Test
@@ -46,7 +46,7 @@ class MyLineTest {
     @Test
     void testResize_fromZeroLength() {
         // If the original line has zero length, it should extend horizontally to the right
-        MyLine zeroLine = new MyLine(1, 1, 1, 1, 0);
+        MyLine zeroLine = new MyLine(1, 1, 1, 1, 0, false, false);
         zeroLine.resize(5, 0);
         Line fx = (Line) zeroLine.getFxShape();
         assertEquals(6.0, fx.getEndX());
@@ -99,19 +99,19 @@ class MyLineTest {
     
     @Test
     void testGetWidthPositiveDirection() {
-        MyLine line = new MyLine(10, 20, 30, 20, 0);
+        MyLine line = new MyLine(10, 20, 30, 20, 0, false, false);
         assertEquals(30.0, line.getWidth());
     }
     
     @Test
     void testGetHeightPositiveDirection() {
-        MyLine line = new MyLine(10, 20, 10, 50, 0);
+        MyLine line = new MyLine(10, 20, 10, 50, 0, false, false);
         assertEquals(50.0, line.getHeight());
     }
 
     @Test
     void testGetLengthDiagonalLine() {
-        MyLine line = new MyLine(0, 0, 3, 4, 0); 
+        MyLine line = new MyLine(0, 0, 3, 4, 0, false, false); 
         assertEquals(5.0, line.getLength());
     }
 

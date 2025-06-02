@@ -15,7 +15,7 @@ class RotationCommandTest {
     @BeforeEach
     void setUp() {
         // Inizializza un rettangolo qualsiasi
-        shape = new MyRectangle(100, 100, 50, 50, 0);
+        shape = new MyRectangle(100, 100, 50, 50, 0, false, false);
     }
 
     @Test

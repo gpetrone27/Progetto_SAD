@@ -24,7 +24,7 @@ class MoveCommandTest {
      */
     @BeforeEach
     void setUp() {
-        ellipse = new MyEllipse(10, 20, 30, 40, 0);
+        ellipse = new MyEllipse(10, 20, 30, 40, 0, false, false);
         ellipse.getFxShape().setFill(Color.GREEN);
         ellipse.getFxShape().setStroke(Color.DARKGRAY);
         

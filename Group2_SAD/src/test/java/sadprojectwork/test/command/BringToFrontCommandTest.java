@@ -29,15 +29,15 @@ class BringToFrontCommandTest {
     void setUp() {
         model = new PaintModel();
         
-        rectangle = new MyRectangle(0, 0, 10, 10, 0);
+        rectangle = new MyRectangle(0, 0, 10, 10, 0, false, false);
         rectangle.getFxShape().setFill(Color.GREEN);
         rectangle.getFxShape().setStroke(Color.YELLOW);
         
-        ellipse = new MyEllipse(20, 20, 10, 10, 0);
+        ellipse = new MyEllipse(20, 20, 10, 10, 0, false, false);
         ellipse.getFxShape().setFill(Color.BEIGE);
         ellipse.getFxShape().setStroke(Color.BROWN);
         
-        secondRect = new MyRectangle(40, 40, 10, 10, 0);
+        secondRect = new MyRectangle(40, 40, 10, 10, 0, false, false);
         secondRect.getFxShape().setFill(Color.RED);
         secondRect.getFxShape().setStroke(Color.GREY);
 

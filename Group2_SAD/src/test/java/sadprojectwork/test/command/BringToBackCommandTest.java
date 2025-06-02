@@ -30,15 +30,15 @@ class BringToBackCommandTest {
     void setUp() {
         model = new PaintModel();
         
-        rectangle = new MyRectangle(0, 0, 10, 10, 0);
+        rectangle = new MyRectangle(0, 0, 10, 10, 0, false, false);
         rectangle.getFxShape().setFill(Color.GREEN);
         rectangle.getFxShape().setStroke(Color.YELLOW);
         
-        ellipse = new MyEllipse(20, 20, 10, 10, 0);
+        ellipse = new MyEllipse(20, 20, 10, 10, 0, false, false);
         ellipse.getFxShape().setFill(Color.PINK);
         ellipse.getFxShape().setStroke(Color.PURPLE);
         
-        secondEllipse = new MyEllipse(40, 40, 10, 10, 0);
+        secondEllipse = new MyEllipse(40, 40, 10, 10, 0, false, false);
         secondEllipse.getFxShape().setFill(Color.GREEN);
         secondEllipse.getFxShape().setStroke(Color.LIGHTBLUE);
 

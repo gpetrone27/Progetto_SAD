@@ -17,7 +17,7 @@ class MyEllipseTest {
     // Set up a default ellipse with top-left point in (50, 50) with width=30 and height=20
     @BeforeEach
     void setUp() {
-        ellipse = new MyEllipse(50, 50, 30, 20, 0);
+        ellipse = new MyEllipse(50, 50, 30, 20, 0, false, false);
     }
 
     // Verify that getFxShape returns a valid Ellipse with the correct initial values
@@ -117,7 +117,7 @@ class MyEllipseTest {
         String csv = ellipse.toCSV();
         String[] parts = csv.split(";");
 
-        assertEquals(12, parts.length);
+        assertEquals(14, parts.length);
 
         Color fill = Color.valueOf(parts[5]);
         Color stroke = Color.valueOf(parts[6]);

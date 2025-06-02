@@ -28,7 +28,7 @@ public class PasteCommandTest {
     public void setUp() {
         model = new PaintModel();
         
-        rectangle = new MyRectangle(10, 10, 20, 20, 0);
+        rectangle = new MyRectangle(10, 10, 20, 20, 0, false, false);
         rectangle.getFxShape().setFill(Color.TURQUOISE);
         
         model.setClipboard(rectangle);

@@ -34,7 +34,7 @@ class MirrorCommandTest {
         new Point2D(30, 10)
         );
         
-        triangle = new MyPolygon(0, 0, points, 0);
+        triangle = new MyPolygon(0, 0, points, 0, false, false);
 
         horizontalMirrorCommand = new MirrorCommand(triangle, true);
         verticalMirrorCommand = new MirrorCommand(triangle, false);
