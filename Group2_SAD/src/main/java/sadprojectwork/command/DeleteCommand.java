@@ -15,26 +15,26 @@ public class DeleteCommand implements Command {
     private MyShape shapeToDelete;
 
     /**
-    * Creates a delete command.
-    * @param model: data model
-    * @param shapeToDelete: shape to delete
-    */
+     * Creates a delete command.
+     * @param model: data model
+     * @param shapeToDelete: shape to delete
+     */
     public DeleteCommand(PaintModel model, MyShape shapeToDelete) {
         this.model = model;
         this.shapeToDelete = shapeToDelete;
     }
 
     /**
-    * Removes the shape from the canvas and from the model.
-    */
+     * Removes the shape from the canvas and from the model.
+     */
     @Override
     public void execute() {
         model.removeShape(shapeToDelete);
     }
 
     /**
-    * Undoes the delete, reinsering the shape into the model.
-    */
+     * Undoes the delete, reinsering the shape into the model.
+     */
     @Override
     public void undo() {
         model.addShape(shapeToDelete);

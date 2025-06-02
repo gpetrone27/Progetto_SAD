@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.shape.Shape;
 
+/**
+ * A composite shape that groups multiple MyShape instances into a single logical unit.
+ */
 public class MyCompositeShape extends MyShape {
     
     protected List<MyShape> children;
@@ -14,21 +17,37 @@ public class MyCompositeShape extends MyShape {
         children  = new ArrayList<>();
         this.fxShape = null; // there is no fxShape
     }
-    
+      
+    /**
+     * Adds a shape to the composite and updates the bounding box
+     * @param shape
+     */
     public void addShape(MyShape shape) {
         children.add(shape);
         calculateBounds();
     }
-        
+ 
+    /**
+     * Removes a shape to the composite and updates the bounding box
+     * @param shape
+     */
     public void removeShape(MyShape shape) {
         children.remove(shape);
         calculateBounds();
     }
     
+    /**
+     * Returns the list of child shapes in this composite
+     * @return a list of children
+     */
     public List<MyShape> getShapes() {
         return children; 
     }
+  
     
+    /**
+     * Computes the bounding box of the composite shape based on its children.
+     */
     private void calculateBounds() {
         if (children.isEmpty()) {
             startX = 0;
@@ -60,10 +79,18 @@ public class MyCompositeShape extends MyShape {
         return children.isEmpty();
     }
     
+    /**
+     * Clears all child shapes from this composite.
+     */
     public void clear() {
         children.clear();
     }
 
+    /**
+     * Resizes the composite shape by proportionally resizing and repositioning all children
+     * @param newWidth the new width of the composite
+     * @param newHeight the new height of the composite
+     */
     @Override
     public void resize(double newWidth, double newHeight) {
         // Avoids division by zero
@@ -100,7 +127,11 @@ public class MyCompositeShape extends MyShape {
     public Shape getFxShape() {
         throw new UnsupportedOperationException("Composite shape has no single JavaFX Shape. Use getChildren() to access individual shapes.");
     }
-
+   
+    /**
+     * Creates a deep copy of the composite shape, including clones of all child shapes
+     * @return the cloned composite shape
+     */
     @Override
     public MyShape cloneShape() {
         MyCompositeShape clone = new MyCompositeShape(startX, startY);
@@ -111,6 +142,11 @@ public class MyCompositeShape extends MyShape {
         return clone;
     }
     
+    /**
+     * Moves the composite shape to a new position by moving all child shapes accordingly
+     * @param x the new X position
+     * @param y the new Y position
+     */    
     @Override
     public void moveTo(double x, double y) {
         double dx = x - startX;
@@ -122,39 +158,67 @@ public class MyCompositeShape extends MyShape {
         this.startY = y;
     }
 
+    /**
+     * Returns the X coordinate of the top-left corner of the composite
+     * @return the X position
+     */
     @Override
     public double getStartX() {
         return startX;
     }
 
+    /**
+     * Returns the Y coordinate of the top-left corner of the composite
+     * @return the Y position
+     */
     @Override
     public double getStartY() {
         return startY;
     }
 
+    /**
+     * Returns the width of the composite bounding box
+     * @return the width
+     */
     @Override
     public double getWidth() {
         return width;
     }
-
+    
+    /**
+     * Returns the height of the composite bounding box
+     * @return the height
+     */
     @Override
     public double getHeight() {
         return height;
     }
 
-    
+    /**
+     * Sets the rotation for all child shapes.
+     * @param rotation the rotation angle in degrees
+     */
     @Override
     public void setRotation(double rotation) {
         for (MyShape shape : children) {
             shape.setRotation(rotation);
         }
     }
-    
+  
+    /**
+     * Returns the rotation of the first child shape
+     * All children share the same rotation
+     * @return the rotation angle in degrees
+     */
     @Override
     public double getRotation() {
         return children.get(0).getRotation();
     }
     
+    /**
+     * Exports the composite shape as a CSV string by concatenating child shapes
+     * @return the CSV representation of all child shapes
+     */    
     @Override
     public String toCSV() {
         StringBuffer buffer = new StringBuffer();

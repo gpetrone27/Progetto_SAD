@@ -16,18 +16,18 @@ public class CutCommand implements Command {
     private MyShape shapeToCut;
     
     /**
-    * Creates a cut command.
-    * @param model: data model that contains the clipboard
-    * @param shapeToCut: shape to cut
-    */
+     * Creates a cut command.
+     * @param model: data model that contains the clipboard
+     * @param shapeToCut: shape to cut
+     */
     public CutCommand(PaintModel model, MyShape shapeToCut){
         this.model = model;
         this.shapeToCut = shapeToCut;
     } 
 
     /**
-    * Removes the selected shape from the model and saves it to the clipboard. 
-    */
+     * Removes the selected shape from the model and saves it to the clipboard. 
+     */
     @Override
     public void execute() {
         model.setClipboard(shapeToCut.cloneShape());
@@ -35,8 +35,8 @@ public class CutCommand implements Command {
     }
 
     /**
-    * Undoes the cut, emptying the clipboard. 
-    */
+     * Undoes the cut, emptying the clipboard. 
+     */
     @Override
     public void undo() {
        model.addShape(shapeToCut);

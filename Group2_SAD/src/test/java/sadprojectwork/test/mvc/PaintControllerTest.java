@@ -21,6 +21,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Slider;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -34,6 +35,7 @@ import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 import org.testfx.api.FxRobot;
 import sadprojectwork.mvc.PaintController;
+import sadprojectwork.shapes.MyCompositeShape;
 import sadprojectwork.shapes.MyPolygon;
 import sadprojectwork.shapes.MyText;
 import sadprojectwork.shapes.Shapes;
@@ -1767,5 +1769,116 @@ public class PaintControllerTest {
         assertTrue(shapeRef[0].getScaleY() > 0, "Undo must restore scaleY positive!");
     }
     
+    /**
+     * Tests that clicking the "Group" menu item groups selected shapes into a MyCompositeShape.
+     * @param robot TestFX robot to simulate user interactions.
+     */
+    @Test
+    void testGroupMenuItemCreatesCompositeShape(FxRobot robot) {
+        MyShape[] shape1Ref = new MyShape[1];
+        MyShape[] shape2Ref = new MyShape[1];
+
+        robot.interact(() -> {
+            MyShape rect = factoryManager.createShape(Shapes.RECTANGLE, 100, 100, 50, 50, 0);
+            MyShape ellipse = factoryManager.createShape(Shapes.ELLIPSE, 200, 100, 60, 60, 0);
+
+            controller.getModel().addShape(rect);
+            controller.getModel().addShape(ellipse);
+
+            controller.enableSelection(rect);
+            controller.enableSelection(ellipse);
+
+            shape1Ref[0] = rect;
+            shape2Ref[0] = ellipse;
+        });
+
+        // Select the shapes
+        robot.moveTo(shape1Ref[0].getFxShape()).clickOn();
+        robot.press(KeyCode.CONTROL);
+        robot.moveTo(shape2Ref[0].getFxShape()).clickOn();
+        robot.release(KeyCode.CONTROL);
+        robot.moveTo(shape1Ref[0].getFxShape()).clickOn(MouseButton.SECONDARY);
+        robot.clickOn("#groupMenuItem");
+
+        // Verifies that a MyCompositeShape is created
+        List<MyShape> shapes = controller.getModel().getShapes();
+        long compositeCount = shapes.stream().filter(s -> s instanceof MyCompositeShape).count();
+        assertEquals(1, compositeCount, "A single composite shape should be created");
+
+        // Checks that the original shapes are contained in the composite
+        MyCompositeShape group = (MyCompositeShape) shapes.stream()
+                .filter(s -> s instanceof MyCompositeShape)
+                .findFirst()
+                .orElse(null);
+
+        assertNotNull(group, "Grouped shape must not be null");
+        assertTrue(group.getShapes().contains(shape1Ref[0]), "Group must contain the first shape");
+        assertTrue(group.getShapes().contains(shape2Ref[0]), "Group must contain the second shape");
+
+        // Verify that the original shapes have been removed from the model
+        assertFalse(controller.getModel().getShapes().contains(shape1Ref[0]), "Original shape 1 must be removed from model");
+        assertFalse(controller.getModel().getShapes().contains(shape2Ref[0]), "Original shape 2 must be removed from model");
+
+    }
+    
+    /**
+     * Tests that right-clicking on a grouped shape and selecting "Ungroup" unpacks the composite shape,
+     * restoring the original individual shapes into the model.
+     * @param robot TestFX robot to simulate user interactions.
+     */
+    @Test
+    void testUngroupCompositeShape(FxRobot robot) {
+        MyShape[] shape1Ref = new MyShape[1];
+        MyShape[] shape2Ref = new MyShape[1];
+        MyCompositeShape[] compositeRef = new MyCompositeShape[1];
+
+        // Create two shapes and add them to the model
+        robot.interact(() -> {
+            MyShape rect = factoryManager.createShape(Shapes.RECTANGLE, 100, 100, 50, 50, 0);
+            MyShape ellipse = factoryManager.createShape(Shapes.ELLIPSE, 200, 100, 60, 60, 0);
+
+            controller.getModel().addShape(rect);
+            controller.getModel().addShape(ellipse);
+
+            controller.enableSelection(rect);
+            controller.enableSelection(ellipse);
+
+            shape1Ref[0] = rect;
+            shape2Ref[0] = ellipse;
+        });
+
+        // Select both shapes with Ctrl+click
+        robot.moveTo(shape1Ref[0].getFxShape()).clickOn();
+        robot.press(KeyCode.CONTROL);
+        robot.moveTo(shape2Ref[0].getFxShape()).clickOn();
+        robot.release(KeyCode.CONTROL);
+
+        // Right-click on one shape and click the "Group" menu item
+        robot.moveTo(shape1Ref[0].getFxShape()).clickOn(MouseButton.SECONDARY);
+        robot.clickOn("#groupMenuItem");
+
+        // Retrieve the created composite shape
+        robot.interact(() -> {
+            compositeRef[0] = (MyCompositeShape) controller.getModel().getShapes()
+                    .stream()
+                    .filter(s -> s instanceof MyCompositeShape)
+                    .findFirst()
+                    .orElse(null);
+        });
+
+        assertNotNull(compositeRef[0], "Composite shape must exist after grouping");
+
+        // Right-click on the composite and click "Ungroup"
+        robot.moveTo(shape1Ref[0].getFxShape()).clickOn(MouseButton.SECONDARY);
+        robot.clickOn("#ungroupMenuItem");
+
+        // Ensure the composite shape has been removed from the model
+        assertFalse(controller.getModel().getShapes().contains(compositeRef[0]), "Composite shape must be removed after ungroup");
+
+        // Ensure the original shapes are back in the model
+        assertTrue(controller.getModel().getShapes().contains(shape1Ref[0]), "Shape 1 must be restored in the model");
+        assertTrue(controller.getModel().getShapes().contains(shape2Ref[0]), "Shape 2 must be restored in the model");
+    }
+
 }
 

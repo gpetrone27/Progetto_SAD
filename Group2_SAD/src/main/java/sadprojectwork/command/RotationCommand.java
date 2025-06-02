@@ -15,10 +15,10 @@ public class RotationCommand implements Command {
     private final double newRotation;
     
     /**
-    * Creates a rotation command.
-    * @param shape: shape to rotate
-    * @param oldRotation: original rotation of the shape
-    * @param newRotation: new rotation after the execution command 
+     * Creates a rotation command.
+     * @param shape: shape to rotate
+     * @param oldRotation: original rotation of the shape
+     * @param newRotation: new rotation after the execution command 
     */
     public RotationCommand(MyShape shape, double oldRotation, double newRotation) {
         this.shape = shape;
@@ -27,7 +27,7 @@ public class RotationCommand implements Command {
     }
     
     /**
-    * Sets the shape's rotation to the new value.
+     * Sets the shape's rotation to the new value.
     */
     @Override
     public void execute() {
@@ -35,7 +35,7 @@ public class RotationCommand implements Command {
     }
 
     /**
-    * Restores the shape's previous rotation.
+     * Restores the shape's previous rotation.
     */    
     @Override
     public void undo() {

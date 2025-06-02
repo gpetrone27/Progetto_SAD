@@ -5,10 +5,6 @@ import org.junit.jupiter.api.Test;
 import sadprojectwork.shapes.MyText;
 import static org.junit.jupiter.api.Assertions.*;
 
-/**
- *
- * @author david
- */
 public class MyTextTest {
     
     MyText text;
