@@ -37,6 +37,10 @@ public class MyRectangle extends MyShape {
     @Override
     public void resize(double newWidth, double newHeight) {
         
+        if (newWidth == 0 || newHeight == 0) {
+            return;
+        }
+        
         // Checks if width is negative
         if (newWidth < 0) {
             rectangle.setX(startX + newWidth);

@@ -56,8 +56,14 @@ public class MyEllipse extends MyShape {
      */
     @Override
     public void resize(double newWidth, double newHeight) {
+        
+        if (newWidth == 0 || newHeight == 0) {
+            return;
+        }
+        
         double centerX = startX + newWidth / 2.0;
         double centerY = startY + newHeight / 2.0;
+        
         ellipse.setCenterX(centerX);
         ellipse.setCenterY(centerY);
         ellipse.setRadiusX(Math.abs(newWidth / 2.0));

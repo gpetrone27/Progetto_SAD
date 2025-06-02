@@ -117,12 +117,11 @@ public class MyCompositeShape extends MyShape {
      */
     @Override
     public void resize(double newWidth, double newHeight) {
-        // Avoids division by zero
-        if (width == 0 || height == 0) {
-            // If current sizes are zero, do not resize
+
+        if (newWidth == 0 || newHeight == 0) {
             return;
         }
-
+        
         double rScaleX = newWidth / width;
         double rScaleY = newHeight / height;
 

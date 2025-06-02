@@ -104,6 +104,10 @@ public class MyPolygon extends MyShape {
     @Override
     public void resize(double newWidth, double newHeight) {
         
+        if (newWidth == 0 || newHeight == 0) {
+            return;
+        }
+        
         List<Double> points = polygon.getPoints();
 
         // Find current bounds
