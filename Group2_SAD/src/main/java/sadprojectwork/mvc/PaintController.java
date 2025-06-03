@@ -340,8 +340,8 @@ public class PaintController implements Initializable {
         backMenuItem.disableProperty().bind(selectedBinding);
         mirrorHorMenuItem.disableProperty().bind(selectedBinding);
         mirrorVerMenuItem.disableProperty().bind(selectedBinding);
-        groupMenuItem.disableProperty().bind(selectedBinding);
-        ungroupMenuItem.disableProperty().bind(selectedBinding);
+        groupMenuItem.disableProperty().bind(exactlyOneSelectedBinding.not());
+        ungroupMenuItem.disableProperty().bind(exactlyOneSelectedBinding);
 
         // Hides the side panel if no shape is selected
         sidePanel.visibleProperty().bind(selectedBinding.not());
@@ -673,7 +673,7 @@ public class PaintController implements Initializable {
         if (shape instanceof MyCompositeShape cs) {
             for (MyShape s : cs.getShapes()) {
                 s.getFxShape().setOnMouseClicked(event -> {
-                    if (modeProperty.get() == Shapes.CURSOR && event.getButton() != MouseButton.SECONDARY) {
+                    if (modeProperty.get() == Shapes.CURSOR) {
                         selectedShapes.setAll(cs);
                         highlightSelected();
                     }
@@ -683,31 +683,33 @@ public class PaintController implements Initializable {
         }
         else {
             shape.getFxShape().setOnMouseClicked(event -> {
-                if (modeProperty.get() == Shapes.CURSOR && event.getButton() != MouseButton.SECONDARY) {
-                    
-                    // Checks if a group is selected
-                    boolean containsGroup = false;
-                    for (MyShape s : selectedShapes) {
-                        if (s instanceof MyCompositeShape) {
-                            containsGroup = true;
+                if (modeProperty.get() == Shapes.CURSOR) {
+                    if (event.getButton() != MouseButton.SECONDARY || selectedShapes.size() <= 1) {
+                        
+                        // Checks if a group is selected
+                        boolean containsGroup = false;
+                        for (MyShape s : selectedShapes) {
+                            if (s instanceof MyCompositeShape) {
+                                containsGroup = true;
+                            }
                         }
-                    }
-                    
-                    if (!containsGroup) {
-                        if (event.isControlDown()) {
-                            if (selectedShapes.contains(shape)) {
-                                selectedShapes.remove(shape);
+
+                        if (!containsGroup) {
+                            if (event.isControlDown()) {
+                                if (selectedShapes.contains(shape)) {
+                                    selectedShapes.remove(shape);
+                                }
+                                else {
+                                    selectedShapes.add(shape);
+                                }
                             }
                             else {
-                                selectedShapes.add(shape);
-                            }
+                                selectedShapes.setAll(shape);
+                            }  
                         }
                         else {
                             selectedShapes.setAll(shape);
-                        }  
-                    }
-                    else {
-                        selectedShapes.setAll(shape);
+                        }
                     }
                     highlightSelected();  
                 }
@@ -1281,13 +1283,14 @@ public class PaintController implements Initializable {
     @FXML
     private void ungroupSelected(ActionEvent event) {
         if (selectedShapes.size() == 1 && selectedShapes.get(0) instanceof MyCompositeShape group) {
+            selectedShapes.clear();
             model.removeShape(group);
             for (MyShape shape : group.getShapes()) {
                 model.addShape(shape);
                 enableSelection(shape);
+                selectedShapes.add(shape);
             }
             group.clear();
-            selectedShapes.clear();
         }
     }
 
