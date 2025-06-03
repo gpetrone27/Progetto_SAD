@@ -37,12 +37,10 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Point2D;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
@@ -79,6 +77,9 @@ public class PaintController implements Initializable {
     // PaintModel reference
     private PaintModel model = new PaintModel();
 
+    // PaintHelper reference
+    private PaintHelper helper;
+    
     // Colors variables
     private Color borderHex = Color.BLACK;
     private Color fillHex = Color.TRANSPARENT;
@@ -97,21 +98,12 @@ public class PaintController implements Initializable {
     // First point of the polygon
     Circle firstPoint;
     
-    // Navigation: Grid
-    private boolean gridActived = false;
-    private double gridCellsSize = 10;
-    
     // Navigation: Zoom
     private double zoomBase = 1.0;
     private final double zoomStep = 0.25;
     private final double zoomMaxValue = 4.0;
     private final double zoomMinValue = 0.5;
     private Scale canvasScale = new Scale(1.0, 1.0, 0, 0);
-    
-    // Text
-    private String displayText = "";
-    private String fontFamily = "Arial";
-    private double textSize = 24;
     
     // Rotation
     private List<Double> initialRotations = new ArrayList<>();
@@ -222,17 +214,20 @@ public class PaintController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        initButtonActions();
+        
+        model = new PaintModel();
+        helper = new PaintHelper(model, canvas, gridSizeSlider);
+        
+        initButtons();
         initBindings();
         initListeners();
-        initButtonIcons();
         initCanvasEvents();
     }
 
     /**
      * Initializes the actions of the buttons of the application.
      */
-    private void initButtonActions() {
+    private void initButtons() {
         
         // Sets the user data of shapes buttons
         cursorButton.setUserData(Shapes.CURSOR);
@@ -251,6 +246,72 @@ public class PaintController implements Initializable {
         sizeComboBox.getItems().addAll("8", "10", "12", "14", "16", "18", "24", "36", "48", "72");
         sizeComboBox.setValue("24");
         sizeComboBoxSide.getItems().addAll("8", "10", "12", "14", "16", "18", "24", "36", "48", "72");
+        
+        // Cursor button
+        FontIcon cursorIcon = new FontIcon("fas-mouse-pointer");
+        cursorIcon.setIconSize(28);
+        cursorIcon.setIconColor(Color.BLACK);
+        cursorButton.setGraphic(cursorIcon);
+        
+        // Line button
+        FontIcon lineIcon = new FontIcon("fas-slash");
+        lineIcon.setIconSize(20);
+        lineIcon.setIconColor(Color.BLACK);
+        lineButton.setGraphic(lineIcon);
+        
+        // Rectangle button
+        FontIcon rectangleIcon = new FontIcon("far-square");
+        rectangleIcon.setIconSize(20);
+        rectangleIcon.setIconColor(Color.BLACK);
+        rectangleButton.setGraphic(rectangleIcon);
+        
+        // Ellipse button
+        FontIcon ellipseIcon = new FontIcon("far-circle");
+        ellipseIcon.setIconSize(20);
+        ellipseIcon.setIconColor(Color.BLACK);
+        ellipseButton.setGraphic(ellipseIcon);
+        
+        // Polygon button
+        FontIcon polygonIcon = new FontIcon("fas-draw-polygon"); // or "bi-pencil-square"
+        polygonIcon.setIconSize(20);
+        polygonIcon.setIconColor(Color.BLACK);
+        polygonButton.setGraphic(polygonIcon);
+        
+        // Grid button
+        FontIcon gridIcon = new FontIcon("bi-grid-3x3");
+        gridIcon.setIconSize(24);
+        gridIcon.setIconColor(Color.BLACK);
+        gridButton.setGraphic(gridIcon);
+        
+        // Zoom in button
+        FontIcon zoomInIcon = new FontIcon("bi-zoom-in");
+        zoomInIcon.setIconSize(16);
+        zoomInIcon.setIconColor(Color.BLACK);
+        zoomInButton.setGraphic(zoomInIcon);
+        
+        // Zoom out button
+        FontIcon zoomOutIcon = new FontIcon("bi-zoom-out");
+        zoomOutIcon.setIconSize(16);
+        zoomOutIcon.setIconColor(Color.BLACK);
+        zoomOutButton.setGraphic(zoomOutIcon);
+        
+        // No Fill button
+        FontIcon noFillIcon = new FontIcon("fas-ban");
+        noFillIcon.setIconSize(16);
+        noFillIcon.setIconColor(Color.RED);
+        noFillButton.setGraphic(noFillIcon);
+
+        // No Fill Panel button
+        FontIcon noFillPanelIcon = new FontIcon("fas-ban");
+        noFillPanelIcon.setIconSize(16);
+        noFillPanelIcon.setIconColor(Color.RED);
+        noFillButtonPanel.setGraphic(noFillPanelIcon);
+        
+        // Text button
+        FontIcon textIcon = new FontIcon("fas-font");
+        textIcon.setIconSize(20);
+        textIcon.setIconColor(Color.BLACK);
+        textButton.setGraphic(textIcon);
         
     }
 
@@ -330,11 +391,6 @@ public class PaintController implements Initializable {
      * Initializes the listeners of the application.
      */
     private void initListeners() {
-        
-        // Adds a listener to update the canvas every time the model changes
-        model.getShapes().addListener((ListChangeListener<MyShape>) change -> {
-            redrawCanvas();
-        });
         
         // Prevents the user from unselecting colors
         borderColor.selectedToggleProperty().addListener((obs, oldToggle, newToggle) -> {
@@ -429,12 +485,6 @@ public class PaintController implements Initializable {
             }
         });
         
-        // Adjusts the grid cells size while the slider is being dragged
-        gridSizeSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
-            gridCellsSize = newVal.doubleValue();
-            redrawGrid();
-        });
-        
         // Closes the active polygon if the user clicks on any part of the screen other than the drawing canvas
         Platform.runLater(() -> {
             rootPane.getScene().addEventFilter(MouseEvent.MOUSE_PRESSED, e -> {
@@ -451,79 +501,6 @@ public class PaintController implements Initializable {
                 }
             });
         });
-        
-    }
-
-    /**
-     * Initializes the icons displayed on the buttons of the application.
-     */
-    private void initButtonIcons() {
-
-        // Cursor button
-        FontIcon cursorIcon = new FontIcon("fas-mouse-pointer");
-        cursorIcon.setIconSize(28);
-        cursorIcon.setIconColor(Color.BLACK);
-        cursorButton.setGraphic(cursorIcon);
-        
-        // Line button
-        FontIcon lineIcon = new FontIcon("fas-slash");
-        lineIcon.setIconSize(20);
-        lineIcon.setIconColor(Color.BLACK);
-        lineButton.setGraphic(lineIcon);
-        
-        // Rectangle button
-        FontIcon rectangleIcon = new FontIcon("far-square");
-        rectangleIcon.setIconSize(20);
-        rectangleIcon.setIconColor(Color.BLACK);
-        rectangleButton.setGraphic(rectangleIcon);
-        
-        // Ellipse button
-        FontIcon ellipseIcon = new FontIcon("far-circle");
-        ellipseIcon.setIconSize(20);
-        ellipseIcon.setIconColor(Color.BLACK);
-        ellipseButton.setGraphic(ellipseIcon);
-        
-        // Polygon button
-        FontIcon polygonIcon = new FontIcon("fas-draw-polygon"); // or "bi-pencil-square"
-        polygonIcon.setIconSize(20);
-        polygonIcon.setIconColor(Color.BLACK);
-        polygonButton.setGraphic(polygonIcon);
-        
-        // Grid button
-        FontIcon gridIcon = new FontIcon("bi-grid-3x3");
-        gridIcon.setIconSize(24);
-        gridIcon.setIconColor(Color.BLACK);
-        gridButton.setGraphic(gridIcon);
-        
-        // Zoom in button
-        FontIcon zoomInIcon = new FontIcon("bi-zoom-in");
-        zoomInIcon.setIconSize(16);
-        zoomInIcon.setIconColor(Color.BLACK);
-        zoomInButton.setGraphic(zoomInIcon);
-        
-        // Zoom out button
-        FontIcon zoomOutIcon = new FontIcon("bi-zoom-out");
-        zoomOutIcon.setIconSize(16);
-        zoomOutIcon.setIconColor(Color.BLACK);
-        zoomOutButton.setGraphic(zoomOutIcon);
-        
-        // No Fill button
-        FontIcon noFillIcon = new FontIcon("fas-ban");
-        noFillIcon.setIconSize(16);
-        noFillIcon.setIconColor(Color.RED);
-        noFillButton.setGraphic(noFillIcon);
-
-        // No Fill Panel button
-        FontIcon noFillPanelIcon = new FontIcon("fas-ban");
-        noFillPanelIcon.setIconSize(16);
-        noFillPanelIcon.setIconColor(Color.RED);
-        noFillButtonPanel.setGraphic(noFillPanelIcon);
-        
-        // Text button
-        FontIcon textIcon = new FontIcon("fas-font");
-        textIcon.setIconSize(20);
-        textIcon.setIconColor(Color.BLACK);
-        textButton.setGraphic(textIcon);
         
     }
 
@@ -687,24 +664,6 @@ public class PaintController implements Initializable {
         }
     }
     
-    /**
-     * Redraws the canvas based on the model list of shapes.
-     */
-    private void redrawCanvas() {
-        canvas.getChildren().clear();
-        for (MyShape shapeToAdd : model.getShapes()) {
-            if (shapeToAdd instanceof MyCompositeShape cs) {
-                for(MyShape s : cs.getShapes()) {
-                    canvas.getChildren().add(s.getFxShape());
-                }
-            }
-            else {
-                canvas.getChildren().add(shapeToAdd.getFxShape());
-            }
-        }
-        redrawGrid();
-    }
-
     /**
      * Enables the selection of the given shape.
      * @param shape
@@ -1038,8 +997,8 @@ public class PaintController implements Initializable {
         if (selectedShapes.size() == 1) {
             Command cutCmd = new CutCommand(model, selectedShapes.get(0));
             model.execute(cutCmd);
+            selectedShapes.clear();
         }
-        selectedShapes.clear();
     }
 
     /**
@@ -1207,44 +1166,7 @@ public class PaintController implements Initializable {
     */
     @FXML
     private void toggleGrid(ActionEvent event) {
-        gridActived = !gridActived;
-        redrawGrid();
-    }
-    
-    /**
-     * Redraws the grid.
-     */
-    private void redrawGrid() {
-
-        // Clears all the lines of the grid
-        canvas.getChildren().removeIf(node -> node instanceof Line && "grid".equals(node.getUserData()));
-
-        if (!gridActived)
-            return;
-
-        double width = canvas.getWidth();
-        double height = canvas.getHeight();
-
-        List<Node> gridLines = new ArrayList<>();
-
-        for (double x = 0; x < width; x += gridCellsSize) {
-            Line verticalLine = new Line(x, 0, x, height);
-            verticalLine.setStroke(Color.LIGHTGRAY);
-            verticalLine.setStrokeWidth(0.5);
-            verticalLine.setUserData("grid");
-            gridLines.add(verticalLine);
-        }
-
-        for (double y = 0; y < height; y += gridCellsSize) {
-            Line horizontalLine = new Line(0, y, width, y);
-            horizontalLine.setStroke(Color.LIGHTGRAY);
-            horizontalLine.setStrokeWidth(0.5);
-            horizontalLine.setUserData("grid");
-            gridLines.add(horizontalLine);
-        }
-
-        canvas.getChildren().addAll(0, gridLines);
-        
+        helper.toggleGrid();
     }
 
     /**
@@ -1276,24 +1198,6 @@ public class PaintController implements Initializable {
     }
 
     /**
-     * Updates the font family variable to match user selection.
-     * @param event 
-     */
-    @FXML
-    private void selectFont(ActionEvent event) {
-        fontFamily = fontsComboBox.getValue();
-    }
-
-    /**
-     * Updates the text size variable to match user selection.
-     * @param event 
-     */
-    @FXML
-    private void selectSize(ActionEvent event) {
-        textSize = Double.parseDouble(sizeComboBox.getValue());
-    }
-
-    /**
      * Updates the font family of the selected text.
      * @param event 
      */
@@ -1315,41 +1219,6 @@ public class PaintController implements Initializable {
             MyText selectedText = (MyText) ((FillColorDecorator) (((BorderColorDecorator) selectedShapes.get(0)).getDecoratedShape())).getDecoratedShape();
             selectedText.setSize(Double.parseDouble(sizeComboBoxSide.getValue()));
         }
-    }
-
-    /**
-     * Updates the text to write to match user selection.
-     * @param event 
-     */
-    @FXML
-    private void selectDisplayText(ActionEvent event) {
-        displayText = displayTextField.getText();
-    }
-    
-    public MyShape getSelectedShape() {
-        if (selectedShapes.size() == 1) {
-            return selectedShapes.get(0); 
-        }
-        else {
-            return null;
-        }
-    }
-    
-    public void selectShape(MyShape shape) {
-        selectedShapes.setAll(shape);
-        highlightSelected();
-    }
-
-    public void setCanvas(Pane canvas) {
-        this.canvas = canvas;
-    }
-
-    public PaintModel getModel() {
-        return model;
-    }
-
-    public Pane getCanvas() {
-        return canvas;
     }
 
     /**
@@ -1422,4 +1291,29 @@ public class PaintController implements Initializable {
         }
     }
 
+    public MyShape getSelectedShape() {
+        if (selectedShapes.size() == 1) {
+            return selectedShapes.get(0); 
+        }
+        else {
+            return null;
+        }
+    }
+    
+    public void selectShape(MyShape shape) {
+        selectedShapes.setAll(shape);
+        highlightSelected();
+    }
+
+    public void setCanvas(Pane canvas) {
+        this.canvas = canvas;
+    }
+
+    public PaintModel getModel() {
+        return model;
+    }
+
+    public Pane getCanvas() {
+        return canvas;
+    }
 }

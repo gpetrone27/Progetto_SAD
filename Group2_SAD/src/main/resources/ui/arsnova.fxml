@@ -29,7 +29,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" fx:id="rootPane" prefHeight="720.0" prefWidth="1280.0" stylesheets="@arsnova.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sadprojectwork.mvc.PaintController">
+<AnchorPane id="AnchorPane" fx:id="rootPane" prefHeight="720.0" prefWidth="1280.0" stylesheets="@arsnova.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sadprojectwork.mvc.PaintController">
    <children>
       <BorderPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <top>
@@ -129,13 +129,13 @@
                                     </ToggleButton>
                                     <VBox alignment="CENTER" spacing="10.0">
                                        <children>
-                                          <ComboBox fx:id="fontsComboBox" onAction="#selectFont" prefWidth="100.0" promptText="Font" />
-                                          <ComboBox fx:id="sizeComboBox" onAction="#selectSize" prefWidth="100.0" promptText="Size" />
+                                          <ComboBox fx:id="fontsComboBox" prefWidth="100.0" promptText="Font" />
+                                          <ComboBox fx:id="sizeComboBox" prefWidth="100.0" promptText="Size" />
                                        </children>
                                     </VBox>
                                  </children>
                               </HBox>
-                              <TextField fx:id="displayTextField" onAction="#selectDisplayText" promptText="Insert your text here..." />
+                              <TextField fx:id="displayTextField" promptText="Insert your text here..." />
                               <Label text="Text">
                                  <font>
                                     <Font name="System Bold" size="12.0" />
