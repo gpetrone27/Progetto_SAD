@@ -110,6 +110,8 @@ public class PaintController implements Initializable {
     
     // Shape Factory
     private ShapeFactoryManager factoryManager = new ShapeFactoryManager();
+    
+    private DrawingFileController fileController;
 
     @FXML
     private AnchorPane rootPane;
@@ -217,6 +219,8 @@ public class PaintController implements Initializable {
         
         model = new PaintModel();
         helper = new PaintHelper(model, canvas, gridSizeSlider);
+        fileController = new DrawingFileController(model, rootPane, this);
+
         
         initButtons();
         initBindings();
@@ -836,7 +840,7 @@ public class PaintController implements Initializable {
      */
     @FXML
     private void newDrawing(ActionEvent event) {
-        model.clear();
+        fileController.newDrawing();
         selectedShapes.clear();
         currentShape.set(null);
     }
@@ -847,16 +851,7 @@ public class PaintController implements Initializable {
      */
     @FXML
     private void saveDrawing(ActionEvent event) {
-
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Save drawing as CSV");
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
-        fileChooser.setInitialDirectory(new File("src/main/resources/drawings"));
-        File file = fileChooser.showSaveDialog(rootPane.getScene().getWindow());
-
-        if (file != null) {
-            model.saveDrawing(file);
-        }
+        fileController.saveDrawing();
     }
 
     /**
@@ -866,19 +861,8 @@ public class PaintController implements Initializable {
     @FXML
     private void loadDrawing(ActionEvent event) {
 
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Load drawing from CSV");
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
-        fileChooser.setInitialDirectory(new File("src/main/resources/drawings"));
-        File file = fileChooser.showOpenDialog(rootPane.getScene().getWindow());
+        fileController.loadDrawing();
 
-        if (file != null) {
-            List<MyShape> loadedShapes = model.loadDrawing(file);
-            for(MyShape s : loadedShapes) {
-                addShape(s);
-                enableSelection(s);
-            }
-        }
     }
 
     /**
